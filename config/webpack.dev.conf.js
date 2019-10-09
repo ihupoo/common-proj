@@ -43,9 +43,26 @@ module.exports = merge(base, {
         port: 8088, // 端口
         open: true, // 自动打开浏览器
         hot: true, // 开启热更新,只监听js文件，所以css假如被抽取后，就监听不到了
-        // proxy: xxx //接口代理配置
         clientLogLevel: "none", //阻止打印那种搞乱七八糟的控制台信息
         overlay: true,
+        proxy:{
+            "/portal": {
+                target: 'http://localhost:8080',
+                secure: false, 
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/portal': '/portal'
+                }
+            },
+            "/api" : {
+                target: 'http://localhost:8099',
+                secure: false, 
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '/api'
+                }
+            }
+        }
     },
     mode: 'development'
 

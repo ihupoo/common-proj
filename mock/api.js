@@ -1,6 +1,5 @@
 const Koa = require('koa')
 const koaBody = require('koa-body')
-const bodyparser = require('koa-bodyparser')
 const app = new Koa()
 const cors = require('koa2-cors')
 const router = require('./routes/index.js')
@@ -15,15 +14,12 @@ app.use(cors({
 }));
 
 // middlewares
-// 处理原生的node还是koa都无法直接解析request的body
-app.use(koaBody()).use(bodyparser({
-  enableTypes: ['json', 'form', 'text']
-}))
+app.use(koaBody())
 
 // routes
 // 加载路由中间件
 app.use(router.routes()).use(router.allowedMethods())
 
-app.listen('8090', () => {
-  console.log('监听端口 8090')
+app.listen('8099', () => {
+  console.log('监听端口 8099')
 })
