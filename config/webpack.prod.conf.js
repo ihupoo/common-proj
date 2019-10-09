@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const base = require('./webpack.base.conf');
 const merge = require('webpack-merge');
 const path = require("path");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin }  = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
@@ -29,8 +29,7 @@ module.exports = merge(base, {
                     {
                         loader: 'css-loader',
                         options: {
-                            importLoaders: 2,
-                            minimize: true
+                            importLoaders: 2
                         }
                     },
                     'postcss-loader',
@@ -39,13 +38,23 @@ module.exports = merge(base, {
                         options: {
                             implementation: require('sass')
                         }
-                    }]
-        }]
+                    },
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: [
+                                // resolve方法第二个参数为scss配置文件地址，如果有多个，就进行依次添加即可
+                                path.resolve(__dirname, '../src/styles/variable.scss'),
+                            ],
+                        }
+                    },
+                ]
+            }
+        ]
     },
     plugins: [
 
-        new CleanWebpackPlugin('dist', {
-            root: path.resolve(__dirname, '../'),
+        new CleanWebpackPlugin({
             verbose: true
         }),
         new MiniCssExtractPlugin({

@@ -22,7 +22,7 @@ module.exports = {
                 test: /\.js$/,
                 use: 'babel-loader?cacheDirectory=true',
                 // include: /src/,   //只转化src目录下js
-                // exclude: /node_modules/ //不转化node_modules目录下js
+                exclude: /node_modules/ //不转化node_modules目录下js
             },
             {
                 test: /\.(html|htm)$/,
