@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 除登入页面及验证失败页面不需要保护，其他都需要拦截 -->
+	<!--健康检查 -->
+	<http pattern="/check/**" security="none" />
+	<http pattern="/access/denied" security="none" />
+	<http pattern="/verifyImage*" security="none" />
+	<http pattern="/login" security="none" />
+	<http pattern="/changeLocale" security="none" />
+	<http pattern="/login/failure" security="none" />
+	<http pattern="/toLogin" security="none" />
+	<http pattern="/forgetpassword/sendemail" security="none" />
+	<http pattern="/forgetpassword/checkresetlink/**" security="none" />
+	<http pattern="/forgetpassword/resetpassword" security="none" />
+	<http pattern="/forgetpassword/checkNewPassword" security="none" />
+	<http pattern="/modifypassword/force/**" security="none" />
+	<http pattern="/modifypassword/reset" security="none" />
+	<http pattern="/modifypassword/checkOldPassword" security="none" />
+	<http pattern="/systemSecurity" security="none" />
+	<!-- 静态资源 -->
+	<http pattern="/static/**" security="none" />
+	<http pattern="/error/**" security="none" />
+	<http pattern="/log/**" security="none"/>
+
+
+	<http use-expressions="true" create-session="stateless" disable-url-rewriting="true"
+		entry-point-ref="authenticationProcessingFilterEntryPoint" >
+		 <access-denied-handler error-page ="/access/denied"/>
+		 <!-- 自定义过滤器 -->
+		<custom-filter ref="loginFilter" position="FORM_LOGIN_FILTER" />
+		<custom-filter ref="customSecurityFilter" before="FILTER_SECURITY_INTERCEPTOR" />
+		<custom-filter ref="ssoFilter" before="REMEMBER_ME_FILTER" />
+		<custom-filter ref="rememberMeFilter" position="REMEMBER_ME_FILTER" />
+		<custom-filter ref="logoutFilter" position="LOGOUT_FILTER" />
+		<custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER" />
+		<headers>  
+	        <frame-options policy="SAMEORIGIN"/>
+	    </headers>  
+	    <csrf disabled="true" />
+	</http>
+
+	<beans:bean id="loginFilter" class="com.kedacom.moooo.sso.filter.LoginFilter">
+		<beans:property name="filterProcessesUrl" value="/j_spring_security_check" />
+		<beans:property name="postOnly" value="false" />
+		<!-- 验证成功后的处理 -->
+		<beans:property name="authenticationSuccessHandler" ref="loginLogAuthenticationSuccessHandler" />
+		<!-- 验证失败后的处理 -->
+		<beans:property name="authenticationFailureHandler" ref="simpleUrlAuthenticationFailureHandler" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="rememberMeServices" ref="rememberMeServices" />
+		<beans:property name="ssoService" ref="customSSOService" />
+		<beans:property name="usernameParameter" value="j_username" />
+		<beans:property name="passwordParameter" value="j_password" />
+	</beans:bean>
+	<beans:bean id="loginLogAuthenticationSuccessHandler"  class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/login/success" />
+		<beans:property name="alwaysUseDefaultTargetUrl" value="true" />
+	</beans:bean>
+
+	<beans:bean id="simpleUrlAuthenticationFailureHandler" class="com.kedacom.moooo.sso.handle.ExceptionAuthenticationFailureHandler">
+		<beans:property name="failureErrorCode">
+			<beans:list >
+				<beans:value>100002</beans:value>
+				<beans:value>100003</beans:value>
+				<beans:value>100004</beans:value>
+				<beans:value>100005</beans:value>
+				<beans:value>100006</beans:value>
+				<beans:value>100007</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="defaultFailureUrl" value="/login/failure" />
+		<beans:property name="useForward" value="true" />
+	</beans:bean>
+    <!-- remember me功能 -->
+	<beans:bean id="rememberMeFilter" class="com.kedacom.moooo.sso.filter.RememberMeFilter">
+		<beans:property name="rememberMeServices" ref="rememberMeServices" />
+	    <beans:property name="ssoService" ref="customSSOService" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="loginUrl" value="/login" />
+		<beans:property name="filterUrl">
+			<beans:list>
+				<beans:value>/login</beans:value>
+			</beans:list>
+		</beans:property>
+   </beans:bean>
+	<beans:bean id="rememberMeServices" class="com.kedacom.moooo.sso.service.PersistentTokenBasedRememberMeServices" >
+		<beans:property ref="customUserDetailService" name="userDetailsService" />
+		<beans:property name="alwaysRemember" value="false" />
+		<beans:property name="tokenValiditySeconds" value="63072000" />
+		<beans:property name="key" value="kedacom-remKey-GVVxVQMjhNcccKYviQk7MocaWQnoJVz785KG" />
+	</beans:bean>
+	<beans:bean class="org.springframework.security.authentication.RememberMeAuthenticationProvider" id="rememberMeAuthenticationProvider">
+		<beans:constructor-arg value="kedacom-remKey-GVVxVQMjhNcccKYviQk7MocaWQnoJVz785KG"/>
+	</beans:bean>
+
+
+	<beans:bean id="customSecurityFilter" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+		<beans:property name="securityMetadataSource" ref="securityMetadataSource" />
+	</beans:bean>
+	<!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源 -->
+	<beans:bean id="accessDecisionManager" class="com.kedacom.moooo.sso.service.CustomAccessDecisionManager"></beans:bean>
+	<!-- 资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色访问 -->
+	<beans:bean id="securityMetadataSource" class="com.kedacom.sso.portal.security.MyInvocationSecurityMetadataSource">
+<!-- 		<beans:constructor-arg name="sqlMapClient" ref="sqlMapClient" /> -->
+	</beans:bean>
+
+	<authentication-manager alias="authenticationManager">
+        <authentication-provider ref="rememberMeAuthenticationProvider" />
+		<authentication-provider ref="ssoAuthenticationProvider" />
+		<authentication-provider ref="loginAuthenticationProvider" />
+	</authentication-manager>
+
+	<beans:bean id="loginAuthenticationProvider" class="com.kedacom.moooo.sso.provider.LoginAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="customUserDetailService" />
+	</beans:bean>
+
+	<beans:bean id="ssoAuthenticationProvider" class="com.kedacom.moooo.sso.provider.SSOAuthenticationProvider" />
+
+	<!-- digest -->
+	<beans:bean id="digestFilter" class="com.kedacom.sso.portal.security.PortalDigestAuthenticationFilter">
+		<beans:property name="userDetailsService" ref="customUserDetailService" />
+		<beans:property name="ssoService" ref="customSSOService" />
+		<beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
+		<beans:property name="rememberMeServices" ref="rememberMeServices" />
+		<beans:property name="configService" ref="configService" />
+		<beans:property name="cxfService" ref="CXFService" />
+		<beans:property name="filterUrl">
+			<beans:list>
+				<beans:value>/slogin</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="digestEntryPoint" class="com.kedacom.sso.portal.security.DigestAuthenticationEntryPoint">
+	  <beans:property name="realmName" value="kedacom"/>
+	  <beans:property name="key" value="kedacom-remKey-GVVxVQMjhNcccKYviQk7MocaWQnoJVz785KG"/>	  
+	  <beans:property name="nonceValiditySeconds" value="30"/>
+	  <beans:property name="failureErrorCode">
+			<beans:list >
+				<beans:value>100002</beans:value>
+				<beans:value>100003</beans:value>
+				<beans:value>100004</beans:value>
+				<beans:value>100005</beans:value>
+				<beans:value>100006</beans:value>
+				<beans:value>100007</beans:value>
+			</beans:list>
+	  </beans:property>
+	  <beans:property name="noVcodeErrorCode">
+			<beans:list >
+				<beans:value>100004</beans:value>
+				<beans:value>100005</beans:value>
+				<beans:value>100006</beans:value>
+			</beans:list>
+	  </beans:property>
+	</beans:bean>
+
+	<!-- userDetailsService -->
+	<beans:bean id="customUserDetailService" class="com.kedacom.sso.portal.security.CustomUserDetailService">
+		<!-- <beans:property name="ssoCXFService" ref="ssoCXFService" /> -->
+
+		<!-- 这里注入访问权限限制，访问限制参数，采用二进制的方式处理 1-默认服务域管理员 2-服务域管理员 4-默认用户域管理员 8-用户域管理员 0表示不限制用户权限，3表示只有默认服务域管理员和服务域管理员可登录系统 -->
+		<beans:property name="accessLimit" value="0" />
+	</beans:bean>
+
+	<beans:bean id="customSSOService" class="com.kedacom.sso.portal.security.CustomSSOService">
+		<beans:property name="key" value="kedacom-ssoKey-GVVxVQMjhNcccKYviQk7MocaWQnoJVz785KG" />
+<!-- 		<beans:property name="ssoCXFService" ref="ssoCXFService" /> -->
+<!-- 		这里注入访问权限限制，访问限制参数，采用二进制的方式处理 1-默认服务域管理员 2-服务域管理员 4-默认用户域管理员 8-用户域管理员 0表示不限制用户权限，3表示只有默认服务域管理员和服务域管理员可登录系统 -->
+		<beans:property name="accessLimit" value="0" />
+	</beans:bean>
+
+	<beans:bean id="ssoFilter" class="com.kedacom.moooo.sso.filter.SSOFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="ssoService" ref="customSSOService" />
+		<beans:property name="ssoEntryPoint" ref="ssoEntryPoint" />
+		<beans:property name="loginUrl" value="/login" />
+ 	    <beans:property name="isRememberMe" value="true" />
+		<beans:property name="filterUrl">
+			<beans:list>
+				<beans:value>/login</beans:value>
+				<beans:value>/slogin</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<beans:bean id="ssoEntryPoint" class="com.kedacom.moooo.sso.point.SSOLoginUrlAuthenticationEntryPoint">
+		<!-- 请求资源无权限默认转向至登录页面 -->
+		 <beans:property name="failureErrorCode">
+			<beans:list >
+				<beans:value>100013</beans:value>
+				<beans:value>100010</beans:value>
+				<beans:value>100011</beans:value>
+				<beans:value>100012</beans:value>
+			</beans:list>
+	  	</beans:property>
+		<beans:constructor-arg value="/login"/>
+	</beans:bean>
+	
+	<!-- logout 功能 -->
+	<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<beans:constructor-arg ref="logoutSuccessHandler" />
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:ref bean="customSSOService" />
+				<beans:ref bean="securityContextLogoutHandler" />
+				<beans:ref bean="rememberMeServices" />
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
+	<beans:bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/login" />
+		<beans:property name="alwaysUseDefaultTargetUrl" value="true" />
+	</beans:bean>
+	<beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+		<beans:property name="invalidateHttpSession" value="true" />
+	</beans:bean>
+
+
+	<beans:bean id="authenticationProcessingFilterEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<!-- 请求资源无权限默认转向至登录页面 -->
+		<beans:constructor-arg value="/login"/>
+	</beans:bean>
+
+</beans:beans>

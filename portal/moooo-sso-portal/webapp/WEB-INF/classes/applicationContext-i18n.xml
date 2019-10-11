@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 国际化支持 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- 用来指定properties文件的通用名，如：messages_en_US.properties，messages_zh_CN.properties通用名为messages -->
+		<property name="basename" value="i18n/messages" />
+		<!-- 当Spring在ResourceBundle中找不到messageKey，使用messageKey作为返回值 -->
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+
+	<!-- 国际化 -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="zh_CN" />
+		<property name="cookieName" value="spring.i18n.locale" />
+	</bean>
+
+</beans>

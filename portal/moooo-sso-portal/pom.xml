@@ -1,0 +1,364 @@
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.kedacom.sso</groupId>
+	<artifactId>moooo-sso-portal</artifactId>
+	<version>6.0.4.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<properties>
+		<spring.version>4.3.22.RELEASE</spring.version>
+		<spring.security.version>4.2.2.RELEASE</spring.security.version>
+		<aspectj.version>1.6.6</aspectj.version>
+		<junit.version>4.8.1</junit.version>
+		<moooo.version>2.2.0.28</moooo.version>
+		<moooo.service.version>6.0.4.0-SNAPSHOT</moooo.service.version>
+	</properties>
+
+	<build>
+		<finalName>portal</finalName>
+
+		<!-- 设定Web应用中编译结果输出到WEB-INF/classes 中，与使用IDE时相同 -->
+		<outputDirectory>${basedir}/webapp/WEB-INF/classes</outputDirectory>
+
+		<!-- Resources filtering -->
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+
+
+		<pluginManagement>
+			<plugins>
+				<!-- war插件,设定webapp目录为/webapp,war名称不带版本号 -->
+			<!-- 	<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-war-plugin</artifactId> 
+					<version>2.1</version> <configuration> <warSourceDirectory>${basedir}/webapp</warSourceDirectory> 
+					</configuration> </plugin> -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.1</version>
+					<configuration>
+						<warSourceDirectory>${basedir}/webapp</warSourceDirectory>
+						<packagingExcludes>%regex[WEB-INF/lib/(?!moooo\-.*\.jar)(?!meeting\-.*\.jar)(?!movision\-.*\.jar)(?!flyway\-.*\.jar)(?!ap\-.*\.jar)(?!platform\-.*\.jar).*]</packagingExcludes>
+					</configuration>
+				</plugin>
+
+				<!-- compiler插件,设定JDK版本 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- resource插件,设定编码 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.5</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<!-- jetty -->
+			<plugin>
+				<groupId>com.kedacom.moooo</groupId>
+				<artifactId>maven-version-plugin</artifactId>
+				<version>1.0.2</version>
+				<configuration>
+					<configName>version.properties</configName>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/share_lib</outputDirectory>
+							<includeScope>runtime</includeScope>
+							<excludeGroupIds>com.kedacom</excludeGroupIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>6.1.26</version>
+				<configuration>
+					<contextPath>/portal</contextPath>
+					<webAppSourceDirectory>${basedir}/webapp</webAppSourceDirectory>
+					<webXmlFile>${basedir}/webapp/WEB-INF/web.xml</webXmlFile>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<jettyEnvXml>${basedir}/src/test/resources/jetty-env.xml</jettyEnvXml>
+					<connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>8080</port>
+							<maxIdleTime>60000</maxIdleTime>
+						</connector>
+					</connectors>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- service -->
+		<dependency>
+			<groupId>com.kedacom.service</groupId>
+			<artifactId>moooo-service-basedata</artifactId>
+			<version>${moooo.service.version}</version>
+			<exclusions>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-client</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-annotations</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-websocket-javax-client</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-websocket-jetty-client</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.quartz-scheduler</groupId>
+		          <artifactId>quartz</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.apache.poi</groupId>
+		          <artifactId>poi</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.apache.poi</groupId>
+		          <artifactId>poi-ooxml</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.apache.poi</groupId>
+		          <artifactId>poi-ooxml-schemas</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>com.googlecode.flyway</groupId>
+		          <artifactId>flyway-core</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>com.kedacom.moooo</groupId>
+		          <artifactId>moooo-rabbitmq</artifactId>
+		        </exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.kedacom.service</groupId>
+			<artifactId>moooo-service-sdk</artifactId>
+			<version>${moooo.service.version}</version>
+			<exclusions>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-client</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-annotations</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-websocket-javax-client</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.cometd.java</groupId>
+		          <artifactId>cometd-java-websocket-jetty-client</artifactId>
+		        </exclusion>
+		        <exclusion>
+		          <groupId>com.kedacom.moooo</groupId>
+		          <artifactId>moooo-rabbitmq</artifactId>
+		        </exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- moooo -->
+		<dependency>
+			<groupId>com.kedacom.moooo</groupId>
+			<artifactId>moooo-core</artifactId>
+			<version>${moooo.version}</version>
+			<exclusions>
+				<exclusion>
+		          <groupId>org.apache.velocity</groupId>
+		          <artifactId>velocity</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>javax.mail</groupId>
+		          <artifactId>mail</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.xmpp</groupId>
+		          <artifactId>smack</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.xmpp</groupId>
+		          <artifactId>smackx</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.xmpp</groupId>
+		          <artifactId>smackx-debug</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.xmpp</groupId>
+		          <artifactId>smackx-jingle</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.codehaus.jettison</groupId>
+		          <artifactId>jettison</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>commons-dbcp</groupId>
+		          <artifactId>commons-dbcp</artifactId>
+		        </exclusion>
+		        <exclusion>
+		          <groupId>cglib</groupId>
+		          <artifactId>cglib</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>cglib</groupId>
+		          <artifactId>cglib-nodep</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.apache.xbean</groupId>
+		          <artifactId>xbean-spring</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>commons-configuration</groupId>
+		          <artifactId>commons-configuration</artifactId>
+		        </exclusion>
+		        <exclusion>
+		          <groupId>org.eclipse.jetty</groupId>
+		          <artifactId>jetty-client</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.eclipse.jetty</groupId>
+		          <artifactId>jetty-server</artifactId>
+		        </exclusion>
+		        <exclusion>
+		          <groupId>net.oauth.core</groupId>
+		          <artifactId>oauth-consumer</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>net.oauth.core</groupId>
+		          <artifactId>oauth-httpclient3</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>net.oauth.core</groupId>
+		          <artifactId>oauth-httpclient4</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>net.oauth.core</groupId>
+		          <artifactId>oauth-provider</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>net.sourceforge.pinyin4j</groupId>
+		          <artifactId>pinyin4j</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.springmodules</groupId>
+		          <artifactId>spring-modules</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>mysql</groupId>
+		          <artifactId>mysql-connector-java</artifactId>
+		        </exclusion>
+				<exclusion>
+		          <groupId>org.springframework.security</groupId>
+		          <artifactId>spring-security-taglibs</artifactId>
+		        </exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.kedacom.moooo</groupId>
+			<artifactId>moooo-components</artifactId>
+			<version>${moooo.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.kedacom.moooo</groupId>
+			<artifactId>moooo-sso</artifactId>
+			<version>${moooo.version}</version>
+		</dependency>
+
+		<!-- aspectj -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+
+		<!-- jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Spring  -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- Spring Security  -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-acl</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+
+	</dependencies>
+</project>

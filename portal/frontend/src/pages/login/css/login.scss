@@ -1,0 +1,463 @@
+.bg {
+    background: #ffffff;
+    text-align: center;
+    overflow: auto;
+}
+
+#login_header {
+    position: relative;
+}
+
+.sys_logo .icon {
+    height: 36px;
+    width: 29px;
+    display: block;
+    background-position: 0 -534px;
+    float: left;
+    font-size: 28px;
+    line-height: 28px;
+    color: #000000;
+}
+
+#wrap .content {
+    margin: 0 auto;
+    width: 960px;
+}
+
+#wrap .login_content {
+    height: 273;
+}
+
+.login_content .login-input {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #606060;
+    font-size: 14px;
+    height: 28px;
+    line-height: 28px;
+    width: 198px;
+    text-align: center;
+    vertical-align: bottom;
+    font-family: '微软雅黑';
+}
+
+.login_content .login_input_wrapper {
+    border: medium none;
+    height: 28px;
+    overflow: hidden;
+    position: relative;
+    width: 198px;
+    display: block;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #949799;
+    margin: 0 auto;
+}
+
+.login_input_wrapper .tip_label {
+    position: absolute;
+    left: 0;
+    bottom: 7px;
+    color: #606060;
+    cursor: text;
+    width: 198px;
+    text-align: center;
+    line-height: 14px;
+    font-size: 14px;
+    font-family: '微软雅黑';
+}
+
+.verifyCode_input_holder .tip_label {
+    bottom: 7px;
+}
+
+.login_content #login_form {
+    width: 198px;
+    position: relative;
+    margin: 0 auto;
+    padding-top: 46px;
+    /*  padding-bottom:133px; */
+}
+
+.login_content #login_form .password_input_holder {
+    margin-top: 15px;
+}
+
+#login_form .password_forget {
+    text-decoration: underline;
+    font-size: 11px;
+    color: #4e4e4e;
+    margin-top: 18px;
+    margin-left: 21px;
+    display: block;
+    line-height: 11px;
+    text-align: center;
+    float: left;
+    font-family: '微软雅黑';
+}
+
+#login_form .password_forget:hover {
+    color: #3e9bd0;
+}
+
+#login_form .keep_login {
+    float: left;
+    margin-top: 18px;
+    margin-left: 23px;
+    font-size: 11px;
+    color: #4e4e4e;
+    line-height: 11px;
+    text-align: center;
+    position: relative;
+}
+
+.keep_login span {
+    padding-left: 0px;
+    margin-left: 6px;
+    vertical-align: 2px;
+    font-size: 11px;
+    font-family: '微软雅黑';
+}
+
+.error_msg {
+    font-size: 12px;
+    color: #d53a3a;
+    width: 198px;
+    text-align: center;
+    padding: 0;
+    position: absolute;
+    margin-top: 0px;
+    bottom: 36px;
+}
+
+.login_content .icon {
+    background-position: 0 -214px;
+    cursor: pointer;
+    height: 31px;
+    position: relative;
+    width: 198px;
+    line-height: 31px;
+    text-align: center;
+    display: inline-block;
+    // _*display: inline;
+    // _*zoom: 1;
+    margin-top: 40px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.icon.small {
+    width: 94px;
+    background: url('../img/SSO94pxbtn.png') no-repeat;
+    background-color: #000;
+    margin-left: 5px;
+}
+
+.login_content .icon:hover {
+    background-position: 0 -256px;
+    color: #2e8cc1;
+}
+
+.login_content .icon:active {
+    background-position: 0 -296px;
+    color: #ffffff;
+}
+
+.icon.small:hover {
+    background-position: 0 -40px;
+    background-color: #ffffff;
+}
+
+.icon.small:active {
+    background-position: 0 -80px;
+    background-color: #2e8cc1;
+}
+
+.icon_disabled {
+    background-position: 0 -256px;
+    color: #2e8cc1;
+}
+
+.error_msg {
+    display: none;
+    overflow: hidden;
+}
+
+.icon {
+    background: url('../img/login_icons.png') repeat scroll 0 0 transparent;
+}
+
+.products_download_content {
+    position: absolute;
+    top: 20px;
+    right: 23px;
+    display: block;
+}
+
+.products_download_content .product_download_item {
+    float: left;
+    margin-left: 1px;
+}
+
+.products_download_content .first {
+    margin-left: 0;
+}
+
+.product_download_item .icon {
+    width: 62px;
+    height: 62px;
+    display: block;
+}
+
+.product_download_item .iphone {
+    background-position: 0 0;
+}
+
+.product_download_item .iphone:hover {
+    /* background-position: 0 -70px; */
+}
+
+.product_download_item .iphone:active {
+    /* background-position: 0 -142px; */
+}
+
+.product_download_item .windows {
+    background-position: -62px 0;
+}
+
+.product_download_item .ipad {
+    background-position: -72px 0;
+}
+
+.product_download_item .ipad:hover {
+    /* background-position: -72px -70px; */
+}
+
+.product_download_item .ipad:active {
+    /* background-position: -72px -142px; */
+}
+
+.product_download_item .android {
+    background-position: -144px 0;
+}
+
+.product_download_item .android:hover {
+    /* background-position: -144px -70px; */
+}
+
+.product_download_item .android:active {
+    /* background-position: -144px -142px; */
+}
+
+.product_download_item .windows {
+    background-position: -216px 0;
+}
+
+.product_download_item .windows:hover {
+    /* background-position: -216px -70px; */
+}
+
+.product_download_item .windows:active {
+    /* background-position: -216px -142px; */
+}
+
+.products_introduce_content {
+    margin-top: 100px;
+    display: block;
+}
+
+.products_introduce_content .product_introduce_item {
+    float: left;
+    width: 188px;
+    display: block;
+    text-align: left;
+    height: 170px;
+    line-height: 22px;
+}
+
+.product_introduce_item .introduce_title {
+    border-top: 2px solid #313438;
+    position: relative;
+}
+
+.product_introduce_item .introduce_title .title_desc {
+    margin-top: 18px;
+    font-size: 18px;
+    font-weight: bold;
+    float: left;
+}
+
+.product_introduce_item .icon {
+    height: 34px;
+    width: 34px;
+    margin: 11px 0 0 13px;
+    float: left;
+}
+
+.product_introduce_item .enterprise_social {
+    background-position: 0 -389px;
+}
+
+.product_introduce_item .meeting_manager {
+    background-position: -135px -389px;
+}
+
+.product_introduce_item .data_meeting {
+    background-position: -45px -389px;
+}
+
+.product_introduce_item .meeting_recorded_and_broadcast {
+    background-position: -179px -389px;
+}
+
+.product_introduce_item .netword_meeting {
+    background-position: -89px -389px;
+    left: 100px;
+}
+
+.padding_top_170 {
+    padding-top: 170px;
+}
+
+.margin_left_5 {
+    margin-left: 5px;
+}
+
+.enterprise_introduce_content {
+    /* width: 600px; */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    /*    color: #616060;
+   */
+}
+
+.enterprise_introduce_content h2 {
+    font-size: 16px;
+}
+
+.enterprise_introduce_content .connect_info {
+    margin-top: 30px;
+}
+
+.enterprise_introduce_content .enterprise_descript {
+    margin: 18px 0 18px;
+}
+
+.enterprise_introduce_content .enterprise_tel,
+.enterprise_introduce_content .enterprise_mail,
+.enterprise_introduce_content .enterprise_net {
+    display: block;
+    float: left;
+    padding-left: 28px;
+    position: relative;
+    text-align: left;
+}
+
+.enterprise_introduce_content .enterprise_mail,
+.enterprise_introduce_content .enterprise_net {
+    margin-left: 40px;
+}
+
+.enterprise_tel .icon,
+.enterprise_net .icon,
+.enterprise_mail .icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.enterprise_tel .icon {
+    background-position: -2px -432px;
+}
+
+.enterprise_net .icon {
+    background-position: -59px -432px;
+}
+
+.enterprise_mail .icon {
+    background-position: -31px -432px;
+}
+
+.login_content #login_form .verifyCode_input_holder {
+    width: 198px;
+    border: 0px;
+    text-align: left;
+    height: 45px;
+}
+
+.login_content #login_form .verifyCode_input_holder.hidden {
+    display: none;
+}
+
+.verifyCode_input_holder .login-input {
+    margin-top: 15px;
+    width: 99px;
+    border-bottom: 1px solid #949799;
+}
+
+.verifyCode_input_holder .tip_label {
+    width: 99px;
+}
+
+#wrap {
+    padding: 0 0 0px;
+}
+
+.login-input {
+    outline: none;
+}
+
+.login_content .login-input {
+    font-size: 14px;
+}
+
+.footVerInfo {
+    display: inline-block;
+}
+
+.meeting a {
+    color: #4e4e4e;
+}
+
+.meeting a:hover {
+    color: #007ac0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.left24 {
+    margin-left: 24px;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.login_input_wrapper .pwdEye {
+    display: none;
+    position: absolute;
+    right: 0px;
+    width: 18px;
+    height: 12px;
+    bottom: 5px;
+    background: url('../img/pwd.png') 0 0 no-repeat;
+}
+
+.login_input_wrapper .pwdEye.active {
+    background-position: -20px 0;
+}
+
+.company_info .email {
+    color: #4e4e4e;
+}
+
+.company_info .email:hover {
+    color: #007ac0;
+    text-decoration: underline;
+    cursor: pointer;
+}

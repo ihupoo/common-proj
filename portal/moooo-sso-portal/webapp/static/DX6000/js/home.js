@@ -1,0 +1,15 @@
+Mo.CompanyInfo={
+systemName:"新视通（4G版）",
+netAddress1Href:"http://xst.189.cn/",
+netAddress1Txt:"xst.189.cn",
+netAddress11Href:"",
+netAddress11Txt:"",
+netAddress2Href:"",
+netAddress2Txt:"",
+companyName:"中国电信视频服务产品（上海）运营中心",
+establishYear:"",
+companyDomainName:"",
+welcome:"",
+systemModeAbbr:"统一管理中心",
+title:"新视通（4G版）-统一管理中心",
+}

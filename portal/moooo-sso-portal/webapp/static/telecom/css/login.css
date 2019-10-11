@@ -1,0 +1,32 @@
+.mo_icons{
+	background: url(../../images/mo-icons-telecom.png?t=6.0.1821658222) no-repeat;
+}
+.login-logo{
+	height: 11px;
+    width: 72px;
+    background-position: 0px 0px;
+}
+.login-title-logo {
+	width: 23px;
+    height: 23px;
+	background-position: 0px -21px;
+    /* background: url(../../images/mo-icons-telecom.png?t=6.0.1821658222) no-repeat; */
+}
+.movision{
+	display:none;
+}
+.establishYear{
+	display:none;
+}
+.companyDomainName{
+	display:none;
+}
+.icp a{
+	font-family: "Microsoft Yahei";
+	color:#606060;;
+	margin-left:22px;
+}
+.icp a:hover {
+    color: #007ac0;
+    text-decoration: underline;
+}
