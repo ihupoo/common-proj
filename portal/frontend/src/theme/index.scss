@@ -1,0 +1,24 @@
+@import './movision/login';
+@import './telecom/login';
+
+$themes:(
+    movision: $movision-theme,
+    telecom: $telecom-theme,
+);
+
+@mixin themify($className, $themes: $themes) {
+    @each $theme-name, $map in $themes {
+        
+        .theme-#{$theme-name} & {
+
+            @each $key, $value in $map {
+                @if $className == $key {
+                    @each $x, $y in $value {
+                        #{$x}: $y;
+                    }
+                }
+            }
+        }
+
+    }
+}

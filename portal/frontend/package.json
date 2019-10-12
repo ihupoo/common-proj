@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.6.2",
-    "art-template": "^4.13.2"
+    "art-template": "^4.13.2",
+    "i18next": "^17.2.0",
+    "jquery-i18next": "^1.2.1"
   }
 }

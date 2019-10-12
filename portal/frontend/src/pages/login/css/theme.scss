@@ -1,0 +1,5 @@
+@import '~@/theme';
+
+.mo_icons{
+    @include themify('mo_icons')
+}

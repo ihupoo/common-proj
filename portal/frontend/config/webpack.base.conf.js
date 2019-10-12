@@ -11,6 +11,7 @@ module.exports = {
             '@': path.resolve(__dirname, '../src'), 
             'images': '@/assets/images', 
             'jquery$': '@/lib/jquery/3.4.1/jquery-3.4.1.js',
+            'jqueryMigrate': '@/lib/jquery/3.4.1/jquery-migrate-3.1.0',
             ...alias
         }
     },
