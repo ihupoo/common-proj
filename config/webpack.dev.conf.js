@@ -31,12 +31,18 @@ module.exports = merge.smart(
             clientLogLevel: 'none', //阻止打印那种搞乱七八糟的控制台信息
             overlay: true,
             proxy: {
-                '/api': {
+                '/portal': {
                     target: 'http://localhost:8080',
                     secure: false,
                     changeOrigin: true,
                     pathRewrite: {
-                        '^/api': '/portal'
+                        '^/portal': '/portal'
+                    },
+                    bypass: function(req, res, proxyOptions) {
+                        if (req.headers.accept.indexOf('html') !== -1) {
+                            console.log('Skipping proxy for browser request.');
+                            return '/login.html';
+                        }
                     }
                 },
                 '/mock': {
@@ -45,14 +51,6 @@ module.exports = merge.smart(
                     changeOrigin: true,
                     pathRewrite: {
                         '^/mock': '/mock'
-                    }
-                },
-                '/portal': {
-                    target: 'http://localhost:8088',
-                    secure: false,
-                    changeOrigin: true,
-                    pathRewrite: {
-                        '^/portal': '/'
                     }
                 },
             }
