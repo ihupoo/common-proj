@@ -207,9 +207,9 @@
         }
         #editor-ui .combo-arrow{
             height: 19px!important;
-            width: 20px!important;
+            width: 19px!important;
             position: relative;
-            left: -4px;
+            /*left: -4px;*/
         }
         .footerWrap{
             padding-left: 128px;
@@ -234,6 +234,8 @@
     <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/css/password.css?t=6.0.3974162316" />
     <script type="text/javascript" src="${RESOUCE_STATIC_URL}/jlib/portal/mo-portal.min.js?t=6.0.1135503165"></script>
     <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/jlib/portal/styles/css/mo-portal.min.css?t=6.0.2644823526" />
+    <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/js/jlib/components/styles/css/mo-portal.min.css?t=6.0.112740787"/>
+    <script src="${RESOUCE_STATIC_URL}/js/jlib/components/mo-portal.min.js?t=6.0.2184442885"></script>
 </head>
 <body class="bg">
 <input type="hidden" id="moid" value="${currentuser.moid}">

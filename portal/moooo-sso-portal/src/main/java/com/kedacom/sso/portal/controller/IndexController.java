@@ -148,8 +148,9 @@ public class IndexController {
 					&& PortalConstants.canRebootServerType.toLowerCase().contains(pServerType.toLowerCase())) {
 				model.addAttribute("show_sh", Constants.ONE);
 				List<String> allIpByServerInfo = portalService.getAllIpByServerInfo();
-				allIpByServerInfo.add("");
-				if (allIpByServerInfo.size() == 1) {
+				if (null == allIpByServerInfo || allIpByServerInfo.size() == 0) {
+					model.addAttribute("onlyCurrentIp", "127.0.0.1");
+				} else if (allIpByServerInfo.size() == 1) {
 					model.addAttribute("onlyCurrentIp", allIpByServerInfo.get(0));
 				}
 			} else {

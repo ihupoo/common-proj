@@ -8,8 +8,9 @@
     <%@ include file="/inc/page_base_nav_menu_pop.jsp"%>
 
     <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/js/jlib/easyui/1.8.5/themes/default/easyui.css?t=6.0.389291012"/>
-    <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/css/reset-easyui.css?t=6.0.1503837568"/>
+    <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/css/reset-easyui.css?t=6.0.1426825201"/>
     <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/${sysBrand}/css/home.css?t=6.0.2615990444" />
+    <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/js/jlib/components/styles/css/mo-portal.min.css?t=6.0.112740787"/>
 
     <title>直播列表</title>
 
@@ -230,6 +231,7 @@
         </div>
     </div>
 
+    <script src="${RESOUCE_STATIC_URL}/js/jlib/components/mo-portal.min.js?t=6.0.2184442885"></script>
     <script type="text/javascript" src="${RESOUCE_STATIC_URL}/${sysBrand}/js/home.js?t=5.2.2722389346"></script>
 
     <script id="VRS-live-rooms" type="text/html">

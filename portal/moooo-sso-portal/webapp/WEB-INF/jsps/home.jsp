@@ -14,7 +14,7 @@
     <link href="${RESOUCE_STATIC_URL}/css/home/boot.css?t=6.0.576836589" rel="stylesheet">
     <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/css/home/common-portal-home.css?t=6.0.2627875745">
     <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/${sysBrand}/css/home.css?t=6.0.2615990444" />
-    <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/js/jlib/components/styles/css/mo-portal.min.css?t=6.0.3450402478"/>
+    <link rel="stylesheet" href="${RESOUCE_STATIC_URL}/js/jlib/components/styles/css/mo-portal.min.css?t=6.0.112740787"/>
 
     <title></title>
     <!--头部子系统模块入口模板-->
@@ -533,7 +533,7 @@
 
 <script src="${RESOUCE_STATIC_URL}/js/jlib/jquery.easyui.min.js?t=6.0.2501531710"></script>
 <script src="${RESOUCE_STATIC_URL}/js/jlib/echarts.min.js?t=6.0.2692493846"></script>
-<script src="${RESOUCE_STATIC_URL}/js/jlib/components/mo-portal.min.js?t=6.0.2468775168"></script>
+<script src="${RESOUCE_STATIC_URL}/js/jlib/components/mo-portal.min.js?t=6.0.2184442885"></script>
 <script type="text/javascript" src="${RESOUCE_STATIC_URL}/${sysBrand}/js/home.js?t=5.2.2722389346"></script>
 <script src="${RESOUCE_STATIC_URL}/js/home/controller.js?t=6.0.133564478"></script>
 <script src="${RESOUCE_STATIC_URL}/js/home/events.js?t=6.0.909632798"></script>

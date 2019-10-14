@@ -2,6 +2,24 @@
  * 工具
  * 
  * */
+$.namespace("SSO.InputAccount");
+SSO.InputAccount={//避免浏览器记住密码后对input输入框的自动回填
+    autocomplete:function(){
+        $("input").each(function(){
+            var type= $(this).attr('type');
+            if(type=='password'){//只给密码框加 避免浏览器记住密码后对input输入框的自动回填
+                $(this).before("<input style='display:none' type='"+type+"'>");
+                $(this).attr("autocomplete","new-password");
+            }else{
+                $(this).attr("autocomplete","off");//避免chrome浏览器对input的默认行为（可下拉勾选输入过的内容）
+            }
+        });
+    }
+}
+$(function(){
+    SSO.InputAccount.autocomplete()
+})
+
 $.namespace("SSO.common");
 SSO.common={
 	init:function(){

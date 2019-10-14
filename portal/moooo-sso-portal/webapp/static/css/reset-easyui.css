@@ -596,5 +596,9 @@ a.s-btn-active .s-btn-downarrow, a.s-btn-plain-active .s-btn-downarrow {
     color:#666666;
 }
 .datagrid table td:nth-child(2){
-    padding-right: 8px;
+    padding-right: 4px;
+}
+
+.progressbar {
+  border: none;
 }

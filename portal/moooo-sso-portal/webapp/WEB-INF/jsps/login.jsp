@@ -192,7 +192,7 @@ input:-webkit-autofill {
 	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/jlib/namespace/1.0/jquery.namespace.min.js?t=5.0.3214755290"></script>
 	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/jlib/template-web.js?t=6.0.3773348943"></script>
 	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/jlib/ezmark/1.0/jquery.ezmark.min.js?t=5.0.851139702"></script>
-	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/utils.js?t=6.0.2571896431"></script>
+	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/utils.js?t=6.0.2932197147"></script>
 	<script type="text/javascript">
 		$.namespace("BP.config");
 		BP.config = {
@@ -206,7 +206,7 @@ input:-webkit-autofill {
 			appUrl:"${APP_URL}",
 		};
 	</script>
-	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/common.js?t=6.0.4136976962"></script>
+	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/common.js?t=6.0.3351068189"></script>
 	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/jlib/artTemplate/1.4/template.min.js?t=5.0.4284117368"></script>
 	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/jlib/artTemplate/1.4/template-syntax.min.js?t=5.0.4213305808"></script>
 	<script type="text/javascript" src="${RESOUCE_STATIC_URL}/${sysBrand}/js/login.js?t=6.0.1499158763"></script>
@@ -230,7 +230,7 @@ input:-webkit-autofill {
 
 			$('input[type="checkbox"]').ezMark();
 			/* if(isRent){
-   checkbox-gray             $(".commercialVerInfo").css("display","inline-block");
+                $(".commercialVerInfo").css("display","inline-block");
             } */
 			if(isIE()){
 				$("#password").removeAttr("readonly");
@@ -284,7 +284,7 @@ input:-webkit-autofill {
 			} */
 
 			setTimeout(function () {
-				loadOtherCss('${RESOUCE_STATIC_URL}/css/reset-easyui.css?t=6.0.1503837568');
+				loadOtherCss('${RESOUCE_STATIC_URL}/css/reset-easyui.css?t=6.0.1426825201');
 				loadOtherCss('${RESOUCE_STATIC_URL}/css/reset-mCustomScrollbar.min.css?t=6.0.393555021');
 				loadOtherCss('${RESOUCE_STATIC_URL}/js/jlib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.min.css?t=6.0.1765382074');
 				loadOtherCss('${RESOUCE_STATIC_URL}/js/jlib/imgareaselect/imgareaselect-default.css?t=5.0.1277980685');

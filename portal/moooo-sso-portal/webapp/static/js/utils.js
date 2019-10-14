@@ -305,97 +305,106 @@ Mo.loadMask = {
     }
 };
 
- $.namespace("Mo.RebootTip");
- Mo.RebootTip = {
-	 intervalId: '',
-	 bodyCssHeight: 'auto',
-	 bodyCssWidth: 'auto',
-	 bodyCssOverflow: 'auto',
-	 show: function (msg, timeout, showDialog, newIp) {
-		 if (!msg) {
-			 msg = '系统重启中，预计5分钟......请勿关闭页面';
-		 }
-		 var rebootWrapper = $('#reboot-wrapper');
-		 var bodyElement = $('body');
-		 Mo.RebootTip.bodyCssHeight = bodyElement.css('height');
-		 bodyElement.css('height','100%');
-		 Mo.RebootTip.bodyCssWidth = bodyElement.css('width');
-		 bodyElement.css('width','100%');
-		 Mo.RebootTip.bodyCssOverflow = bodyElement.css('overflow');
-		 bodyElement.css('overflow','hidden');
-		 if (!rebootWrapper[0]) {
-			 var top = 0;
-			 var logo = $('.sys-info .header-logo');
-			 if (!!logo[0]) {
-                 top = parseInt(logo.css('margin-top'))*2 + logo.height();
-			 }
-			 var div = '<div id="reboot-wrapper" style="height:calc(100% - ' + top + 'px);top:' + top + 'px;"><div class="reboot-img"></div><div class="reboot-info"><span id="reboot-info-text">' + msg + '</span></div></div>';
-			 bodyElement.append(div);
-             this.disableOperations();//禁用掉头部的操作按钮
-		 } else {
-			 rebootWrapper.find('#reboot-info-text').text(msg);
-			 rebootWrapper.show();
-		 }
-		 if (!timeout || isNaN(timeout)) {
-			 timeout = 120000;
-		 }
-		 setTimeout(function () {
-			 if (!newIp) {
-				 Mo.RebootTip.intervalId = window.setInterval(function () {
-					 Mo.RebootTip.getStatus(showDialog);
-				 }, 10000);
-			 } else {
-				 var baseUrl = location.protocol + '//' + newIp + ':' + location.port + Mo.Config.appUrl;
-				 Mo.RebootTip.checkSuccessCallback(showDialog, baseUrl);
-			 }
-		 }, timeout);
-	 },
-     disableOperations:function(){//禁用头部操作
-         $('.setting-wrapper .seetings a').addClass("disabled");
-         $("#header_title_logo").css('cursor', 'default').attr('href','javascript:');
-         $("#header_title_logo span").css('cursor', 'default');
-     },
-	 hide: function () {
-		 window.clearInterval(Mo.RebootTip.intervalId);
-		 var bodyElement = $('body');
-		 bodyElement.css('height',Mo.RebootTip.bodyCssHeight);
-		 bodyElement.css('width',Mo.RebootTip.bodyCssWidth);
-		 bodyElement.css('overflow',Mo.RebootTip.bodyCssOverflow);
-		 var rebootWrapper = $('#reboot-wrapper');
-		 if (!!rebootWrapper[0]) {
-			 rebootWrapper.hide();
-		 }
-	 },
-	 getStatus: function (showDialog) {
-        $.ajax({
-            url: Mo.Config.appUrl + '/check',
-            method: 'GET',
-            timeout: 7000,
-            success: function() {
-                window.clearInterval(Mo.RebootTip.intervalId);
-                Mo.RebootTip.checkSuccessCallback(showDialog);
+$.namespace("Mo.RebootTip")
+Mo.RebootTip = {
+    intervalId: null,
+    progressbar: null,
+    progressId: null,
+    runningFlag: true,
+    show: function(msg, timeout, progressTime, domain, noDialog, toCore) {
+        if (!msg) {
+            msg = '系统重启中，请稍候...';
+        }
+        if (!timeout || isNaN(timeout)) {
+            timeout = 120000;
+        }
+        if (!progressTime || isNaN(progressTime)) {
+            progressTime = 300000;
+        }
+        this.runningFlag = true;
+        this.showProgressDialog(msg, progressTime);
+        setTimeout(function() {
+            if (Mo.RebootTip.runningFlag) {
+                Mo.RebootTip.intervalId = window.setInterval(function() {
+                    Mo.RebootTip.getStatus(domain, noDialog, toCore);
+                }, 10000);
             }
+        }, timeout);
+    },
+	getStatus: function (domain, noDialog, toCore) {
+		var appurl = toCore ? '/portalCore' : '/portal';
+        if (domain) {
+			var loginUrl = domain + appurl + '/login';
+            Mo.RebootTip.complete(loginUrl, noDialog);
+        } else {
+            $.ajax({
+                url: Mo.Config.appUrl + '/check',
+                method: 'GET',
+                timeout: 7000,
+                success: function() {
+                    var loginUrl = location.href.split(Mo.Config.appUrl)[0] + appurl + '/login';
+                    Mo.RebootTip.complete(loginUrl, noDialog);
+                }
+            });
+        }
+    },
+    getDialogTemplate: function(msg) {
+        return (
+            '<div class="mo-msgbox-wrapper" style="display: block;"><div class="mo-msgbox-content mo-dialog-content" style="height:256px"><div class="title">' +
+            '<span>提示</span></div><div class="separater"></div><div class="info-wrap"><div class="info" id="infoCustom" style="margin-left:25px">' +
+            msg +
+            '<div id="rebootProgressbar" style="margin-top:12px"></div></div></div></div></div>'
+        );
+    },
+    showProgressDialog: function(msg, progressTime) {
+        top.$.dialog({
+            padding: 0,
+            id: 'rebootProgressDialog',
+            content: Mo.RebootTip.getDialogTemplate(msg),
+            lock: true,
+            opacity: 0.5,
+            cancel: false,
+            drag: false,
+            esc: false
         });
-	 },
-	 checkSuccessCallback: function (showDialog, baseUrl) {
-		 if (!baseUrl) {
-			 baseUrl = Mo.Config.appUrl;
-		 }
-		 var url = baseUrl + '/login';
-		 if (!showDialog) {
-			 top.location.href = url;
-		 } else {
-			 Mo.alert('重启完成，请重新登录生效！', function (r) {
-				 if (r) {
-					 top.location.href = url;
-				 }
-			 });
-		 }
-	 },
-	 loadImgCache: function (url) {
-		 setTimeout(function () {
-			 var img = new Image();
-			 img.src = url;
-		 }, 0);
-	 }
- };
+        this.progressbar = top.Portal.Progressbar('#rebootProgressbar', {
+            width: 315
+        });
+        this.progressId = window.setInterval(function() {
+            var progressbar = Mo.RebootTip.progressbar;
+            var current = progressbar.getValue();
+            if (current < 99) {
+                progressbar.setValue(++current);
+            } else {
+                window.clearInterval(Mo.RebootTip.progressId);
+            }
+        }, progressTime / 100);
+    },
+    close: function() {
+        top.$.dialog({ id: 'rebootProgressDialog' }).close();
+        this.runningFlag = false;
+        window.clearInterval(Mo.RebootTip.progressId);
+        window.clearInterval(Mo.RebootTip.intervalId);
+    },
+    complete: function(loginUrl, noDialog) {
+        window.clearInterval(this.progressId);
+        this.progressbar.setValue(100);
+        window.clearInterval(this.intervalId);
+        setTimeout(function() {
+            top.$.dialog({ id: 'rebootProgressDialog' }).close();
+            if (Mo.RebootTip.runningFlag) {
+                if (noDialog) {
+                    top.window.onbeforeunload = null;
+                    top.location.href = loginUrl;
+                } else {
+                    Moo.alert('重启完成，请重新登录生效！', function(r) {
+                        if (r) {
+                            top.window.onbeforeunload = null;
+                            top.location.href = loginUrl;
+                        }
+                    });
+                }
+            }
+        }, 1000);
+    }
+};

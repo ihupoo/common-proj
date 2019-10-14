@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="${RESOUCE_STATIC_URL}/css/commonCSS.css?t=6.0.2250813937">
 <link rel="stylesheet" type="text/css" href="${RESOUCE_STATIC_URL}/js/jlib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.min.css?t=6.0.1765382074">
 <link rel="stylesheet" type="text/css" href="${RESOUCE_STATIC_URL}/css/reset-mCustomScrollbar.min.css?t=6.0.393555021">
-<link rel="stylesheet" type="text/css" href="${RESOUCE_STATIC_URL}/css/reset-easyui.css?t=6.0.1503837568" type="text/css">
+<link rel="stylesheet" type="text/css" href="${RESOUCE_STATIC_URL}/css/reset-easyui.css?t=6.0.1426825201" type="text/css">
 
 
 <script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/jlib/jquery/3.4.1/jquery-3.4.1.min.js?t=6.0.1541703249"></script>
@@ -26,7 +26,7 @@
 <script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/jlib/ezmark/1.0/jquery.ezmark.min.js?t=5.0.851139702"></script>
 <script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/jlib/imgareaselect/jquery.imgareaselect.pack.js?t=5.0.1441039338" ></script>
 
-<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/utils.js?t=6.0.2571896431"></script>
+<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/utils.js?t=6.0.2932197147"></script>
 <script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/messagebox.js?t=6.0.3966687589"></script>
 <script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/messageboxCustom.js?t=6.0.476928025"></script>
 
@@ -43,7 +43,5 @@ $.namespace("Mo.Config");
 Mo.Config = {
 		appUrl:"${APP_URL}",
 };
-//加载重启提示图片缓存
-Mo.RebootTip.loadImgCache('${RESOUCE_STATIC_URL}/images/config-wizard.png?t=6.0.1979589880');
 </script>
-<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/common.js?t=6.0.4136976962"></script>
+<script type="text/javascript" src="${RESOUCE_STATIC_URL}/js/common.js?t=6.0.3351068189"></script>

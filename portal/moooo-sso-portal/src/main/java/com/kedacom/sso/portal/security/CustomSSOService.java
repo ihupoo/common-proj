@@ -108,6 +108,7 @@ public class CustomSSOService extends AbstractSSOService {
 			Cookie cookie = new Cookie("loginUserName", URLEncoder.encode(ssoUser.getLoginName(), "UTF-8"));
 			cookie.setPath(request.getContextPath());
 			cookie.setMaxAge(14*24*3600);
+			cookie.setHttpOnly(true);
 			response.addCookie(cookie);
 		} catch (Exception e) {
 			e.printStackTrace();

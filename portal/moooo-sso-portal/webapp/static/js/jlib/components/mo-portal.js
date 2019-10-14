@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 166);
+/******/ 	return __webpack_require__(__webpack_require__.s = 167);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -208,27 +208,6 @@ module.exports = _possibleConstructorReturn;
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var O = 'object';
-var check = function (it) {
-  return it && it.Math == Math && it;
-};
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-module.exports =
-  // eslint-disable-next-line no-undef
-  check(typeof globalThis == O && globalThis) ||
-  check(typeof window == O && window) ||
-  check(typeof self == O && self) ||
-  check(typeof global == O && global) ||
-  // eslint-disable-next-line no-new-func
-  Function('return this')();
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(73)))
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var _Object$getPrototypeOf = __webpack_require__(141);
 
 var _Object$setPrototypeOf = __webpack_require__(69);
@@ -243,7 +222,7 @@ function _getPrototypeOf(o) {
 module.exports = _getPrototypeOf;
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _Object$create = __webpack_require__(148);
@@ -268,10 +247,31 @@ function _inherits(subClass, superClass) {
 module.exports = _inherits;
 
 /***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var O = 'object';
+var check = function (it) {
+  return it && it.Math == Math && it;
+};
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+module.exports =
+  // eslint-disable-next-line no-undef
+  check(typeof globalThis == O && globalThis) ||
+  check(typeof window == O && window) ||
+  check(typeof self == O && self) ||
+  check(typeof global == O && global) ||
+  // eslint-disable-next-line no-new-func
+  Function('return this')();
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(73)))
+
+/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var shared = __webpack_require__(25);
 var uid = __webpack_require__(34);
 var NATIVE_SYMBOL = __webpack_require__(48);
@@ -304,7 +304,7 @@ module.exports = function (exec) {
 
 "use strict";
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var getOwnPropertyDescriptor = __webpack_require__(50).f;
 var isForced = __webpack_require__(79);
 var path = __webpack_require__(13);
@@ -567,7 +567,7 @@ module.exports = function (it, TAG, STATIC, SET_METHOD) {
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var setGlobal = __webpack_require__(74);
 var IS_PURE = __webpack_require__(27);
 
@@ -705,7 +705,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var NATIVE_WEAK_MAP = __webpack_require__(77);
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var isObject = __webpack_require__(16);
 var hide = __webpack_require__(15);
 var objectHas = __webpack_require__(14);
@@ -937,7 +937,7 @@ module.exports = !DESCRIPTORS && !fails(function () {
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var isObject = __webpack_require__(16);
 
 var document = global.document;
@@ -1300,7 +1300,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var path = __webpack_require__(13);
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 
 var aFunction = function (variable) {
   return typeof variable == 'function' ? variable : undefined;
@@ -1631,7 +1631,7 @@ module.exports = g;
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var hide = __webpack_require__(15);
 
 module.exports = function (key, value) {
@@ -1716,7 +1716,7 @@ module.exports = {
 /* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var nativeFunctionToString = __webpack_require__(78);
 
 var WeakMap = global.WeakMap;
@@ -1903,7 +1903,7 @@ module.exports = function (it) {
 
 __webpack_require__(88);
 var DOMIterables = __webpack_require__(89);
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var hide = __webpack_require__(15);
 var Iterators = __webpack_require__(30);
 var wellKnownSymbol = __webpack_require__(10);
@@ -2119,7 +2119,7 @@ module.exports = function (METHOD_NAME) {
 "use strict";
 
 var $ = __webpack_require__(12);
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var IS_PURE = __webpack_require__(27);
 var DESCRIPTORS = __webpack_require__(17);
 var NATIVE_SYMBOL = __webpack_require__(48);
@@ -2606,7 +2606,7 @@ setToStringTag(Math, 'Math', true);
 /* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var setToStringTag = __webpack_require__(24);
 
 // JSON[@@toStringTag] property
@@ -3157,7 +3157,7 @@ module.exports = __webpack_require__(13).setTimeout;
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(12);
-var global = __webpack_require__(7);
+var global = __webpack_require__(9);
 var userAgent = __webpack_require__(162);
 
 var slice = [].slice;
@@ -3215,6 +3215,12 @@ module.exports = getBuiltIn('navigator', 'userAgent') || '';
 
 /***/ }),
 /* 166 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3473,11 +3479,11 @@ var possibleConstructorReturn = __webpack_require__(6);
 var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs3/helpers/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(8);
+var getPrototypeOf = __webpack_require__(7);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs3/helpers/inherits.js
-var inherits = __webpack_require__(9);
+var inherits = __webpack_require__(8);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // CONCATENATED MODULE: ./node_modules/@kedacom3/base-button/src/button.js
@@ -5834,12 +5840,231 @@ var styles_dialog = __webpack_require__(165);
 
 
 
+// CONCATENATED MODULE: ./node_modules/@kedacom3/base-progressBar/src/progressbar.js
+
+
+
+
+
+
+
+/**
+ * @class Progressbar
+ * @author 孙春燕
+ * @description
+ * 进度条组件
+ * 依赖文件：
+ * jquery: jquery.js v1.12.4
+ * {@link http://localhost:3000/demo/progressbar/|Demo}
+ * @example
+ *  使用方法：
+ *      new Progressbar("#id",{
+ *          width:200,进度条的宽度 默认200
+ *          height:10,进度条的高度 默认10
+ *          value:null,进度条的进度值 百分比
+ *          background:#e4e0e0,进度条的背景色 默认e4e0e0
+ *          backgroundBar:'#1e94da',进度条的进度值的背景色 默认1e94da
+ *          hidden：false,是否隐藏进度条 默认展示 不隐藏 即显示状态
+ *     })
+ * @property {*} id 元素对象、#id .class
+ * @property {object} config 进度条基础参数属性
+ * @property {number} config.width 进度条的宽度
+ * @property {number} config.height 进度条的宽度
+ * @property {string} config.value 进度条的进度值
+ * @property {string} config.background 进度条的背景色
+ * @property {string} config.backgroundBar 进度条的进度值的背景色
+ * @property {string} config.getHidden 获取当前进度条是否隐藏
+ * @property {string} config.show 展示
+ * @property {string} config.hide 隐藏
+ * @property {string} config.hidden 是否隐藏进度条 默认展示 不隐藏 即显示状态
+ *
+ */
+
+
+var progressbar_Progressbar =
+/*#__PURE__*/
+function (_Base) {
+  inherits_default()(Progressbar, _Base);
+
+  function Progressbar(id) {
+    var _this;
+
+    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    classCallCheck_default()(this, Progressbar);
+
+    _this = possibleConstructorReturn_default()(this, getPrototypeOf_default()(Progressbar).call(this));
+    _this.config = $.extend(true, {
+      width: 150,
+      //默认宽
+      height: 3,
+      //默认高
+      value: 0,
+      //默认进度 百分比
+      background: '#e4e0e0',
+      backgroundBar: '#1e94da',
+      hidden: false //是否隐藏 默认不隐藏 即显示状态
+
+    }, config);
+    _this.el = id;
+
+    if (!(id instanceof jQuery)) {
+      _this.el = $(id);
+    }
+
+    _this._init();
+
+    return _this;
+  }
+
+  createClass_default()(Progressbar, [{
+    key: "_init",
+    value: function _init(newWidth) {
+      var _context, _context2, _context3, _context4, _context5;
+
+      if (!!this.config.hidden) {
+        this.el.css('display', 'none');
+      }
+
+      var width = newWidth || this.config.width; //进度条总长度
+
+      var progressWidth = Math.floor(width * this.config.value / 100); //进度值占据进度条的长度
+
+      progressWidth = progressWidth > width ? width : progressWidth;
+
+      var templateProgress = concat_default()(_context = concat_default()(_context2 = concat_default()(_context3 = concat_default()(_context4 = concat_default()(_context5 = "<div \n        class=\"progressbar\" \n        style=\"width:".concat(width, "px;\n            height:")).call(_context5, this.config.height, "px;\n            background: ")).call(_context4, this.config.background, ";\n            overflow: hidden;\" \n           >\n            <div class=\"progressbar-value\" data-value=")).call(_context3, this.config.value, "\n                style=\"width: ")).call(_context2, progressWidth, "px;\n                height:100%;\n                margin:-1px;\n                border: 1px solid #ddd;\n                background:")).call(_context, this.config.backgroundBar, "\">\n            </div>\n        </div>");
+
+      this.el.empty();
+      this.el.append(templateProgress);
+    }
+    /**
+    * @description 设置显示
+    */
+
+  }, {
+    key: "show",
+    value: function show() {
+      $(this.el).show();
+    }
+    /**
+     * @description 设置隐藏
+     */
+
+  }, {
+    key: "hide",
+    value: function hide() {
+      $(this.el).hide();
+    }
+    /**
+    * 
+    * @description 获取隐藏状态
+    */
+
+  }, {
+    key: "getHidden",
+    value: function getHidden() {
+      var status = '';
+      var display = $(this.el).css('display');
+
+      if (display == 'none') {
+        status = true;
+      } else {
+        status = false;
+      }
+
+      return status;
+    }
+    /**
+     * 
+     * @description 设置进度条的长度
+     * @param {Number} width 
+    */
+
+  }, {
+    key: "setWidth",
+    value: function setWidth(newWidth) {
+      $(".progressbar", this.el).width(newWidth);
+
+      this._init(newWidth);
+    }
+    /**
+    * 
+    * @description 获取进度条的长度
+    */
+
+  }, {
+    key: "getWidth",
+    value: function getWidth() {
+      return $(".progressbar", this.el).width();
+    }
+    /**
+     * 
+     * @description 设置进度条的高度
+     * @param {Number} height 
+     */
+
+  }, {
+    key: "setHeight",
+    value: function setHeight(height) {
+      $(".progressbar", this.el).height(height);
+    }
+    /**
+    * 
+    * @description 获取进度条的高度
+    */
+
+  }, {
+    key: "getHeight",
+    value: function getHeight() {
+      return $(".progressbar", this.el).height();
+    }
+    /**
+    * 
+    * @description 设置进度条的进度值
+    * @param {Number} value 
+    */
+
+  }, {
+    key: "setValue",
+    value: function setValue(value) {
+      // 进度值
+      $(".progressbar-value", this.el).attr('data-value', value); // 进度值在页面中占据进度条的长度
+
+      var width = $(".progressbar", this.el).width() * this.getValue() / 100; //向下取整 避免有32.45这样的小数px 判断是否大于整个进度条的长度是因为怕传过来的value大于100%
+
+      width = width > this.getWidth() ? this.getWidth() : Math.floor(width);
+      $(".progressbar-value", this.el).width(width);
+    }
+    /**
+    * 
+    * @description 获取进度条的进度值
+    */
+
+  }, {
+    key: "getValue",
+    value: function getValue() {
+      return $(".progressbar-value", this.el).attr('data-value');
+    }
+  }]);
+
+  return Progressbar;
+}(base);
+
+/* harmony default export */ var progressbar = (progressbar_Progressbar);
+// EXTERNAL MODULE: ./node_modules/@kedacom3/base-progressBar/src/styles/progressbar.scss
+var styles_progressbar = __webpack_require__(166);
+
+// CONCATENATED MODULE: ./node_modules/@kedacom3/base-progressBar/src/index.js
+
+
+/* harmony default export */ var base_progressBar_src = (progressbar);
 // CONCATENATED MODULE: ./src/index.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Portal", function() { return Portal; });
 
 //打包第三方组件
 //checkbox radio
  //scrollBar
+
 
 
 
@@ -5886,6 +6111,9 @@ var Portal = {
   WinAlert: function WinAlert() {
     window.alert = window.top.Portal._Alert;
     window.confirm = window.top.Portal._Confirm;
+  },
+  Progressbar: function Progressbar(id, config, data) {
+    return initInstant(base_progressBar_src, id, config, data, 'progressbar');
   },
   ScrollBar: function ScrollBar(id, config, data) {
     return initInstant(base_scrollBar_src, id, config, data, 'scrollBar');
