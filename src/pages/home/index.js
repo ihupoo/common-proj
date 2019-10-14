@@ -1,3 +1,5 @@
+import './css/home.scss';
+import './css/theme.scss';
 
 
-console.log('object :', 111);
+

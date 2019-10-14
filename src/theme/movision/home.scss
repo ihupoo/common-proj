@@ -1,0 +1,35 @@
+$movision-theme : (
+    '.sys-info .header-logo': (
+        display: inline-block,
+        height: 18px,
+        width: 116px,
+        background-position: 0px 0px,
+        margin-top:18px,
+        float: left,
+        cursor: pointer,
+    ),
+    slash: (
+        background-position: 0px -25px,
+        height: 18px,
+        width: 9px,
+    ),
+    '.about_company .about_company_logo': (
+        height: 60px,
+        width: 116px,
+        background-position: 0px -835px,
+    ),
+    '.about_company .about_company-alternate-logo': (
+        height: 60px,
+        width: 58px,
+        background-position: 0px -765px,
+    ),
+    about_netAddress1: (
+        display:none,
+    ),
+    about_netAddress11: (
+        
+    ),
+    about_netAddress2: (
+        margin-left: 15px,
+    ),
+)

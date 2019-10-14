@@ -1,0 +1,26 @@
+$DX6000-theme : (
+    mo_icons:(
+        background: url('~images/mo-icons-telecom.png') no-repeat
+    ),
+    login-title-logo: (
+        width: 23px,
+        height: 23px,
+        background-position: 0px -21px
+    ),
+    movision: (
+        display:none
+    ),
+    establishYear: (
+        display:none
+    ),
+    companyDomainName: (
+        display:none,
+    ),
+    'icp a': (
+        display: none
+    ),
+    'icp a:hover': (
+        color: #007ac0,
+        text-decoration: underline
+    )
+)

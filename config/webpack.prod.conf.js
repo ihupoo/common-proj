@@ -11,82 +11,97 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const { cssPlugin } = require('./utils.js')
 
 
-module.exports = merge(base, {
-    output: {
-        filename: '[name].[chunkhash].js', //chunkhash:根据自身的内容计算而来
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(css|scss|sass)$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: '../'
+module.exports = merge.smart(
+    {
+        output: {
+            filename: '[name].[chunkhash].js' //chunkhash:根据自身的内容计算而来
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.(css|scss|sass)$/,
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                publicPath: '../'
+                            }
                         }
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 2
+                    ]
+                },
+                {
+                    test: /\.(eot|ttf|woff|svg|woff2)$/,
+                    use: 'file-loader'
+                },
+                {
+                    test: /\.(jpe?g|png|gif)$/,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 10000,
+                                outputPath: 'images/', //打包目录
+                                name: '[name].[hash:7].[ext]'
+                            }
                         }
-                    },
-                    'postcss-loader',
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            implementation: require('sass')
-                        }
-                    },
-                    {
-                        loader: 'sass-resources-loader',
-                        options: {
-                            resources: [
-                                // resolve方法第二个参数为scss配置文件地址，如果有多个，就进行依次添加即可
-                                path.resolve(__dirname, '../src/styles/variable.scss'),
-                            ],
-                        }
-                    },
-                ]
-            }
-        ]
-    },
-    plugins: [
+                    ]
+                }
+            ]
+        },
+        plugins: [
+            new CleanWebpackPlugin({
+                verbose: true
+            }),
+            new MiniCssExtractPlugin({
+                filename: 'css/[name].[contenthash].css',
+                chunkFilename: 'css/[name].[contenthash].css'
+            }),
+            new OptimizeCSSAssetsPlugin(),
 
-        new CleanWebpackPlugin({
-            verbose: true
-        }),
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash].css',
-            chunkFilename: 'css/[name].[contenthash].css',
-        }),
-        new webpack.HashedModuleIdsPlugin(), //固化module id
-
-        new SimpleProgressWebpackPlugin({
-            format: 'expanded',
-        }),
-
-        new BundleAnalyzerPlugin() // 可视化定位体积大的模块, 使用默认配置，启动127.0.0.1:8888
-    ],
-    optimization: {
-        splitChunks:{
-            cacheGroups:{
-                ...cssPlugin
+            //new webpack.HashedModuleIdsPlugin(), //固化module id
+            new SimpleProgressWebpackPlugin({
+                format: 'expanded'
+            })
+            //new BundleAnalyzerPlugin() // 可视化定位体积大的模块, 使用默认配置，启动127.0.0.1:8888
+        ],
+        optimization: {
+            moduleIds: 'hashed',
+            splitChunks: {
+                chunks: 'all', //'all'|'async'|'initial'(全部|按需加载|初始加载)的chunks
+                maxAsyncRequests: 5, // 最大异步请求数， 默认1
+                maxInitialRequests: 3, // 最大初始化请求书，默认1
+                name: true,
+                cacheGroups: {
+                    ...cssPlugin,
+                    // 抽离第三方插件
+                    vendor: {
+                        test: /node_modules/, // 指定是node_modules下的第三方包
+                        chunks: 'all',
+                        name: 'vendor', // 打包后的文件名，任意命名
+                        priority: 10 // 设置优先级，防止和自定义公共代码提取时被覆盖，不进行打包
+                    },
+                    libs: {
+                        test: /src[\\|\/]lib/,
+                        chunks: 'all',
+                        name: 'libs',
+                        priority: 20
+                    },
+                    // 抽离自己写的公共代码，utils这个名字可以随意起
+                    utils: {
+                        chunks: 'all',
+                        name: 'utils',
+                        minSize: 0, // 只要超出0字节就生成一个新包
+                        minChunks: 2, //至少两个chucks用到
+                        reuseExistingChunk: true
+                    }
+                }
+            },
+            //提取webpack运行时的代码
+            runtimeChunk: {
+                name: 'manifest'
             }
         },
-        minimizer: [
-            new TerserPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: false
-            }),
-            new OptimizeCSSAssetsPlugin({
-                cssProcessorPluginOptions: {
-                    preset: ['default', { discardComments: { removeAll: true } }],
-                },
-            }),
-        ]
+        mode: 'production'
     },
-    mode: 'production'
-})
+    base
+);

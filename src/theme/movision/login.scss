@@ -1,0 +1,20 @@
+$movision-theme : (
+    mo_icons:(
+        background: url("~images/mo_icons.png") no-repeat center
+    ),
+    login-title-logo:(
+        width: 23px,
+        height: 23px,
+        background-position: 0px -21px
+    ),
+    'icp a': (
+        font-family: "Microsoft Yahei",
+        color:#606060,
+        margin-left:22px
+    ),
+    'icp a:hover': (
+        color: #007ac0,
+        text-decoration: underline
+    )
+)
+

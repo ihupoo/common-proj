@@ -1,0 +1,39 @@
+@import '~@/theme';
+
+.mo_icons {
+  @include themify('mo_icons')
+}
+
+.login-logo {
+  height: 11px;
+  width: 72px;
+  background-position: 0px 0px;
+}
+
+.login-title-logo {
+  @include themify('login-title-logo')
+}
+
+.movision {
+  @include themify('movision')
+}
+
+.establishYear {
+  @include themify('establishYear')
+}
+
+.companyDomainName {
+  @include themify('companyDomainName')
+}
+
+.icp a {
+  @include themify('icp a')
+}
+
+.icp a:hover {
+  @include themify('icp a:hover')
+}
+
+.icp {
+  @include themify('icp')
+}

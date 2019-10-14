@@ -1,0 +1,32 @@
+@import './movision/login';
+@import './telecom/login';
+@import './kedacom/login';
+@import './DX6000/login';
+@import './movision/home';
+@import './telecom/home';
+@import './kedacom/home';
+@import './DX6000/home';
+
+$themes:(
+    movision: $movision-theme,
+    telecom: $telecom-theme,
+    kedacom: $kedacom-theme,
+    DX6000: $DX6000-theme,
+);
+
+@mixin themify($className, $themes: $themes) {
+    @each $theme-name, $map in $themes {
+        
+        .theme-#{$theme-name} & {
+
+            @each $key, $value in $map {
+                @if $className == $key {
+                    @each $x, $y in $value {
+                        #{$x}: $y;
+                    }
+                }
+            }
+        }
+
+    }
+}
