@@ -1,5 +1,3 @@
-import movision from './movision';
-
 export default {
     home:{
         user:{
@@ -31,8 +29,7 @@ export default {
             }
         },
         pagebase:{
-            copyright:'版权所有',
-            movision
+            copyright:'版权所有'
         }
     },
     SSO:{
