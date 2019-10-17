@@ -1,3 +1,8 @@
+import movision from './movision';
+import kedacom from './kedacom';
+import telecom from './telecom';
+import DX6000 from './DX6000';
+
 export default {
     home:{
         user:{
@@ -29,7 +34,11 @@ export default {
             }
         },
         pagebase:{
-            copyright:'版权所有'
+            copyright:'Copyright',
+            movision,
+            kedacom,
+            telecom,
+            DX6000
         }
     },
     SSO:{
@@ -37,7 +46,7 @@ export default {
             username:'userName',
             password:'password',
             submit:'Log in',
-            forgetPassword:'forget password',
+            forgetPassword:'Request a Password Reset',
         }
     }
 }

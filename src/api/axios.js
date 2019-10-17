@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 const service = axios.create({
-    baseURL: '/api',
+    baseURL: '/mock',
     timeout: 115000
 })
 
 //请求拦截
 service.interceptors.request.use(config => {
-    config.headers['X-Token'] = 111
+    
     return config
 
 }, error => {

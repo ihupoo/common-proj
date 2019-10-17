@@ -1,0 +1,39 @@
+<div class="enterprise_introduce_content clearfix">
+    <div class="company_info_up"> 
+        <p class="clearfix company_info">
+            <!-- 电话图标 -->
+            <a class="no_meeting_icon phone_icon"></a>
+            <!-- 电话 -->
+            <span class="phoneNumber" data-i18n="home.pagebase.{{sysBrand}}.login.phoneNumber"></span>
+            <!-- 邮件 -->
+            <a class="no_meeting_icon emal_icon"></a>
+            <a class="email" data-i18n="[href]home.pagebase.{{sysBrand}}.login.emailAddressHref;home.pagebase.{{sysBrand}}.login.emailAddress"></a>
+            <!-- 网址 -->
+            <a class="no_meeting_icon no_meeting"></a>
+            <span class="meeting">
+                <a target="_blank" data-i18n="[href]home.pagebase.{{sysBrand}}.netAddress1Href;home.pagebase.{{sysBrand}}.netAddress1Txt"></a>
+            </span>
+            <span class="meeting movision">
+                <a class="no_meeting_icon no_meeting"></a>
+                <a target="_blank" data-i18n="[href]home.pagebase.{{sysBrand}}.login.netAddress2Href;home.pagebase.{{sysBrand}}.login.netAddress2Txt"></a>
+            </span>
+            
+        </p>
+    </div>
+    
+    <div class="company_info_down">
+        <p class="clearfix company_info">
+            <!-- 公司名称-->
+            <span class="companyName" data-i18n="home.pagebase.{{sysBrand}}.companyName"></span>
+            <span class="copyright" >Copyright &copy;
+            <span class="establishYear"  data-i18n="home.pagebase.{{sysBrand}}.establishYear"></span>
+            <span class="version_year">{{versionYear}}</span>
+            <span class="companyDomainName"  data-i18n="home.pagebase.{{sysBrand}}.companyDomainName"></span>
+            <span>.&nbsp;All rights reserved.</span>
+            <!-- 科达视讯无备案号 摩云视讯有备案号 阿里云电信有备案号 DX6000无备案号 -->
+            <span class="icp">
+                <a target="_blank" data-i18n="[href]home.pagebase.{{sysBrand}}.icpInfoHref;home.pagebase.{{sysBrand}}.icpInfoTxt"></a>
+            </span>				
+        </p>
+    </div>
+</div>

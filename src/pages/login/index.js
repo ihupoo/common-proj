@@ -1,9 +1,10 @@
 import $ from 'jquery-migrate';
-import 'jquery-namespace';
+import 'jquery.namespace';
+import 'ezmark'
 
-import '@/lib/ezmark/1.0/ezmark'
-import '@/lib/ezmark/1.0/jquery.ezmark'
+import '@/lib/ezmark/ezmark.scss'
 
+import '@/styles/reset.scss'
 import '@/styles/common.scss'
 import '@/styles/commonCSS.scss'
 
@@ -13,18 +14,19 @@ import './css/theme.scss';
 import '@/utils/utils'
 import './js/_tmp_globalUrl'
 import '@/utils/common'
-
 import '@/utils/sm';
 import '@/utils/md5';
 import '@/utils/digestAuth';//todo
 
 import './js/login';
 
-var showVerifyCode = "${showVerifyCode}";
-var realmName = "${realmName}";
-var nonceValue = "${nonceValue}";
-var systemSecurity = "${systemSecurity}";
-var outAlter = "${outAlter}";
+import { fetchLoginInfo } from './service';
+import renderHeader from './tpl/sys_logo.art';
+import renderFooter from './tpl/enterprise_introduce.art';
+
+
+import store from '@/store/index';
+import { i18next , documentTitle } from '@/i18n/i18n';
 
 function isIE() {
     if (!!window.ActiveXObject || "ActiveXObject" in window)
@@ -32,15 +34,15 @@ function isIE() {
     else
         return false;
 }
+
 $(function () {
 
     $('input[type="checkbox"]').ezMark();
-    /* if(isRent){
-        $(".commercialVerInfo").css("display","inline-block");
-    } */
+
     if (isIE()) {
         $("#password").removeAttr("readonly");
     }
+
     $("#password").on('focus', function () {
         $("#password").removeAttr("readonly");
     });
@@ -62,42 +64,47 @@ $(function () {
         }
     });
 
-    Mo.common.logininit(Mo.CompanyInfo);
-    SSO.login.init();
-    SSO.login.initVerifyCode();
-    window.onresize = function() {
-        SSO.login.init();
-    }
-    /* if(outAlter=='100010'){
-        $("#login_form .error_msg").text("token值已经登出，请重新登录！").show();
-    }
-    if(outAlter=='100011'){
-        $("#login_form .error_msg").text("token验证错误，请重新登录！").show();
-    } */
-    if(outAlter=='100012'){
-        $("#login_form .error_msg").text("当前账号在别处登录，请重新登录！").show();
-    }
-    /* if(outAlter=='100013'){
-        $("#login_form .error_msg").text("认证信息不存在，请重新登录！").show();
-    } */
+    fetchLoginInfo().then(res => {
+        if (res.success && res.data) {
+            const showVerifyCode = res.data.showVerifyCode;
+            const realmName = res.data.realmName;
+            const nonceValue = res.data.nonceValue;
+            const outAlter = res.data.outAlter;
+            const versionYear = res.data.versionYear;
+            const loginUserName = res.data.loginUserName;
+            const sysBrand = res.data.sysBrand
+
+
+            //将sysBrand，versionYear保存到store ??
+            $('body').addClass(`theme-${sysBrand}`);
+
+            $('#verifyImage').attr('src', `${BP.config.SYSTEM_URL}/verifyImage`)
+            $('.email_input_holder .login-input').val(loginUserName)
+
+            $('body').addClass(`theme-${sysBrand}`);
+
+
+            // i18next.changeLanguage('en-US')
+
+            $('#login_form').localize();
+            $(renderHeader({ sysBrand })).localize().appendTo('#login_header .sys_logo');
+            $(renderFooter({ sysBrand, versionYear })).localize().appendTo('#footer');
+            document.title = documentTitle(sysBrand)('login')
+
+            SSO.login.init();
+            SSO.login.initVerifyCode();
+            window.onresize = function () {
+                SSO.login.init();
+            }
+            if (outAlter == '100012') {
+                $("#login_form .error_msg").text("当前账号在别处登录，请重新登录！").show();
+            }
+
+        }
+    }).catch(err => {
+
+    })
 });
 
 
 
-// import i18next from 'i18next';
-// import jqueryI18next from 'jquery-i18next';
-// import translationZn from '@/i18n/zn-CN';
-// import translationEn from '@/i18n/en-US';
-
-// i18next.init({
-//     lng: 'zn-CN',
-//     resources: {
-//         'zn-CN': {
-//             translation: translationZn
-//         }
-//     }
-// }).then((t) => {
-//     jqueryI18next.init(i18next, $);
-
-//     $('<div class="nav"><span data-i18n="home.user.modify.title"></span></div>').localize().appendTo('body')
-// })

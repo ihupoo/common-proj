@@ -1,0 +1,5 @@
+<span class="logo_text">
+    <span class="login-title-logo mo_icons"></span>
+    <div class="logo_title" data-i18n="home.pagebase.{{sysBrand}}.systemName"></div>
+</span>
+<div class="logo_englishtext"  data-i18n="home.pagebase.{{sysBrand}}.systemEnglishName"></div>

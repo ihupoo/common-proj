@@ -10,7 +10,6 @@ module.exports = {
         alias: {//别名
             '@': path.resolve(__dirname, '../src'), 
             'images': '@/assets/images', 
-            'jquery-namespace': '@/lib/namespace/jquery.namespace.js',
             ...alias
         }
     },

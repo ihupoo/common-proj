@@ -1,0 +1,65 @@
+$DX6000-theme : (
+    //////////login/////////////
+    mo_icons:(
+        background: url('~images/mo-icons-telecom.png') no-repeat
+    ),
+    login-title-logo: (
+        width: 23px,
+        height: 23px,
+        background-position: 0px -21px
+    ),
+    movision: (
+        display:none
+    ),
+    establishYear: (
+        display:none
+    ),
+    companyDomainName: (
+        display:none,
+    ),
+    'icp a': (
+        display: none
+    ),
+    'icp a:hover': (
+        color: #007ac0,
+        text-decoration: underline
+    ),
+    ///////////// home////////////
+    mo-icons-logo-bg: (
+        background: url("~images/home_img.png") no-repeat
+    ),
+    '.sys-info .header-logo': (
+        display: inline-block,
+        height: 31px,
+        width: 116px,
+        background-position: 2px -1028px,
+        margin-top:14px,
+        float: left,
+        cursor: pointer,
+    ),
+    slash: (
+        background-position: 0px -25px,
+        height: 18px,
+        width: 9px,
+    ),
+    about_company_logo: (
+        height: 31px,
+        width: 116px,
+        background-position: -124px -1028px,
+    ),
+    about_company-alternate-logo: (
+        display:none,
+    ),
+    about_netAddress1: (
+        color: #007ac0,
+        text-decoration: underline,
+        font-family: Microsoft YaHei,
+        margin-left: 15px,
+    ),
+    about_netAddress11: (
+        display:none,
+    ),
+    about_netAddress2: (
+        display:none,
+    ),
+)

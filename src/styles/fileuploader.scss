@@ -1,0 +1,25 @@
+.qq-uploader{position:relative;width:100%}
+.qq-upload-button{}
+.qq-upload-button-hover{background-position:0 -36px;color:#fff}
+.qq-upload-button-hover span{color:#fff}
+.qq-upload-button-focus{outline:1px dotted #000}
+.qq-upload-drop-area{height:100%;left:0;min-height:70px;position:absolute;text-align:center;top:0;width:100%;z-index:2}
+.qq-upload-drop-area span{display:block;font-size:16px;margin-top:-8px;position:absolute;top:50%;width:100%}
+.qq-upload-drop-area-active{}
+.qq-upload-list{list-style:disc;margin:15px 35px;padding:0}
+.qq-upload-list li{font-size:12px;line-height:15px;margin:0;padding:0}
+.qq-upload-file,.qq-upload-spinner,.qq-upload-size,.qq-upload-cancel,.qq-upload-failed-text{margin-right:7px}
+.qq-upload-spinner{background:url('~images/loader.gif');display:inline-block;height:15px;vertical-align:text-bottom;width:15px}
+.qq-upload-size,.qq-upload-cancel{font-size:12px}
+.qq-upload-failed-text{display:none}
+.qq-upload-fail .qq-upload-failed-text{display:inline}
+.side_256{width:256px;height:256px;border: 1px solid #dcdfe1;background-color: #eff2f4; float: left; clear: both;overflow: hidden;}
+.side_128{width:128px;height:128px;border: 1px solid #dcdfe1;background-color: #eff2f4; float: left; margin-top: 128px; margin-left: 32px;overflow: hidden;}
+.side_64{width:64px;height:64px;border: 1px solid #dcdfe1;background-color: #eff2f4; float: left; margin-top: 192px; margin-left: 32px;overflow: hidden;}
+.side_32{width:32px;height:32px;border: 1px solid #dcdfe1;background-color: #eff2f4; float: left; margin-top: 224px; margin-left: 32px;overflow: hidden;}
+.side_320{width:320px;height:320px;border: 1px solid #dcdfe1;background-color: #eff2f4; float: left; margin-left: 52px; margin-top: -64px;}
+.img_side_320{border: 0px;float: left;}
+.img_256{width:256px;height:256px;}
+.img_128{width:128px;height:128px;}
+.img_64{width:64px;height:64px;}
+.img_32{width:32px;height:32px;}

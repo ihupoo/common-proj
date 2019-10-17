@@ -32,7 +32,7 @@ module.exports = merge.smart(
             overlay: true,
             proxy: {
                 '/portal': {
-                    target: 'http://localhost:8080',
+                    target: 'http://172.16.185.233',
                     secure: false,
                     changeOrigin: true,
                     pathRewrite: {
@@ -40,7 +40,6 @@ module.exports = merge.smart(
                     },
                     bypass: function(req, res, proxyOptions) {
                         if (req.headers.accept.indexOf('html') !== -1) {
-                            console.log('Skipping proxy for browser request.');
                             return '/login.html';
                         }
                     }

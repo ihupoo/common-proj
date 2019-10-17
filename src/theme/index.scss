@@ -1,11 +1,7 @@
-@import './movision/login';
-@import './telecom/login';
-@import './kedacom/login';
-@import './DX6000/login';
-@import './movision/home';
-@import './telecom/home';
-@import './kedacom/home';
-@import './DX6000/home';
+@import './movision';
+@import './telecom';
+@import './kedacom';
+@import './DX6000';
 
 $themes:(
     movision: $movision-theme,

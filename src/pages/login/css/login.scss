@@ -9,6 +9,21 @@
     position: relative;
 }
 
+.company_info_up {
+    font-size:14px;
+    font-family:'微软雅黑';
+    color:#4e4e4e;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.company_info_down{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
 .sys_logo .icon {
     height: 36px;
     width: 29px;

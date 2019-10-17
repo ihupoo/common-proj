@@ -1,0 +1,95 @@
+<div class="col-md-4 {{contentId}} {{if isClear}}clear{{/if}}">
+    <div class="content_panel {{contentId}}" {{if contentId=='resource_load'}}style="border:none" {{/if}}>
+        {{if contentId=='resource_load'}}<div id="{{contentId}}_wrapper">{{/if}}
+            <div class="header-div">
+                <ul class="header-titles {{if head_titles.length>1}}tab{{/if}}">
+                    {{each head_titles as head_title i}}
+                    <li
+                        class="header-title {{if head_titles.length>1&&i==0}}active {{else}} {{if head_titles.length==1}}one-title {{/if}}{{/if}}">
+                        <span class="title">{{head_title}}</span></li>
+                    {{/each}}
+                </ul>
+                <ul class="header-titles header-more">
+                    {{each head_more as mores i}}
+                    <li
+                        class="header-title {{if (i==0&&contentId=='meeting_info')||(i==0&&contentId=='call_meeting_info')}}create-meeting-title-li{{/if}}">
+                        <span>
+                            {{if mores.more==='创建会议'&&(contentId==='meeting_info'||contentId==='call_meeting_info')}}<a
+                                href="{{mores.url}} " target="_blank" class="mo-icons-bg create-meeting "></a>{{/if}}
+                            {{if (i==0&&contentId=='platform_resource')}}<a href="javascript:void(0)"
+                                class="mo-icons-bg isPersonalSetting no-checked"></a>{{/if}}
+                            <a class="{{if !((mores.more==='创建会议'&&contentId=='meeting_info')||(i==0&&contentId=='platform_resource')||(i==0&&contentId=='call_meeting_info'))}}more{{/if}}"
+                                href="{{mores.url}}"
+                                {{if !((mores.more==='创建会议'&&contentId=='meeting_info')||(i==0&&contentId=='platform_resource')||(i==0&&contentId=='call_meeting_info'))}}target="_blank"
+                                {{/if}}>{{mores.more}}</a>
+                            {{if (i==0&&contentId=='platform_resource')}}<a href="javascript:void(0)"
+                                class="mo-icons-bg personalSetting "></a>{{/if}}
+                        </span>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="content-wrapper" id={{contentId}}>
+                <div class="no-data-wrapper">
+                    <div class="no-data hidden">
+                        <span class="mo-icons-bg warm-icon"></span>
+                        <span class="warm-text">
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {{if contentId=='resource_load'}}
+        </div>
+        {{if subscribe_alarm!=null}}
+        <div id="subscribe_alarm_wrapper">
+            <div class="header-div">
+                <ul class="header-titles">
+                    {{each subscribe_alarm.head_titles as head_title i}}
+                    <li
+                        class="resource-title header-title {{if head_titles.length>1&&i==0}}active {{else}} {{if head_titles.length==1}}one-title {{/if}}{{/if}}">
+                        <span class="title">{{head_title}}</span></li>
+                    {{/each}}
+                </ul>
+                <ul class="header-titles header-more">
+                    {{each subscribe_alarm.head_more as mores i}}
+                    <li class="resource-title header-title"><span><a href="{{mores.url}}"
+                                target="_blank">{{mores.more}}</a></span></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="content-wrapper" id={{subscribe_alarm.contentId}}>
+                <div class="no-data-wrapper">
+                    <div class="no-data hidden">
+                        <span class="mo-icons-bg warm-icon"></span>
+                        <span class="warm-text">暂无订阅告警信息</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{if book_meeting_count!=null}}
+        <div id="book_meeting_count_wrapper">
+            <div class="header-div">
+                <ul class="header-titles">
+                    {{each book_meeting_count.head_titles as head_title i}}
+                    <li
+                        class="resource-title header-title {{if head_titles.length>1&&i==0}}active {{else}} {{if head_titles.length==1}}one-title {{/if}}{{/if}}">
+                        <span class="title">{{head_title}}</span></li>
+                    {{/each}}
+                </ul>
+                <ul class="header-titles header-more">
+                    {{each book_meeting_count.head_more as mores i}}
+                    <li class="resource-title header-title"><span><a href="{{mores.url}}"
+                                target="_blank">{{mores.more}}</a></span></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="content-wrapper" id={{book_meeting_count.contentId}}>
+
+            </div>
+        </div>
+        {{/if}}
+        {{/if}}
+    </div>
+</div>

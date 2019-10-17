@@ -319,7 +319,7 @@
 }
 
 .tree-expanded,.tree-expanded-hover,.tree-collapsed,.tree-collapsed-hover,.tree-node .tree-checkbox{
-   background: url("../images/home/home_img.png?t=6.0.353982950") no-repeat
+   background: url("~images/home_img2.png") no-repeat
 }
 .tree-node .tree-hit{
 	width:14px;
@@ -341,7 +341,7 @@
     background:none;
 }
 .tree-node-selected .tree-title{
-    background: url("../images/aside-selected.png?t=5.0.3404059134") no-repeat scroll 0 0 #53AFE4;
+    background: url("~images/aside-selected.png") no-repeat scroll 0 0 #53AFE4;
     color: #fff;
 }
 
@@ -393,7 +393,7 @@
 
 
 .datagrid-header-check, .datagrid-cell-check {
-	background: transparent url('../images/ezmark/checkbox-gray.png?t=6.0.1097428054') 0 -14px no-repeat;
+	background: transparent url('~images/ezmark/checkbox-gray.png') 0 -14px no-repeat;
 	width:14px;
 	height:14px;
 	margin:1px 4px;
@@ -434,7 +434,7 @@
 
 
 .combo-arrow{
-	background:url("../images/mo-combox.png?t=6.0.242689137") 0 4px no-repeat;
+	background:url("~images/mo-combox.png") 0 4px no-repeat;
 	opacity: 1;
 	height:15px;
 	width:15px;
@@ -447,7 +447,7 @@
 .datebox .combo-arrow {
 	margin-left:0;
 	width:20px;
-    background-image: url("../images/mo-datebox.png?t=6.0.578549654");
+    background-image: url("~images/mo-datebox.png");
     background-position: -1px 0;
 }
 
@@ -580,7 +580,7 @@ a.l-btn:hover .s-btn-downarrow, a.s-btn-active .s-btn-downarrow, a.s-btn-plain-a
 	width:11px;
 	height:11px;
 	line-height:11px;
-	background: url("../images/mo-small-images.png?t=6.0.3046756478") -44px -198px no-repeat;
+	background: url("~images/mo-small-images.png") -44px -198px no-repeat;
 }
 
 a.l-btn:hover .s-btn-downarrow{
