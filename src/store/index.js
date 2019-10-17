@@ -1,5 +1,5 @@
-const store = {
-    state: {
+class Store{
+    state = {
         sysBrand: 'kedacom',
         versionYear: '2019',
         currentuser: {
@@ -29,17 +29,26 @@ const store = {
             virMachineroomMoid: '7777',
             show_sh: '1',   //重启和关机是否显示
         }
-    },
-    reducers: {
-        save([payload]) {
+    }
+
+    reducers = {
+        save(payload){
             this.state = {
                 ...this.state,
                 ...payload
             }
         }
-    },
-    getState: (param) => param ? store.state[param] : store.state,
-    dispatch: ({ type, payload = {} }) => store.reducers[type] ? store.reducers[type].call(store, [payload]) : null
+    }
+
+    getState(param){
+       return param ? this.state[param] : this.state
+    }
+
+    dispatch({ type, payload = {} }){
+        this.reducers[type] ? this.reducers[type].call(this, payload) : null
+    } 
+
 }
 
-export default store
+
+export default new Store()
