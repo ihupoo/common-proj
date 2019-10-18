@@ -171,23 +171,3 @@ SSO.Home.about = {
         $.dialog({ id: 'aboutWindow' }).close();
     }
 };
-
-$.namespace("SSO.Size");
-SSO.Size = {
-    init: function () {
-        var height = $(window).height() - 185;
-        $(".content").css("min-height", height);
-        $(window).resize(function () {
-            SSO.Size.experirdpageInit();
-        })
-    },
-
-    experirdpageInit: function () {
-        var wrapMinHeight = 650;
-        var winHeight = $(window).height();
-        var wrapHeight = winHeight > wrapMinHeight ? winHeight : wrapMinHeight;
-        var wrapAllHeight = wrapHeight - $("#footer").outerHeight();
-        $(".wrap").height(wrapHeight)
-        $(".wrap-all").height(wrapAllHeight)
-    }
-}

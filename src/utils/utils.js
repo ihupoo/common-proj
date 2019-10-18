@@ -48,27 +48,27 @@ const Validation = {
         return value.length <= len
 	},
     isAllNumber(value){
-        var reg =/^[0-9]*$/;
+        let reg =/^[0-9]*$/;
         return validation.checkValue(reg,value);
     },
 	//是否为任意数字
 	isNumeric(value){
-		var reg = /^(-|\+)?\d+(\.\d+)?$/;
+		let reg = /^(-|\+)?\d+(\.\d+)?$/;
 		return validation.checkValue(reg,value);
 	},
 	//是否为整数
 	isInteger(value){
-		var reg = /^(-|\+)?\d+$/;
+		let reg = /^(-|\+)?\d+$/;
 		return validation.checkValue(reg,value);
 	},
 	//是否为非负整数
 	isUnsignedInteger(value){
-		var reg = /^\d+$/;
+		let reg = /^\d+$/;
 		return validation.checkValue(reg,value);
 	},
 	//是否为正整数
 	isPositiveInteger(value){
-		var reg = /^[0-9]*[1-9][0-9]*$/;
+		let reg = /^[0-9]*[1-9][0-9]*$/;
 		return validation.checkValue(reg,value);
     },
 };
@@ -129,7 +129,7 @@ const Mask = {
     show(el){
         el = el || $("body");
         $(`<div class="datagrid-mask" style="display:block"></div>`).appendTo(el);
-        var msg = $(`<div class="datagrid-mask-msg" style="display:block;left:50%">正在加载，请稍候...</div>`).appendTo(el);
+        let msg = $(`<div class="datagrid-mask-msg" style="display:block;left:50%">正在加载，请稍候...</div>`).appendTo(el);
         msg.outerHeight(40);
         msg.css({ 
             marginLeft:(-msg.outerWidth()/2),
@@ -219,9 +219,10 @@ const SimpleSearch = (selector, w) => {
         .blur();
 }
 
+
 export {
     Validation,
     Throttle,
     Loading,
-    Mask
+    Mask,
 }

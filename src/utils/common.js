@@ -2,7 +2,7 @@
  * 工具
  * 
  * */
-let Common = {
+const Common = {
 	init: function () {
 		this.regEvent();
 		ModifyPassword.init();
@@ -24,7 +24,7 @@ let Common = {
 			else
 				e.cancelBubble = true;
 
-			var id = $.trim($(".cloud-name").attr("value"));
+			let id = $.trim($(".cloud-name").attr("value"));
 			$(".check-hook").removeClass("active");
 			$("#" + id).addClass("active");
 		})
@@ -88,17 +88,17 @@ let Common = {
 		});
 	},
 	regEvent: function () {
-		var that = this;
-		var t;
-		var count = $(".menu-long a:visible").length;
+		let that = this;
+		let t;
+		let count = $(".menu-long a:visible").length;
 		if (count > 5) {
 			$(".a_right").css({ visibility: 'visible' });
 		}
 		$(".menu-long").css({ width: count * 165 });
 	},
 	initFooter: function () {
-		var bh = $("body").height();
-		var wh = $(window).height();
+		let bh = $("body").height();
+		let wh = $(window).height();
 		if (bh > wh) {
 			$("#footer").css({ "position": "relative", "margin": "30px 0 0 0" });
 			$("#wrap").css("padding", 0);
@@ -113,7 +113,7 @@ let Common = {
 		} else if (portraitDomain) {
 			portrait = '//' + portraitDomain + '/' + portrait;
 		}
-		var $userPortrait = $('.user-info .user-portrait');
+		let $userPortrait = $('.user-info .user-portrait');
 		$userPortrait.on('load', function () {
 			$(this).removeClass('hidden');
 		});
@@ -130,12 +130,12 @@ let Common = {
 };
 
 //修改用户信息
-let ModifyUser = {
+const ModifyUser = {
 	init: function () {
 		this.initEvent();
 	},
 	initEvent: function () {
-		var that = this;
+		let that = this;
 		$("#modifyUser").on("click", function () {
 			$.dialog({
 				padding: 0,
@@ -158,7 +158,7 @@ let ModifyUser = {
 		//绑定按钮
 		$(".confirm", "#modifyUserWrapper").on("click", function () {
 			that.hideMsg();
-			var data = that.checkData();
+			let data = that.checkData();
 			if (false == data) {
 				return false;
 			}
@@ -198,20 +198,20 @@ let ModifyUser = {
 	},
 	//验证
 	checkData: function () {
-		var data = {
+		let data = {
 			mobile: $.trim($("#mobile").val()),
 			email: $.trim($("#email").val()),
 			seat: $.trim($("#officeLocation").val()),
 			moid: $.trim($("#moid").val())
 		};
 
-		if (data.mobile && !Verify.mobile(data.mobile)) {
+		if (data.mobile && !Validation.checkValue(regexEnum.mobile, data.mobile)) {
 			this.showMsg('请输入11位数字的手机号码'); //this.showMsg('手机长度不超过15,只允许输入"数字、.、_、-、*、#、空格"');
 			$("#mobile").focus();
 			return false;
 		}
 
-		if (data.email && !Verify.email(data.email)) {
+		if (data.email && !Validation.checkValue(regexEnum.email, data.email)) {
 			this.showMsg("请输入正确的邮箱地址");
 			$("#email").focus();
 			return false;
@@ -242,12 +242,12 @@ let ModifyUser = {
 };
 
 //修改密码
-let ModifyPassword = {
+const ModifyPassword = {
 	init: function () {
 		this.initEvent();
 	},
 	initEvent: function () {
-		var that = this;
+		let that = this;
 		$("#modifyPassword").on("click", function () {
 			$.dialog({
 				padding: 0,
@@ -269,7 +269,7 @@ let ModifyPassword = {
 		//绑定按钮
 		$(".confirm", "#modifyPasswordWrapper").on("click", function () {
 			that.hideMsg();
-			var data = that.checkData();
+			let data = that.checkData();
 			if (data == false) {
 				return false;
 			}
@@ -305,7 +305,7 @@ let ModifyPassword = {
 		$.dialog({ id: 'modifyPasswordWindow' }).close();
 	},
 	checkData: function () {
-		var data = {
+		let data = {
 			moid: $("#moid").val(),
 			oldPassword: $.trim($("#oldPassword").val()),
 			newPassword: $.trim($("#newPassword").val()),
@@ -322,7 +322,7 @@ let ModifyPassword = {
 			return false;
 		}
 
-		if (data.newPassword && !Verify.password(data.newPassword)) {
+		if (data.newPassword && !Validation.checkValue(regexEnum.password, data.newPassword)) {
 			this.showMsg('密码仅支持大小写字母、数字、"_"、"."');
 			$("#newPassword").focus();
 			return false;
@@ -359,7 +359,7 @@ let ModifyPassword = {
 };
 
 //设置头像
-let ModifyPortait = {
+const ModifyPortait = {
 	reg: /(jpg|jpeg|JPG|JPEG|png|gif|bmp)$/,
 	proportion: 1,
 	minXY: 0,
@@ -372,7 +372,7 @@ let ModifyPortait = {
 		this.initUpLoad();
 	},
 	initEvent: function () {
-		var that = this;
+		let that = this;
 		$("#modifyPortait").on("click", function () {
 			$.dialog({
 				padding: 0,
@@ -430,7 +430,7 @@ let ModifyPortait = {
 			$(".preview_div").find("img").attr("src", BP.config.SYSTEM_URL + "/" + msg.data + "?t=" + Math.random());
 			ModifyPortait.setFileName(msg.data);
 			ModifyPortait.setXY(msg.data);
-			var length = 0;
+			let length = 0;
 			document.getElementById("img_side_320").onload = function () {
 				length = SelectImage.getSelectLength();
 				SelectImage.qietuInit(length);
@@ -442,8 +442,8 @@ let ModifyPortait = {
 		Throttle.unLock(this.url);
 	},
 	setFileName: function (url) {
-		var arr = url.split("/");
-		var file = arr[arr.length - 1];
+		let arr = url.split("/");
+		let file = arr[arr.length - 1];
 		arr = file.split("?");
 		this.fileName = arr[0];
 		$("#fileName").val(arr[0]);
@@ -451,25 +451,25 @@ let ModifyPortait = {
 	setXY: function (url) {
 		$("#img_side_320").css("width", "");
 		$("#img_side_320").css("height", "");
-		var arr = url.split("?xy=");
+		let arr = url.split("?xy=");
 		if (arr.length < 2) return;
 
-		var arrXY = arr[arr.length - 1].split("_");
-		var x = parseInt(arrXY[0]);
-		var y = parseInt(arrXY[1]);
+		let arrXY = arr[arr.length - 1].split("_");
+		let x = parseInt(arrXY[0]);
+		let y = parseInt(arrXY[1]);
 		this.proportion = 1;
 		if (x >= y) {
 			if (x > 320) {
 				$("#img_side_320").css("width", "320px");
 				$("#img_side_320").css("height", "");
-				var multipleNum = x / 320;
+				let multipleNum = x / 320;
 				this.proportion = Math.floor(multipleNum * 100) / 100;
 			}
 		} else {
 			if (y > 320) {
 				$("#img_side_320").css("width", "");
 				$("#img_side_320").css("height", "320px");
-				var multipleNum = y / 320;
+				let multipleNum = y / 320;
 				this.proportion = Math.floor(multipleNum * 100) / 100;
 			}
 		}
@@ -486,15 +486,15 @@ let ModifyPortait = {
 };
 
 //图片剪切
-let SelectImage = {
+const SelectImage = {
 	getSelectLength: function () {
-		var length = $("#img_side_320").width() < $("#img_side_320").height() ? $("#img_side_320").width() : $("#img_side_320").height();
+		let length = $("#img_side_320").width() < $("#img_side_320").height() ? $("#img_side_320").width() : $("#img_side_320").height();
 		return length;
 	},
 
 	qietuInit: function (length) {
 		//构造imgAreaSelectApi
-		var imgAreaSelectApi = $('#img_side_320').imgAreaSelect({
+		let imgAreaSelectApi = $('#img_side_320').imgAreaSelect({
 			persistent: true,	// true，选区以外点击不会启用一个新选区（只能移动/调整现有选区）
 			instance: true,	// true，返回一个imgAreaSelect绑定到的图像的实例，可以使用api方法
 			onSelectChange: this.preview_img,	// 改变选区时的回调函数
@@ -507,13 +507,13 @@ let SelectImage = {
 		});
 		imgAreaSelectApi.setSelection(0, 0, length, length);
 		imgAreaSelectApi.update();
-		var xx = {};
+		let xx = {};
 		xx.width = length;
 		xx.height = length;
 		this.preview_img("", xx);
 	},
 	preview_img: function (img, selection) {
-		var param = {};
+		let param = {};
 		param.x1 = parseInt(selection.x1 * ModifyPortait.proportion);
 		param.y1 = parseInt(selection.y1 * ModifyPortait.proportion);
 		param.width = parseInt(selection.width * ModifyPortait.proportion);
@@ -525,10 +525,10 @@ let SelectImage = {
 		SelectImage.preview_photo(selection, ".side_32");
 	},
 	preview_photo: function (selection, item) {
-		var div = $(item);
+		let div = $(item);
 		//获取div的宽度与高度
-		var width = div.outerWidth();
-		var height = div.outerHeight();
+		let width = div.outerWidth();
+		let height = div.outerHeight();
 
 		//显示区域与选区图片比例 宽度之比，高度之比
 		//获取比例的用处是：
@@ -536,8 +536,8 @@ let SelectImage = {
 		//当选区的图片小于显示区域时，要相应的放大图片。
 		//selection的宽高之比是4:3,div的宽高之比也是4:3 
 		//scaleX scaleY之比为1:1
-		var scaleX = width / selection.width;
-		var scaleY = height / selection.height;
+		let scaleX = width / selection.width;
+		let scaleY = height / selection.height;
 
 		//css 控制图片的缩放以及偏移量
 		//width height 控制img区域的大小，如果只做他俩的限定可以实现图片的缩放
@@ -554,12 +554,12 @@ let SelectImage = {
 
 $(function () {
 	//全局对象MessageBox
-	var orgAlert = window.alert;
+	let orgAlert = window.alert;
 	window.alert = function (msg, callback) {
 		if (window.top.MoMessageBox1) {
 			if (window.top.g_msgbox && window.top.g_msgbox.isvisible()) {
-				var dialogCount = window.momsgboxCount || 0;
-				var msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
+				let dialogCount = window.momsgboxCount || 0;
+				let msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
 				window.momsgboxCount = dialogCount + 1;
 				msgbox.alert(msg, '提示', callback);
 			} else {
@@ -572,10 +572,10 @@ $(function () {
 	}
 });
 
-let MoAlert = function (msg, callback) {
+const MoAlert = function (msg, callback) {
 	if (window.top.g_msgbox && window.top.g_msgbox.isvisible()) {
-		var dialogCount = window.momsgboxCount || 0;
-		var msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
+		let dialogCount = window.momsgboxCount || 0;
+		let msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
 		window.momsgboxCount = dialogCount + 1;
 		msgbox.alert(msg, '提示', callback);
 	} else {
@@ -584,13 +584,13 @@ let MoAlert = function (msg, callback) {
 	}
 }
 
-let MoConfirm = function (msg, callback, title) {
+const MoConfirm = function (msg, callback, title) {
 	if (!!!title) {
 		title = '提示';
 	}
 	if (window.top.confirm_msgbox && window.top.confirm_msgbox.isvisible()) {
-		var dialogCount = window.momsgboxCount || 0;
-		var msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
+		let dialogCount = window.momsgboxCount || 0;
+		let msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
 		window.momsgboxCount = dialogCount + 1;
 		msgbox.confirm(msg, title, callback);
 	} else {
@@ -600,10 +600,10 @@ let MoConfirm = function (msg, callback, title) {
 
 }
 
-let MooAlert = function (msg, callback, okText, cancelText) {
+const MooAlert = function (msg, callback, okText, cancelText) {
 	if (window.top.g_msgbox1 && window.top.g_msgbox1.isvisible()) {
-		var dialogCount = window.momsgboxCount1 || 0;
-		var msgbox1 = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
+		let dialogCount = window.momsgboxCount1 || 0;
+		let msgbox1 = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
 		window.momsgboxCount1 = dialogCount + 1;
 		msgbox1.alert(msg, '提示', okText, cancelText);
 	} else {
@@ -612,10 +612,10 @@ let MooAlert = function (msg, callback, okText, cancelText) {
 	}
 }
 
-let MooConfirm = function (msg, callback, okText, cancelText) {
+const MooConfirm = function (msg, callback, okText, cancelText) {
 	if (window.top.confirm_msgbox1 && window.top.confirm_msgbox1.isvisible()) {
-		var dialogCount = window.momsgboxCount1 || 0;
-		var msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
+		let dialogCount = window.momsgboxCount1 || 0;
+		let msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
 		window.momsgboxCount1 = dialogCount + 1;
 		msgbox.confirm(msg, '提示', callback, okText, cancelText);
 	} else {
@@ -624,35 +624,35 @@ let MooConfirm = function (msg, callback, okText, cancelText) {
 	}
 };
 
-let MoCommon = {
+const MoCommon = {
 	logininit: function (data) {
-		var loginHeaderHtml = template('loginheader', data);
+		let loginHeaderHtml = template('loginheader', data);
 		document.getElementById('login_header').innerHTML = loginHeaderHtml;
 		/* 渲染底部信息 */
-		var lodinFooterHtml = template('enterprise_introduce', data);
+		let lodinFooterHtml = template('enterprise_introduce', data);
 		document.getElementById('footer').innerHTML = lodinFooterHtml;
 
 		document.title = data.title;
 	},
 	homeInit: function (data) {
 		document.title = data.title;
-		var headerHtml = template('logo', data);
+		let headerHtml = template('logo', data);
 		document.getElementById('header_title_logo').innerHTML = headerHtml;
 	},
 	aboutInit: function (data) {
-		var aboutHtml = template('company_info', Mo.CompanyInfo);
+		let aboutHtml = template('company_info', Mo.CompanyInfo);
 		document.getElementById('about_info').innerHTML = aboutHtml;
 	},
 
 };
 
-let MoBaseAccount = {
+const MoBaseAccount = {
 	getPasswordStrength: function (pwd) {
 		if (!!!pwd && '0' != pwd)
 			return "fault";
-		var strengthRegular = strengthRegular;// 默认获取当前页面
-		var max = 8;// 寻找上级页面密码强认证规则
-		for (var i = 0; i < max; i++) {
+		let strengthRegular = strengthRegular;// 默认获取当前页面
+		let max = 8;// 寻找上级页面密码强认证规则
+		for (let i = 0; i < max; i++) {
 			if (!!!strengthRegular) {
 				strengthRegular = window.parent.strengthRegular;
 			} else {
@@ -660,9 +660,9 @@ let MoBaseAccount = {
 			}
 		}
 		if (!!strengthRegular) {
-			var checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
-			for (var i = 0; i < checkArr.length; i++) {
-				var strength = checkArr[i];
+			let checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
+			for (let i = 0; i < checkArr.length; i++) {
+				let strength = checkArr[i];
 				if (!!strengthRegular[strength] && !!(eval('/' + strengthRegular[strength] + '/').test(pwd))) {
 					if (strength == '2') {
 						return "medium";
@@ -696,7 +696,8 @@ let MoBaseAccount = {
 		return true;
 	},
 	checkPassword: function (value) {
-		if (!Verify.password(value)) {
+
+		if (!Validation.checkValue(regexEnum.password, value)) {
 			alert("密码仅支持大小写字母、数字、'_'、'.'，请确认后重新输入。");
 			return false;
 		}
@@ -714,17 +715,17 @@ $(document).ajaxComplete(function (event, xhr, options) {
 	}
 })
 
-let MoTips = {
+const MoTips = {
 	show: function (text, callback, time) {
 		if (callback && typeof callback == "function") {
 			callback();
 		}
-		var height = $(window).height();
-		var width = $(window).width();
-		var htmlText = text || "操作成功";
-		var el = document.getElementsByTagName("body");
-		var maskBox = '<div class="success-datagrid-maskBox" style="width:' + width + 'px;height:' + height + 'px;position: fixed;top:0;left: 0; background: #000; opacity: 0.2;"></div>';
-		var mask = '<div class="success-datagrid-mask" style="min-width:148px;text-align:center;z-index:100;font-size:14px;position: absolute;display: inline-block;padding: 14px 20px;' +
+		let height = $(window).height();
+		let width = $(window).width();
+		let htmlText = text || "操作成功";
+		let el = document.getElementsByTagName("body");
+		let maskBox = '<div class="success-datagrid-maskBox" style="width:' + width + 'px;height:' + height + 'px;position: fixed;top:0;left: 0; background: #000; opacity: 0.2;"></div>';
+		let mask = '<div class="success-datagrid-mask" style="min-width:148px;text-align:center;z-index:100;font-size:14px;position: absolute;display: inline-block;padding: 14px 20px;' +
 			'left: 43%;bottom: 121px;background: #434343;color: #fff;">' + htmlText + '</div>';
 		$(el).append(mask)
 		$(el).append(maskBox)
@@ -735,7 +736,26 @@ let MoTips = {
 	}
 }
 
-export { Common, MoAlert, MoConfirm, MoTips, MoCommon, MoBaseAccount, MooAlert, MooConfirm, ModifyUser, ModifyPassword, ModifyPortait, SelectImage }
+const Size = {
+	init: function () {
+		var height = $(window).height() - 185;
+		$(".content").css("min-height", height);
+		$(window).resize(function () {
+			SSO.Size.experirdpageInit();
+		})
+	},
+
+	experirdpageInit: function () {
+		var wrapMinHeight = 650;
+		var winHeight = $(window).height();
+		var wrapHeight = winHeight > wrapMinHeight ? winHeight : wrapMinHeight;
+		var wrapAllHeight = wrapHeight - $("#footer").outerHeight();
+		$(".wrap").height(wrapHeight)
+		$(".wrap-all").height(wrapAllHeight)
+	}
+}
+
+export { Size, Common, MoAlert, MoConfirm, MoTips, MoCommon, MoBaseAccount, MooAlert, MooConfirm, ModifyUser, ModifyPassword, ModifyPortait, SelectImage }
 
 
 

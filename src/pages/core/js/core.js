@@ -1,5 +1,33 @@
-$.namespace("Mo.SetFrame");
-let CoreFrame = {
+let currentuser = store.getState('currentuser');
+import { getCoreData } from './service.js';
+
+const CoreData = {
+	username: currentuser.account,
+	portrait40: currentuser.portrait40,
+	portrait64: currentuser.portrait64,
+	portrait128: currentuser.portrait128,
+	portrait256: currentuser.portrait256,
+	editName: '',
+	realmName: '',
+	systemSecurity: '',
+	strengthRegular: '',
+	passwordStrengthOfSecurityPolicy: '',
+	portraitDomain: '',
+	init() {
+		getCoreData().then(res => {
+			if (res.success && res.data) {
+				this.editName = res.data.editName;
+				this.realmName = res.data.realmName;
+				this.systemSecurity = res.data.systemSecurity;
+				this.strengthRegular = res.data.strengthRegular;
+				this.passwordStrengthOfSecurityPolicy = res.data.securityPolicy.passwordStrength;
+				this.portraitDomain = res.data.portraitDomain;
+			}
+		})
+	}
+}
+
+const CoreFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
 	default_detail_paddingLeft: 0, // 默认详细表单左边偏移量
 	main_min_width: 1280,
@@ -15,14 +43,14 @@ let CoreFrame = {
 	},
 
 	initEvent: function () {
-		var that = this;
+		let that = this;
 		$(window).resize(function () {
 			that.setSize();
 		})
 	},
 
 	setSize: function () {
-		var win = this.getWindowSize();
+		let win = this.getWindowSize();
 
 		if (win.w < this.main_min_width) {
 			win.w = this.main_min_width;
@@ -31,19 +59,19 @@ let CoreFrame = {
 		if (win.h < this.main_min_height) {
 			win.h = this.main_min_height;
 		}
-		var wrapW = win.w - (this.main_padding_left * 2);
-		var wrapH = win.h;
+		let wrapW = win.w - (this.main_padding_left * 2);
+		let wrapH = win.h;
 		$(".wrap-all").width(wrapW);
 		$(".wrap-all").height(win.h);
-		var innerHeight = win.h - this.main_top_height - this.main_padding_bottom;
+		let innerHeight = win.h - this.main_top_height - this.main_padding_bottom;
 		$("#inner-main").height(innerHeight);
-		var viewHeight = innerHeight - (this.fixLineHeight * 2);
+		let viewHeight = innerHeight - (this.fixLineHeight * 2);
 		$(".wrapcontent").height(viewHeight);
 	},
 	initCoreSetPage: function () {
-		var wH = $(window).height();
-		var innerHeight = wH - this.main_top_height - this.main_padding_bottom;
-		var viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
+		let wH = $(window).height();
+		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
+		let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
 		$(".wrapcontent").css("min-height", viewHeight);
 		if ('password' == $(".tabs .active").attr("data-tab")) {
 			$("#detail-btn-save").addClass('disabled');
@@ -53,8 +81,8 @@ let CoreFrame = {
 	},
 
 	getWindowSize: function () {
-		var w = ($(window).width());
-		var h = ($(window).height());
+		let w = ($(window).width());
+		let h = ($(window).height());
 		return { w: w, h: h };
 	},
 
@@ -62,16 +90,16 @@ let CoreFrame = {
 		return 0;
 	}
 }
-$.namespace("Mo.updataAccount")
-let UpdataAccount = {
+
+const UpdataAccount = {
 	accountInput: '',
 
 	init: function () {
 		this.initEvent()
 	},
-	
+
 	initEvent: function () {
-		if (Mo.Base.DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
+		if (DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
 			$('#account').show()
 			$("#account-readonly").hide();
 		} else {
@@ -105,8 +133,8 @@ let UpdataAccount = {
 				});
 			},
 			comfirmFun: function (cb) {
-				var value = $('#account .base-input').val();
-				if (!Mo.Base.account.checkAccount(value)) {
+				let value = $('#account .base-input').val();
+				if (!MoBaseAccount.checkAccount(value)) {
 					return false
 				}
 				cb();
@@ -122,15 +150,14 @@ let UpdataAccount = {
 	}
 }
 
-$.namespace("Mo.Set")
-Mo.Set = {
+const Set = {
 	profileHref: false,//记录是否从个人设置tab标签页进入的密码修改页面 默认false
 	init: function () {
-		Mo.Form.store.storePass = $(".password-form").html()
+		FormStore.storePass = $(".password-form").html()
 		this.initTab();
 		this.initEvent();
-		Mo.Set.change.init();
-		SSO.Size.init();
+		SetChange.init();
+		Size.init();
 	},
 	initEvent: function () {
 		$("#detail-btn-cancel").click(function () {
@@ -138,7 +165,7 @@ Mo.Set = {
 		});
 		$("#detail-btn-save").click(function () {
 			if (!($("#detail-btn-save").hasClass("disabled"))) {
-				Mo.Set.save();
+				Set.save();
 			}
 		});
 		$(".tab-item").click(function () {
@@ -152,8 +179,8 @@ Mo.Set = {
 		SSO.common.headerEvent();
 	},
 	save: function () {
-		var tabname = this.getTabName();
-		var that = this;
+		let tabname = this.getTabName();
+		let that = this;
 		switch (tabname) {
 			case "profile": {
 				this.profileSave();
@@ -180,20 +207,18 @@ Mo.Set = {
 	//保存更改后的个人信息
 	profileSave: function () {
 
-		var url = BP.config.SYSTEM_URL + "/system/user/updateuser";
-		if (Mo.Base.throttle.isLock(url)) {
+		let url = BP.config.SYSTEM_URL + "/system/user/updateuser";
+		if (Throttle.isLock(url)) {
 			return false;
 		}
-
-		// Mo.Base.throttle.lock(url);
-		var newAccount = $('#account .base-input').val();
-		var account = "";//超管传
-		if (Mo.Base.DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
+		let newAccount = $('#account .base-input').val();
+		let account = "";//超管传
+		if (DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
 			if (username && newAccount && (username != newAccount)) {//并修改了账号
 				account = newAccount
 			}
 		}
-		var data = {
+		let data = {
 			moid: $.trim($("#moid").val()),
 			account: account,
 			mobile: $.trim($("#mobile").val()),
@@ -220,13 +245,11 @@ Mo.Set = {
 		if (data.email && !SSO.Base.validation.checkLength(data.email, 64)) {
 			alert("邮箱地址长度不能大于64位字符");
 			$("#email").focus();
-			// Mo.Base.throttle.unLock(url);
 			return false;
 		}
 		if (data.seat && !SSO.Base.validation.checkLength(data.seat, 60)) {
 			alert("请输入联系地址长度不超过60");
 			$("#officeLocation").focus();
-			// Mo.Base.throttle.unLock(url);
 			return false;
 		}
 
@@ -238,11 +261,11 @@ Mo.Set = {
 				alert('办公位置只能为中英文和数字及下划线组成', function () {
 					$('#officeLocation').focus();
 				});
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 				return false;
 			}
 		}
-		Mo.Base.throttle.lock(url);
+		Throttle.lock(url);
 		$.ajax({
 			type: 'post',
 			url: url,
@@ -250,11 +273,11 @@ Mo.Set = {
 			dataType: 'json',
 			success: function (msg) {
 				if (msg.success) {
-					Mo.Form.store.set("profile");
+					FormStore.set("profile");
 				}
 				alert(msg.description);
-				Mo.Base.throttle.unLock(url);
-				var newAccount = $('#account .base-input').val();
+				Throttle.unLock(url);
+				let newAccount = $('#account .base-input').val();
 				if (username && newAccount && (username != newAccount)) {//修改了账号 回到登陆页面
 					setTimeout(function () {
 						window.location.href = "./loginout"
@@ -263,25 +286,25 @@ Mo.Set = {
 			},
 			error: function () {
 				alert("修改个人资料失败，请与系统管理员联系！");
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			}
 		});
 	},
 	portraitSave: function () {
-		var url = BP.config.SYSTEM_URL + "/system/user/confirmPortrait";
-		if (Mo.Base.throttle.isLock(url)) {
+		let url = BP.config.SYSTEM_URL + "/system/user/confirmPortrait";
+		if (Throttle.isLock(url)) {
 			return false;
 		}
-		Mo.Base.throttle.lock(url);
+		Throttle.lock(url);
 
-		var selection_str = $("#selection").val();
+		let selection_str = $("#selection").val();
 		if (!selection_str) {
 			alert("请先选择图片");
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		}
 
-		var selection = JSON.parse(selection_str);
+		let selection = JSON.parse(selection_str);
 		$.ajax({
 			type: 'post',
 			url: url,
@@ -295,49 +318,49 @@ Mo.Set = {
 			dataType: 'json',
 			success: function (msg) {
 				if (msg.success) {
-					Mo.alert("头像修改成功", function () {
-						Mo.Set.loadPage(msg.data);
+					MoAlert("头像修改成功", function () {
+						Set.loadPage(msg.data);
 					});
 				} else {
 					alert(msg.description);
 				}
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			},
 			error: function () {
 				alert("头像修改失败");
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			}
 		});
 	},
 	loadPage: function (data) {
-		SSO.common.initPortrait(data.portraitUrl40, window.portraitDomain);
+		Common.initPortrait(data.portraitUrl40, window.portraitDomain);
 	},
 	passwordSave: function () {
-		var url = BP.config.SYSTEM_URL + "/system/user/updatepassword";
-		var securityPolicyObj = { "弱": 1, "中": 2, "强": 3 };
-		var newPasswordStrength = securityPolicyObj[$(".newPasswordTip .tip-info").text()];
+		let url = BP.config.SYSTEM_URL + "/system/user/updatepassword";
+		let securityPolicyObj = { "弱": 1, "中": 2, "强": 3 };
+		let newPasswordStrength = securityPolicyObj[$(".newPasswordTip .tip-info").text()];
 		if (passwordStrengthOfSecurityPolicy != "") {
 			if (newPasswordStrength < passwordStrengthOfSecurityPolicy) {
 				if (passwordStrengthOfSecurityPolicy == 3) {
-					Mo.alert("密码等级必须为强");
+					MoAlert("密码等级必须为强");
 				}
 				if (passwordStrengthOfSecurityPolicy == 2) {
-					Mo.alert("密码等级至少为中");
+					MoAlert("密码等级至少为中");
 				}
 				if (passwordStrengthOfSecurityPolicy == 1) {
-					Mo.alert("密码等级至少为弱");
+					MoAlert("密码等级至少为弱");
 				}
 				return;
 			}
 		} else {
-			Mo.alert("未获取到用户密码等级强度");
+			MoAlert("未获取到用户密码等级强度");
 			return;
 		}
-		if (Mo.Base.throttle.isLock(url)) {
+		if (Throttle.isLock(url)) {
 			return false;
 		}
-		Mo.Base.throttle.lock(url);
-		var data = {
+		Throttle.lock(url);
+		let data = {
 			moid: $("#moid").val(),
 			oldPassword: $.trim($("#oldPassword").val()),
 			newPassword: $.trim($("#newPassword").val()),
@@ -347,47 +370,47 @@ Mo.Set = {
 		if ('' == $.trim(data.oldPassword)) {
 			alert("请输入当前密码。");
 			$("#oldPassword").focus();
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		}
 		if ('' == $.trim(data.newPassword)) {
 			alert("请输入新密码");
 			$("#newPassword").focus();
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		}
 
 		if ('' == $.trim(data.confirmPassword)) {
 			alert("请输入确认密码");
 			$("#confirmPassword").focus();
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		}
 		if (data.newPassword.length > 32 || !SSO.Base.validation.isRegExp(regexEnum.password, data.newPassword)) {
 			alert('密码由1-32个字符组成，支持字母大小写、数字、"_"、"."(不包括空格)');
 			$("#newPassword").focus();
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		};
 
 		if ($.trim(data.oldPassword) == $.trim(data.newPassword)) {
 			alert("新密码不能与旧密码一致");
 			$("#newPassword").focus();
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		}
 		if ($.trim(data.newPassword) != $.trim(data.confirmPassword)) {
 			alert("新密码、确认密码不一致，请确认后重新输入。");
 			$("#confirmPassword").focus();
-			Mo.Base.throttle.unLock(url);
+			Throttle.unLock(url);
 			return false;
 		}
-		var cdata = {};
+		let cdata = {};
 		if ('1' == systemSecurity) {
-			cdata = Mo.Base.DigestAuth.makePassword(data.oldPassword, data.newPassword);
+			cdata = DigestAuth.makePassword(data.oldPassword, data.newPassword);
 		} else {
-			cdata = Mo.Base.DigestAuth.makePassword(hex_md5(data.oldPassword), data.newPassword);
-			var params = Mo.Base.DigestAuth.makePassword(hex_md5(data.oldPassword), data.oldPassword);
+			cdata = DigestAuth.makePassword(hex_md5(data.oldPassword), data.newPassword);
+			let params = DigestAuth.makePassword(hex_md5(data.oldPassword), data.oldPassword);
 			cdata['key'] = params['knonce'] + '_' + params['ciphertext'] + '_' + params['hmac'];
 		}
 		$.ajax({
@@ -397,18 +420,18 @@ Mo.Set = {
 			dataType: 'json',
 			success: function (msg) {
 				if (msg.success) {
-					Mo.Form.store.reset();
+					FormStore.reset();
 					alert("密码修改成功，请重新登录。", function () {
 						location.href = BP.config.SYSTEM_URL + "/loginout";
 					});
 				} else {
 					alert(msg.description);
 				}
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			},
 			error: function () {
 				alert("密码修改失败");
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			}
 		});
 	},
@@ -421,15 +444,15 @@ Mo.Set = {
 	},
 
 	getHash: function () {
-		var hash;
+		let hash;
 		hash = (!window.location.hash) ? "#perfile" : window.location.hash;
 		return hash.substring(1, hash.length);
 	},
 	//选项卡切换
 	initTab: function () {
-		var hash = this.getHash();
+		let hash = this.getHash();
 		this.activeTab("." + hash);
-		var that = this;
+		let that = this;
 		$(".tab-item").click(function () {
 			return that.activeTab(this);
 		});
@@ -442,9 +465,9 @@ Mo.Set = {
 		if (tab == '.profile') {
 			this.profileHref = true;
 		}
-		var name = $(tab).data("tab"); //name=password  注意多类选择器的问题
-		var userMoids = $("#moid").val();
-		var newAccount = $('#account .base-input').val();
+		let name = $(tab).data("tab"); //name=password  注意多类选择器的问题
+		let userMoids = $("#moid").val();
+		let newAccount = $('#account .base-input').val();
 		if (name == 'password') {
 			if (username && newAccount && (username != newAccount)) {//修改了账号
 				if ($('.bmc-accountInput-edit').css("display") == "none") {//是编辑状态
@@ -454,17 +477,17 @@ Mo.Set = {
 			}
 		}
 		if (this.before(name)) {
-			Mo.Set.change.show(name);
+			SetChange.show(name);
 			return false;
 		}
 		if (name == 'password') {//切换至修改密码时 个人信息中账号要还原至原状态
-			Mo.updataAccount.accountInput.setValue(username);
-			Mo.updataAccount.accountInput.setReadonly();//账号设置只读状态
+			UpdataAccount.accountInput.setValue(username);
+			UpdataAccount.accountInput.setReadonly();//账号设置只读状态
 		} else if (name == 'profile') {
-			Mo.updataAccount.init();
+			UpdataAccount.init();
 		}
 		if (userMoids == 'mooooooo-oooo-oooo-oooo-defaultadmin') {
-			var _this = this;
+			let _this = this;
 			if (name == 'password') {
 				$(".tipPass").show();
 				// Moo.alert('密码修改后，请牢记新密码！'+'<br/>'+'未配置邮箱将密码丢失后无法找回，需返厂进行初始化。',function(){
@@ -510,7 +533,7 @@ Mo.Set = {
 		}
 
 		// if(this.before(name)){
-		// 	Mo.Set.change.show(name);
+		// 	SetChange.show(name);
 		// 	return false;
 		// }
 
@@ -530,8 +553,8 @@ Mo.Set = {
 				$(".imgareaselect-outer").css("display", "none");
 			}
 		}
-		Mo.Form.store.set(name);
-		/*Mo.SetFrame.loadPassword();*/
+		FormStore.set(name);
+		/*SetFrame.loadPassword();*/
 	},
 
 	getTabName: function () {
@@ -540,33 +563,32 @@ Mo.Set = {
 
 	dialog: null,
 	before: function (name) {
-		return Mo.Form.store.isChange();
+		return FormStore.isChange();
 	}
 }
 
-$.namespace("Mo.Set.change")
-Mo.Set.change = {
+const SetChange = {
+	name: null,
 	init: function () {
 		this.initEvent();
 	},
-	name: null,
 	initEvent: function () {
-		var that = this;
+		let that = this;
 		//取消
 		$(".w-close", "#changeWrapper").on("click", function () {
 			that.close();
-			Mo.Form.store.reset();
-			Mo.Set.activeTab("." + that.name);
+			FormStore.reset();
+			Set.activeTab("." + that.name);
 		});
 		$(".cancel", "#changeWrapper").on("click", function () {
 			that.close();
-			Mo.Form.store.reset();
-			Mo.Set.activeTab("." + that.name);
+			FormStore.reset();
+			Set.activeTab("." + that.name);
 		});
 
 		$(".save", "#changeWrapper").on("click", function () {
 			that.close();
-			Mo.Set.save();
+			Set.save();
 		});
 	},
 	show: function (name) {
@@ -587,8 +609,7 @@ Mo.Set.change = {
 	}
 };
 
-$.namespace("Mo.Form.store")
-Mo.Form.store = {
+const FormStore = {
 	store: [],
 	storeH: [],
 	storePass: [],
@@ -601,14 +622,14 @@ Mo.Form.store = {
 	},
 	reset: function () {
 		if (this.lastKey == "password") {
-			$("." + this.lastKey + "-form").html(Mo.Form.store.storePass)
+			$("." + this.lastKey + "-form").html(FormStore.storePass)
 		} else {
 			$("." + this.lastKey + "-form").html(this.storeH[this.lastKey]);
 		}
-		Mo.Password.init(options);
-		Mo.Password.capitalTip("oldPassword")
-		Mo.Password.capitalTip("newPassword")
-		Mo.Password.capitalTip("confirmPassword");
+		Password.init(options);
+		Password.capitalTip("oldPassword")
+		Password.capitalTip("newPassword")
+		Password.capitalTip("confirmPassword");
 	},
 	set: function (name) {
 		this.lastKey = name;
@@ -623,3 +644,5 @@ Mo.Form.store = {
 		return this.store[this.lastKey] != this.getSerialize(this.lastKey);
 	}
 }
+
+export { CoreData, CoreFrame, UpdataAccount, Set, SetChange, FormStore }

@@ -1,5 +1,4 @@
-
-let Password = {
+const Password = {
 	oldPasswordId: "#oldPassword",
 	newPasswordId: "#newPassword",
 	confirmPasswordId: "#confirmPassword",
@@ -59,15 +58,15 @@ let Password = {
 
 	},
 	initShowHidePass: function () {
-		var that = this;
+		let that = this;
 		$(".showHidePassword").mousedown(function () {
 			that.toggleEye($(this))
 		});
 	},
 	initOldPass: function () {
-		var that = this;
+		let that = this;
 		$(this.oldPasswordId).keyup(function (event) {
-			var oldPassword = $(this).val();
+			let oldPassword = $(this).val();
 			if (oldPassword == undefined || oldPassword.length <= 0) {//当前密码清空时，新密码和确认密码都清空
 				that.clearOldPasswordTip();
 				that.clearNewPassword();
@@ -110,7 +109,7 @@ let Password = {
 		});
 	},
 	newPassFocus: function ($this) {
-		var that = this;
+		let that = this;
 		if (!$this.next().hasClass("showHidePassword")) {
 			$this.after(that.newPasswordEye)
 			$(that.newPasswordEye).addClass("hide-password")
@@ -119,7 +118,7 @@ let Password = {
 		}
 	},
 	newPassBlur: function ($this) {
-		var that = this;
+		let that = this;
 		if ($this.next().hasClass("showHidePassword")) {
 			if (!$this.next().hasClass("click")) {
 				if (that.newPasswordEye.hasClass("show-password")) {
@@ -129,7 +128,7 @@ let Password = {
 					$(that.newPasswordId).next().removeClass("click");
 					that.newPasswordEye = $(that.newPasswordId).next();
 					$(that.newPasswordEye).remove();
-					var newPassword = $.trim($(Password.newPasswordId).val());
+					let newPassword = $.trim($(Password.newPasswordId).val());
 					if (this.strongAuthentication) {
 						if (newPassword.length > 0 && newPassword.length < 8) {
 							this.showTips($(that.newPasswordTip), false, "长度至少为8位")
@@ -150,8 +149,8 @@ let Password = {
 					}
 					//判断密码是否使用过
 					if (Password.checkUsed) {
-						var oldPassword = $.trim($(Password.oldPasswordId).val());
-						var cdata = {};
+						let oldPassword = $.trim($(Password.oldPasswordId).val());
+						let cdata = {};
 						if (!!oldPassword) {
 							if (newPassword.length > 0) {
 								if ('1' === systemSecurity) {
@@ -197,8 +196,8 @@ let Password = {
 		return true;
 	},
 	initNewPass: function () {
-		var that = this;
-		var newPass = true;
+		let that = this;
+		let newPass = true;
 		$(this.newPasswordId).focus(function () {
 			if (that.oldPasswordId != "") {
 				if ($(that.oldPasswordTip).find('.tip-icon').hasClass("error-icon")) {
@@ -229,7 +228,7 @@ let Password = {
 			}*/
 		})
 		$(this.newPasswordId).keyup(function (event) {
-			var password = $(this).val();
+			let password = $(this).val();
 			if (password == "" || password == undefined) {//新密码清空时，确认密码清空
 				that.clearConfirmPassword();
 				that.clearNewPasswordTip();
@@ -258,7 +257,7 @@ let Password = {
 		})
 	},
 	confirmPassFocus: function ($this) {
-		var that = this;
+		let that = this;
 		if (!$this.next().hasClass("showHidePassword")) {
 			$this.after(that.confirmPasswordEye)
 			$(that.confirmPasswordEye).addClass("hide-password")
@@ -267,7 +266,7 @@ let Password = {
 		}
 	},
 	initConfirmPass: function () {
-		var that = this;
+		let that = this;
 		$(this.confirmPasswordId).focus(function () {
 			if ($(that.newPasswordTip).find('.tip-icon').hasClass("error-icon") || $(that.oldPasswordTip).find('.tip-icon').hasClass("error-icon")) {
 				$(that.newPasswordId).focus();
@@ -337,8 +336,8 @@ let Password = {
 		})
 	},
 	checkPasswordLevel: function (value) {
-		var strong = 0;
-		for (var i = 0; i < value.length; i++) {
+		let strong = 0;
+		for (let i = 0; i < value.length; i++) {
 			if (this.checkCharMode(value.charCodeAt(i)) == 9) {
 				strong = -1;
 				break;
@@ -417,11 +416,11 @@ let Password = {
 		$(this.saveBtnId).addClass("disabled");
 	},
 	checkPassword: function (newPass) {//检测旧（当前）密码是否正确
-		var that = this;
-		var oldPassword = $(this.oldPasswordId).val();
+		let that = this;
+		let oldPassword = $(this.oldPasswordId).val();
 		if (oldPassword != "" && oldPassword != undefined) {
-			var url = Mo.Config.appUrl + "/modifypassword/checkOldPassword";
-			var data = {};
+			let url = Mo.Config.appUrl + "/modifypassword/checkOldPassword";
+			let data = {};
 			if ('1' == systemSecurity) {
 				data = DigestAuth.makePassword(oldPassword, oldPassword);
 			} else {
@@ -469,10 +468,10 @@ let Password = {
 	},
 	//密码大写输入提示
 	capitalTip: function (id) {
-		var capital = false; //聚焦初始化，防止刚聚焦时点击Caps按键提示信息显隐错误
+		let capital = false; //聚焦初始化，防止刚聚焦时点击Caps按键提示信息显隐错误
 
 		// 获取大写提示的标签，并提供大写提示显示隐藏的调用接口
-		var capitalTip = {
+		let capitalTip = {
 			$elem: $('#capital_' + id),
 			toggle: function (s) {
 				if (s === 'none') {
@@ -496,8 +495,8 @@ let Password = {
 			capitalTip.toggle('none');
 		});
 		function capsLock(e) {
-			var keyCode = e.keyCode || e.which;// 按键的keyCode
-			var isShift = e.shiftKey || keyCode === 16 || false;// shift键是否按住
+			let keyCode = e.keyCode || e.which;// 按键的keyCode
+			let isShift = e.shiftKey || keyCode === 16 || false;// shift键是否按住
 			if (keyCode === 9) {
 				capitalTip.toggle('none');
 			} else {

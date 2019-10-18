@@ -21,7 +21,7 @@ import '@/styles/password.scss';
 import '@/utils/password.js';
 import '@/utils/digestAuth.js';
 import '@/utils/common.js';
-import '@/utils/fileuploader.js';
+import '@/lib/uploader/fileuploader.js';
 import '@/utils/utils.js';
 import '@/utils/md5.js';
 import '@/utils/sm.js';
