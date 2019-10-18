@@ -2,8 +2,7 @@
  * 工具
  * 
  * */
-$.namespace("SSO.login");
-SSO.login = {
+let Login = {
 	min_height: 143, //页面最小高度
 	//min_widht:960,//页面最小宽度
 	init: function () {
@@ -141,11 +140,11 @@ SSO.login = {
 
 		$("#login-submit").on("click", function () {
 
-			var url = SSO.utils.getSystemUrl('slogin');
-			if (Mo.Base.throttle.isLock(url)) {
+			var url = Utils.getSystemUrl('slogin');
+			if (Throttle.isLock(url)) {
 				return false;
 			}
-			Mo.Base.throttle.lock(url);
+			Throttle.lock(url);
 
 			var email = $.trim($("#email").val());
 			var password = $.trim($("#password").val());
@@ -161,23 +160,23 @@ SSO.login = {
 
 			if (null == email || "" == email) {
 				$("#login_form .error_msg").text('用户名不能为空!').show();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 				return false;
 			}
 
 			if (null == password || "" == password) {
 				$("#login_form .error_msg").text('密码不能为空!').show();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 				return false;
 			}
 			if ((isChecked == 1) && (verifyCode == null || verifyCode == "")) {
 				$("#login_form .error_msg").text("请输入验证码!").show();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 				return false;
 			}
 			$("#login_form .error_msg").text('');
 
-			Mo.Base.DigestAuth.username = email;
+			DigestAuth.username = email;
 			var timestamp = new Date().getTime();
 
 			var a = '?source=web&timestamp=' + timestamp;
@@ -186,33 +185,33 @@ SSO.login = {
 			}
 			var cdata = {};
 			///////标记ajax：用户名///////////
-			$.post(SSO.utils.getSystemUrl('systemSecurity'), {
+			$.post(Utils.getSystemUrl('systemSecurity'), {
 				username: email
 			}, function (t) {
 				if (t.success) {
 					systemSecurity = t.data;
 					if ('1' != systemSecurity) {
-						Mo.Base.DigestAuth.password = hex_md5(password);
-						Mo.Base.DigestAuth.realm = realmName;
-						cdata = Mo.Base.DigestAuth.makePassword(Mo.Base.DigestAuth.password, password);
+						DigestAuth.password = hex_md5(password);
+						DigestAuth.realm = realmName;
+						cdata = DigestAuth.makePassword(DigestAuth.password, password);
 					} else {
-						Mo.Base.DigestAuth.password = password;
+						DigestAuth.password = password;
 					}
 					cdata['isChecked'] = isChecked;
 					cdata['verifyCode'] = verifyCode;
 					cdata['remember'] = remember;
 					//////标记ajax：digest/////////
-					Mo.Base.DigestAuth.ajax({
-						headers: Mo.Base.DigestAuth.makeHeader('POST', url, 'auth', realmName, nonceValue, 'SM3'),
+					DigestAuth.ajax({
+						headers: DigestAuth.makeHeader('POST', url, 'auth', realmName, nonceValue, 'SM3'),
 						type: 'POST',
 						url: url + a,
 						data: cdata,
 						dataType: 'json',
 						success: function (t) {
-							Mo.Base.DigestAuth.password = "";
+							DigestAuth.password = "";
 							if (t.success) {
 								if (t.data[0]) {
-									var homeUrl = SSO.utils.getSystemUrl('home');
+									var homeUrl = Utils.getSystemUrl('home');
 									location.href = homeUrl;
 								} else {
 									alert("跳转至用户所在平台域", function () {
@@ -259,7 +258,7 @@ SSO.login = {
 									$("#verifyImage").click();
 								}
 							}
-							Mo.Base.throttle.unLock(url);
+							Throttle.unLock(url);
 						},
 						error: function (e) {
 							var t = e.responseJSON;
@@ -301,7 +300,7 @@ SSO.login = {
 								that.setBetwweenWraperAndContentHeight();
 								$("#verifyImage").click();
 							}
-							Mo.Base.throttle.unLock(url);
+							Throttle.unLock(url);
 						}
 					});
 
@@ -310,14 +309,14 @@ SSO.login = {
 					$(".verifyCode_input_holder").removeClass("hidden");
 					that.setBetwweenWraperAndContentHeight();
 					$("#verifyImage").click();
-					Mo.Base.throttle.unLock(url);
+					Throttle.unLock(url);
 				}
 			}, 'json').error(function () {
 				$("#login_form .error_msg").text('系统异常,请与管理员联系！').show();
 				$(".verifyCode_input_holder").removeClass("hidden");
 				that.setBetwweenWraperAndContentHeight();
 				$("#verifyImage").click();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			});
 		});
 
@@ -328,7 +327,7 @@ SSO.login = {
 		$("a.password_forget").on("click", function () {
 			$("#login_form").children().hide();
 			$("#forgotPassword-wrapper").show();
-			SSO.login.setBetwweenWraperAndContentHeight();
+			Login.setBetwweenWraperAndContentHeight();
 
 		});
 		//找回密码->返回按钮
@@ -338,7 +337,7 @@ SSO.login = {
 			$("#reg-email").val("");
 			$("#forgotPassword-wrapper .error_msg").text("");
 			$("#reg-email").siblings().show();
-			SSO.login.setBetwweenWraperAndContentHeight();
+			Login.setBetwweenWraperAndContentHeight();
 		});
 		$(".W_close").on("click", function () {
 			$("#login_form").children().show();
@@ -349,24 +348,24 @@ SSO.login = {
 		});
 
 		$("#send_email").on("click", function () {
-			var url = SSO.utils.getSystemUrl('forgetpassword/sendemail');
-			if (Mo.Base.throttle.isLock(url)) {
+			var url = Utils.getSystemUrl('forgetpassword/sendemail');
+			if (Throttle.isLock(url)) {
 				return false;
 			}
-			Mo.Base.throttle.lock(url);
+			Throttle.lock(url);
 			$("#forgotPassword-wrapper .error_msg").text("");
 
 			var email = $.trim($("#reg-email").val());
 			if (email == '' || email == null) {
 				$(".error_msg", "#forgotPassword-wrapper").text("请输入您的注册邮箱！").show();
 				$("#reg-email").focus();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 				return false;
 			}
 			if (email && !SSO.verify.email(email)) {
 				$(".error_msg", "#forgotPassword-wrapper").text("请输入正确的邮箱").show();
 				$("#reg-email").focus();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 				return false;
 			}
 			///////////标记ajax：邮箱找回密码////////////////
@@ -377,7 +376,7 @@ SSO.login = {
 
 				}
 				$("#forgotPassword-wrapper .error_msg").text(t.description).show();
-				Mo.Base.throttle.unLock(url);
+				Throttle.unLock(url);
 			}, 'json');
 		});
 	},
@@ -397,3 +396,5 @@ SSO.login = {
 		$("#password").focus();
 	}
 };
+
+export default Login;

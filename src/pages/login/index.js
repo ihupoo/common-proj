@@ -11,32 +11,25 @@ import '@/styles/commonCSS.scss'
 import './css/login.scss';
 import './css/theme.scss';
 
-import '@/utils/utils'
+import {} from '@/utils/utils';
+import { Common, MoBaseAccount } from '@/utils/common';
+import { DigestAuth } from '@/utils/digestAuth'
 import './js/_tmp_globalUrl'
-import '@/utils/common'
-import '@/utils/sm';
-import '@/utils/md5';
-import '@/utils/digestAuth';//todo
+import { Login } from './js/login';
 
-import './js/login';
 
 import { fetchLoginInfo } from './service';
 import renderHeader from './tpl/sys_logo.art';
 import renderFooter from './tpl/enterprise_introduce.art';
-
-
 import store from '@/store/index';
-import { i18next , documentTitle } from '@/i18n/i18n';
+import { i18next , documentTitle } from '@/i18n';
+
 
 function isIE() {
-    if (!!window.ActiveXObject || "ActiveXObject" in window)
-        return true;
-    else
-        return false;
+    return !!(window.ActiveXObject || "ActiveXObject" in window)
 }
 
 $(function () {
-
     $('input[type="checkbox"]').ezMark();
 
     if (isIE()) {
@@ -91,10 +84,10 @@ $(function () {
             $(renderFooter({ sysBrand, versionYear })).localize().appendTo('#footer');
             document.title = documentTitle(sysBrand)('login')
 
-            SSO.login.init();
-            SSO.login.initVerifyCode();
+            Login.init();
+            Login.initVerifyCode();
             window.onresize = function () {
-                SSO.login.init();
+                Login.init();
             }
             if (outAlter == '100012') {
                 $("#login_form .error_msg").text("当前账号在别处登录，请重新登录！").show();

@@ -179,9 +179,9 @@ var controller = {
 	getResourceLoadInfo: function () {//获取资源负载
 		//ajax获取资源负载数据，并将其组装成resource_load_data形式
 		var url = Mo.Config.appUrl + "/nms/getResource";
-		var data = $.extend(true, {}, panelData.resource_load);
-		var type = isServiceDomainAdmin ? 'service' : 'user';
-		var requestGet = $.get(url, { 'type': type, 'moid': moid }, function (t) {
+		var data = $.extend(true, {}, Home.Data.panelData.resource_load);
+		var type = Home.Data.isServiceDomainAdmin ? 'service' : 'user';
+		var requestGet = $.get(url, { 'type': type, 'moid': Home.Data.moid}, function (t) {
 			if (t.success) {
 				//处理虚拟会议室资源
 				controller.eightData = [];
@@ -271,11 +271,11 @@ var controller = {
 							portMeetingPercent = controller.getIntData(portMeetingUsed, portMeetingTotal);
 						}
 						//有端口会议 总百分比根据端口已使用数加本域的其他占用数计算 
-						totalPercent = controller.getIntData(portMeetingUsed + (isServiceDomainAdmin ? portMeetingOther : portMeetingOtherUserDomain), portMeetingTotal);
+						totalPercent = controller.getIntData(portMeetingUsed + (Home.Data.isServiceDomainAdmin ? portMeetingOther : portMeetingOtherUserDomain), portMeetingTotal);
 					} else { //端口会议数据如果缺失则不显示
 						controller.mediaData.item_resource_data[1].show = false;
 						//没有端口会议 总百分比根据传统已使用数加本域的其他占用数计算 
-						totalPercent = controller.getIntData(traMeetingUsed + (isServiceDomainAdmin ? traMeetingOther : traMeetingOtherUserDomain), traMeetingTotal);
+						totalPercent = controller.getIntData(traMeetingUsed + (Home.Data.isServiceDomainAdmin ? traMeetingOther : traMeetingOtherUserDomain), traMeetingTotal);
 					}
 					data.resourceData[3].percent = totalPercent;
 					data.resourceData[3].showInfo = true;
@@ -291,7 +291,7 @@ var controller = {
 					controller.mediaData.item_resource_data[1].percent = portMeetingPercent;
 				}
 			}
-			panelData.resourceData = data.resourceData;
+			Home.Data.panelData.resourceData = data.resourceData;
 			var sourceHtml = template('resource-content', data);
 			$(".resource-wrapper", "#resource_load").remove();
 			$('#resource_load').append(sourceHtml)
@@ -465,10 +465,10 @@ var controller = {
 					data['time'][i] = data['time'][i].slice(5, -3)
 				}
 				var bookMeetingCountData = null;
-				if (panelData.hasOwnProperty("book_meeting_count")) {
-					bookMeetingCountData = panelData.book_meeting_count;
-				} else if (panelData.hasOwnProperty("resource_load") && panelData.resource_load.hasOwnProperty("book_meeting_count")) {
-					bookMeetingCountData = panelData.resource_load.book_meeting_count;
+				if (Home.Data.panelData.hasOwnProperty("book_meeting_count")) {
+					bookMeetingCountData = Home.Data.panelData.book_meeting_count;
+				} else if (Home.Data.panelData.hasOwnProperty("resource_load") && Home.Data.panelData.resource_load.hasOwnProperty("book_meeting_count")) {
+					bookMeetingCountData = Home.Data.panelData.resource_load.book_meeting_count;
 				}
 				var testData = [];
 				if (data && data.values && data.values.length) {

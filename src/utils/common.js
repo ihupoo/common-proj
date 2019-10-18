@@ -1,53 +1,13 @@
 /**
- * 工具（SSO.InputAccount，SSO.Size，SSO.common，Mo.alert，Mo.confirm，Moo.alert，Moo.confirm，Mo.common，Mo.Base.account，Mo.tips）
+ * 工具
  * 
  * */
-$.namespace("SSO.InputAccount");
-SSO.InputAccount = {//避免浏览器记住密码后对input输入框的自动回填
-	autocomplete: function () {
-		$("input").each(function () {
-			var type = $(this).attr('type');
-			if (type == 'password') {//只给密码框加 避免浏览器记住密码后对input输入框的自动回填
-				$(this).before("<input style='display:none' type='" + type + "'>");
-				$(this).attr("autocomplete", "new-password");
-			} else {
-				$(this).attr("autocomplete", "off");//避免chrome浏览器对input的默认行为（可下拉勾选输入过的内容）
-			}
-		});
-	}
-}
-
-$(function () {
-	SSO.InputAccount.autocomplete()
-})
-
-$.namespace("SSO.Size");
-SSO.Size = {
-	init: function () {
-		var height = $(window).height() - 185;
-		$(".content").css("min-height", height);
-		$(window).resize(function () {
-			SSO.Size.experirdpageInit();
-		})
-	},
-
-	experirdpageInit: function () {
-		var wrapMinHeight = 650;
-		var winHeight = $(window).height();
-		var wrapHeight = winHeight > wrapMinHeight ? winHeight : wrapMinHeight;
-		var wrapAllHeight = wrapHeight - $("#footer").outerHeight();
-		$(".wrap").height(wrapHeight)
-		$(".wrap-all").height(wrapAllHeight)
-	}
-}
-
-$.namespace("SSO.common");
-SSO.common = {
+let Common = {
 	init: function () {
 		this.regEvent();
-		SSO.common.modifyPassword.init();
-		SSO.common.modifyUser.init();
-		SSO.common.modifyPortait.init();
+		ModifyPassword.init();
+		ModifyUser.init();
+		ModifyPortait.init();
 	},
 	headerEvent: function () {
 		$(".li").on("mouseover", function () {
@@ -90,24 +50,24 @@ SSO.common = {
 
 		$("#modifyUser").on("click", function () {
 			$(".setting-list").hide();
-			//location.href = BP.config.SYSTEM_URL + "/set#profile";
+			location.href = BP.config.SYSTEM_URL + "/set#profile";
 		});
 
 		$("#modifyPassword").on("click", function () {
 			$(".setting-list").hide();
-			//location.href = BP.config.SYSTEM_URL + "/set#password";
+			location.href = BP.config.SYSTEM_URL + "/set#password";
 		});
 		$("#gmt").on("click", function () {
 			$(".setting-list").hide();
-			//location.href = BP.config.SYSTEM_URL + "/set#gmt";
+			location.href = BP.config.SYSTEM_URL + "/set#gmt";
 		});
 		$("#language").on("click", function () {
 			$(".setting-list").hide();
-			//location.href = BP.config.SYSTEM_URL + "/set#language";
+			location.href = BP.config.SYSTEM_URL + "/set#language";
 		});
 		$("#modifyPortrait").on("click", function () {
 			$(".setting-list").hide();
-			//location.href = BP.config.SYSTEM_URL + "/set#portrait";
+			location.href = BP.config.SYSTEM_URL + "/set#portrait";
 		});
 		$("#about").on("click", function () {
 			$(".setting-list").hide();
@@ -170,7 +130,7 @@ SSO.common = {
 };
 
 //修改用户信息
-SSO.common.modifyUser = {
+let ModifyUser = {
 	init: function () {
 		this.initEvent();
 	},
@@ -245,25 +205,25 @@ SSO.common.modifyUser = {
 			moid: $.trim($("#moid").val())
 		};
 
-		if (data.mobile && !SSO.verify.mobile(data.mobile)) {
+		if (data.mobile && !Verify.mobile(data.mobile)) {
 			this.showMsg('请输入11位数字的手机号码'); //this.showMsg('手机长度不超过15,只允许输入"数字、.、_、-、*、#、空格"');
 			$("#mobile").focus();
 			return false;
 		}
 
-		if (data.email && !SSO.verify.email(data.email)) {
+		if (data.email && !Verify.email(data.email)) {
 			this.showMsg("请输入正确的邮箱地址");
 			$("#email").focus();
 			return false;
 		}
 
-		if (data.email && !SSO.Base.validation.checkLength(data.email, 64)) {
+		if (data.email && !Validation.checkLength(data.email, 64)) {
 			this.showMsg("邮箱地址长度不能大于64位字符");
 			$("#email").focus();
 			return false;
 		}
 
-		if (data.seat && !SSO.Base.validation.checkLength(data.seat, 60)) {
+		if (data.seat && !Validation.checkLength(data.seat, 60)) {
 			this.showMsg("请输入联系地址长度不超过60");
 			$("#officeLocation").focus();
 			return false;
@@ -282,7 +242,7 @@ SSO.common.modifyUser = {
 };
 
 //修改密码
-SSO.common.modifyPassword = {
+let ModifyPassword = {
 	init: function () {
 		this.initEvent();
 	},
@@ -362,13 +322,13 @@ SSO.common.modifyPassword = {
 			return false;
 		}
 
-		if (data.newPassword && !SSO.verify.password(data.newPassword)) {
+		if (data.newPassword && !Verify.password(data.newPassword)) {
 			this.showMsg('密码仅支持大小写字母、数字、"_"、"."');
 			$("#newPassword").focus();
 			return false;
 		}
 
-		if (data.newPassword && !SSO.Base.validation.checkLength(data.newPassword, 32)) {
+		if (data.newPassword && !Validation.checkLength(data.newPassword, 32)) {
 			this.showMsg('密码长度不能大于32位字符');
 			$("#newPassword").focus();
 			return false;
@@ -399,7 +359,7 @@ SSO.common.modifyPassword = {
 };
 
 //设置头像
-SSO.common.modifyPortait = {
+let ModifyPortait = {
 	reg: /(jpg|jpeg|JPG|JPEG|png|gif|bmp)$/,
 	proportion: 1,
 	minXY: 0,
@@ -452,14 +412,14 @@ SSO.common.modifyPortait = {
 		$(".qq-upload-list").addClass("hidden");
 	},
 	onSubmit: function (id, fileName) {
-		if (!(fileName && SSO.common.modifyPortait.reg.test(fileName.toLowerCase()))) {
+		if (!(fileName && ModifyPortait.reg.test(fileName.toLowerCase()))) {
 			alert('仅支持JPG、PNG、GIF、BMP图片文件');
 			return false;
 		}
-		if (Mo.Base.throttle.isLock(this.url)) {
+		if (Throttle.isLock(this.url)) {
 			return false;
 		}
-		Mo.Base.throttle.lock(this.url);
+		Throttle.lock(this.url);
 	},
 	onProgress: function (id, fileName, loaded, total) {
 		$(".img_span").text("图片正在上传中...");
@@ -468,18 +428,18 @@ SSO.common.modifyPortait = {
 		if (msg.success) {
 			$("#img_side_320").attr("src", BP.config.SYSTEM_URL + "/" + msg.data + "?t=" + Math.random());
 			$(".preview_div").find("img").attr("src", BP.config.SYSTEM_URL + "/" + msg.data + "?t=" + Math.random());
-			SSO.common.modifyPortait.setFileName(msg.data);
-			SSO.common.modifyPortait.setXY(msg.data);
+			ModifyPortait.setFileName(msg.data);
+			ModifyPortait.setXY(msg.data);
 			var length = 0;
 			document.getElementById("img_side_320").onload = function () {
-				length = SSO.common.selectImage.getSelectLength();
-				SSO.common.selectImage.qietuInit(length);
+				length = SelectImage.getSelectLength();
+				SelectImage.qietuInit(length);
 			}
 		} else {
 			alert(msg.description);
 		}
 		$(".img_span").addClass("hidden");
-		Mo.Base.throttle.unLock(this.url);
+		Throttle.unLock(this.url);
 	},
 	setFileName: function (url) {
 		var arr = url.split("/");
@@ -526,7 +486,7 @@ SSO.common.modifyPortait = {
 };
 
 //图片剪切
-SSO.common.selectImage = {
+let SelectImage = {
 	getSelectLength: function () {
 		var length = $("#img_side_320").width() < $("#img_side_320").height() ? $("#img_side_320").width() : $("#img_side_320").height();
 		return length;
@@ -554,15 +514,15 @@ SSO.common.selectImage = {
 	},
 	preview_img: function (img, selection) {
 		var param = {};
-		param.x1 = parseInt(selection.x1 * SSO.common.modifyPortait.proportion);
-		param.y1 = parseInt(selection.y1 * SSO.common.modifyPortait.proportion);
-		param.width = parseInt(selection.width * SSO.common.modifyPortait.proportion);
-		param.height = parseInt(selection.height * SSO.common.modifyPortait.proportion);
+		param.x1 = parseInt(selection.x1 * ModifyPortait.proportion);
+		param.y1 = parseInt(selection.y1 * ModifyPortait.proportion);
+		param.width = parseInt(selection.width * ModifyPortait.proportion);
+		param.height = parseInt(selection.height * ModifyPortait.proportion);
 		$("#selection").val(JSON.stringify(param));
-		SSO.common.selectImage.preview_photo(selection, ".side_256");
-		SSO.common.selectImage.preview_photo(selection, ".side_128");
-		SSO.common.selectImage.preview_photo(selection, ".side_64");
-		SSO.common.selectImage.preview_photo(selection, ".side_32");
+		SelectImage.preview_photo(selection, ".side_256");
+		SelectImage.preview_photo(selection, ".side_128");
+		SelectImage.preview_photo(selection, ".side_64");
+		SelectImage.preview_photo(selection, ".side_32");
 	},
 	preview_photo: function (selection, item) {
 		var div = $(item);
@@ -612,8 +572,7 @@ $(function () {
 	}
 });
 
-$.namespace("Mo.alert");
-Mo.alert = function (msg, callback) {
+let MoAlert = function (msg, callback) {
 	if (window.top.g_msgbox && window.top.g_msgbox.isvisible()) {
 		var dialogCount = window.momsgboxCount || 0;
 		var msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
@@ -625,8 +584,7 @@ Mo.alert = function (msg, callback) {
 	}
 }
 
-$.namespace("Mo.confirm");
-Mo.confirm = function (msg, callback, title) {
+let MoConfirm = function (msg, callback, title) {
 	if (!!!title) {
 		title = '提示';
 	}
@@ -642,8 +600,7 @@ Mo.confirm = function (msg, callback, title) {
 
 }
 
-$.namespace("Moo.alert");
-Moo.alert = function (msg, callback, okText, cancelText) {
+let MooAlert = function (msg, callback, okText, cancelText) {
 	if (window.top.g_msgbox1 && window.top.g_msgbox1.isvisible()) {
 		var dialogCount = window.momsgboxCount1 || 0;
 		var msgbox1 = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
@@ -655,8 +612,7 @@ Moo.alert = function (msg, callback, okText, cancelText) {
 	}
 }
 
-$.namespace("Moo.confirm");
-Moo.confirm = function (msg, callback, okText, cancelText) {
+let MooConfirm = function (msg, callback, okText, cancelText) {
 	if (window.top.confirm_msgbox1 && window.top.confirm_msgbox1.isvisible()) {
 		var dialogCount = window.momsgboxCount1 || 0;
 		var msgbox = new window.top.MoMessageBox1({ id: 'mo-msgbox-dialog-' + dialogCount, autodestroy: true });
@@ -668,8 +624,7 @@ Moo.confirm = function (msg, callback, okText, cancelText) {
 	}
 };
 
-$.namespace("Mo.common");
-Mo.common = {
+let MoCommon = {
 	logininit: function (data) {
 		var loginHeaderHtml = template('loginheader', data);
 		document.getElementById('login_header').innerHTML = loginHeaderHtml;
@@ -691,8 +646,7 @@ Mo.common = {
 
 };
 
-$.namespace("Mo.Base.account");
-Mo.Base.account = {
+let MoBaseAccount = {
 	getPasswordStrength: function (pwd) {
 		if (!!!pwd && '0' != pwd)
 			return "fault";
@@ -727,26 +681,26 @@ Mo.Base.account = {
 		return "fault";
 	},
 	checkAccount: function (value) {
-		if (SSO.Base.validation.isAllNumber(value)) {//账号的检验 新增该规则（不可以纯数字）
+		if (Validation.isAllNumber(value)) {//账号的检验 新增该规则（不可以纯数字）
 			alert('账号不允许纯数字');
 			return false;
 		}
-		if (!SSO.Base.validation.isRegExp(regexEnum.account, value)) {
+		if (!Validation.isRegExp(regexEnum.account, value)) {
 			alert('账号仅允许输入英文、数字、汉字、下划线（_）、减号（-）、@、点号（.）且首尾字符仅允许英文、数字、汉字');
 			return false;
 		}
-		if (!SSO.Base.validation.checkLength(value, 40)) {
+		if (!Validation.checkLength(value, 40)) {
 			alert('账号长度不能大于40位字符');
 			return false;
 		}
 		return true;
 	},
 	checkPassword: function (value) {
-		if (!SSO.verify.password(value)) {
+		if (!Verify.password(value)) {
 			alert("密码仅支持大小写字母、数字、'_'、'.'，请确认后重新输入。");
 			return false;
 		}
-		if (!SSO.Base.validation.checkLength(value, 32)) {
+		if (!Validation.checkLength(value, 32)) {
 			alert('密码长度不能大于32位字符');
 			return false;
 		}
@@ -760,8 +714,7 @@ $(document).ajaxComplete(function (event, xhr, options) {
 	}
 })
 
-$.namespace("Mo.tips");
-Mo.tips = {
+let MoTips = {
 	show: function (text, callback, time) {
 		if (callback && typeof callback == "function") {
 			callback();
@@ -782,18 +735,7 @@ Mo.tips = {
 	}
 }
 
-$.namespace("Mo.Config");
-Mo.Config = {
-	appUrl: ''
-}
-
-$.namespace("BP.config");
-BP.config = {
-	SYSTEM_URL: "",
-	STATIC_URL: "",
-	FILE_TYPE_ALLOW:"[rar,zip,doc,xls,ppt,pps,pdf,txt,jpg,jpeg,bmp,gif,png]",
-	LANG:'${lang}',
-};
+export { Common, MoAlert, MoConfirm, MoTips, MoCommon, MoBaseAccount, MooAlert, MooConfirm, ModifyUser, ModifyPassword, ModifyPortait, SelectImage }
 
 
 

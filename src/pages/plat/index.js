@@ -25,7 +25,7 @@ import '@/utils/fileuploader.js';
 import '@/utils/utils.js';
 import '@/utils/md5.js';
 import '@/utils/sm.js';
-import '@/utils/browser-polyfill.min.js';
+
 
 import './css/theme.scss';
 import './css/set.scss';

@@ -1,3 +1,16 @@
+function get (source, path, defaultValue = undefined) {
+    const paths = path.replace(/\[(\d+)\]/g, '.$1').split('.')
+    let result = source
+    for (const p of paths) {
+      result = Object(result)[p]
+      if (result === undefined) {
+        return defaultValue
+      }
+    }
+    return result
+  }
+
+
 class Store{
     state = {
         sysBrand: 'kedacom',
@@ -41,7 +54,7 @@ class Store{
     }
 
     getState(param){
-       return param ? this.state[param] : this.state
+       return param ? get(this.state, param) : this.state
     }
 
     dispatch({ type, payload = {} }){

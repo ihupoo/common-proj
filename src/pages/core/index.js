@@ -18,6 +18,7 @@ import '@/styles/reset-mCustomScrollbar.scss';
 import '@/styles/reset-easyui.scss';
 import '@/styles/fileuploader.scss';
 import '@/styles/password.scss';
+
 import '@/utils/password.js';
 import '@/utils/digestAuth.js';
 import '@/utils/common.js';
@@ -25,7 +26,8 @@ import '@/utils/fileuploader.js';
 import '@/utils/utils.js';
 import '@/utils/md5.js';
 import '@/utils/sm.js';
-import '@/utils/browser-polyfill.min.js';
+
+
 
 import './css/theme.scss';
 import './css/set.scss';
