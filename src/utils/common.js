@@ -2,6 +2,23 @@
  * 工具
  * 
  * */
+$.namespace("SSO.InputAccount");
+SSO.InputAccount={//避免浏览器记住密码后对input输入框的自动回填
+    autocomplete:function(){
+        $("input").each(function(){
+            var type= $(this).attr('type');
+            if(type=='password'){//只给密码框加 避免浏览器记住密码后对input输入框的自动回填
+                $(this).before("<input style='display:none' type='"+type+"'>");
+                $(this).attr("autocomplete","new-password");
+            }else{
+                $(this).attr("autocomplete","off");//避免chrome浏览器对input的默认行为（可下拉勾选输入过的内容）
+            }
+        });
+    }
+}
+$(function(){
+    SSO.InputAccount.autocomplete()
+})
 const Common = {
 	init: function () {
 		this.regEvent();
@@ -165,7 +182,7 @@ const ModifyUser = {
 			///////////标记ajax：修改用户信息////////////
 			$.ajax({
 				type: 'post',
-				//url: BP.config.SYSTEM_URL + "/system/user/updateuser",
+				url: BP.config.SYSTEM_URL + "/system/user/updateuser",
 				data: data,
 				dataType: 'json',
 				success: function (msg) {
@@ -205,13 +222,13 @@ const ModifyUser = {
 			moid: $.trim($("#moid").val())
 		};
 
-		if (data.mobile && !Validation.checkValue(regexEnum.mobile, data.mobile)) {
+		if (data.mobile && !Validation.check('mobile', data.mobile)) {
 			this.showMsg('请输入11位数字的手机号码'); //this.showMsg('手机长度不超过15,只允许输入"数字、.、_、-、*、#、空格"');
 			$("#mobile").focus();
 			return false;
 		}
 
-		if (data.email && !Validation.checkValue(regexEnum.email, data.email)) {
+		if (data.email && !Validation.check('email', data.email)) {
 			this.showMsg("请输入正确的邮箱地址");
 			$("#email").focus();
 			return false;
@@ -276,7 +293,7 @@ const ModifyPassword = {
 			////////////标记ajax：修改密码////////////////////
 			$.ajax({
 				type: 'post',
-				//url: BP.config.SYSTEM_URL + "/system/user/updatepassword",
+				url: BP.config.SYSTEM_URL + "/system/user/updatepassword",
 				data: data,
 				dataType: 'json',
 				success: function (msg) {
@@ -322,7 +339,7 @@ const ModifyPassword = {
 			return false;
 		}
 
-		if (data.newPassword && !Validation.checkValue(regexEnum.password, data.newPassword)) {
+		if (data.newPassword && !Validation.check('password', data.newPassword)) {
 			this.showMsg('密码仅支持大小写字母、数字、"_"、"."');
 			$("#newPassword").focus();
 			return false;
@@ -366,7 +383,7 @@ const ModifyPortait = {
 	_X: 0,   //原始宽度
 	_Y: 0,	//原始长度
 	fileName: "",//上传后的文件名称
-	//url: BP.config.SYSTEM_URL + "/system/user/uploadPortrait",
+	url: BP.config.SYSTEM_URL + "/system/user/uploadPortrait",
 	init: function () {
 		this.initEvent();
 		this.initUpLoad();
@@ -697,7 +714,7 @@ const MoBaseAccount = {
 	},
 	checkPassword: function (value) {
 
-		if (!Validation.checkValue(regexEnum.password, value)) {
+		if (!Validation.check('password', value)) {
 			alert("密码仅支持大小写字母、数字、'_'、'.'，请确认后重新输入。");
 			return false;
 		}

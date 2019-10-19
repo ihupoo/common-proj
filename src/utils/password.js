@@ -1,3 +1,12 @@
+import Store from '@/store';
+import { DigestAuth } from './digestAuth';
+import { MoBaseAccount } from './common';
+
+import { hex_md5 } from '@/lib/md5';
+
+const BASE_URL = Store.getState('BASE_URL');
+const passwordStrength = Store.getState('user.passwordStrength')
+
 const Password = {
 	oldPasswordId: "#oldPassword",
 	newPasswordId: "#newPassword",
@@ -139,7 +148,7 @@ const Password = {
 							this.showTips($(that.newPasswordTip), null)
 							return false;
 						} else {
-							if (this.strengthOfPass[$(that.newPasswordTip).find('.tip-info').text()] < passwordStrengthOfSecurityPolicy) {
+							if (this.strengthOfPass[$(that.newPasswordTip).find('.tip-info').text()] < passwordStrength) {
 								this.showTips($(that.newPasswordTip), false, "密码不符合强度等级要求")
 								$(that.newPasswordTip).find('.help').hide();
 								$(that.newPasswordId).focus();
@@ -158,7 +167,7 @@ const Password = {
 								} else {
 									cdata = DigestAuth.makePassword(hex_md5(oldPassword), newPassword);
 								}
-								$.post(Mo.Config.appUrl + '/system/user/checkNewPassword', cdata, function (msg) {
+								$.post(BASE_URL + '/system/user/checkNewPassword', cdata, function (msg) {
 									if (msg.success) {
 										return Password.checkNewPasswordCallback(msg.data);
 									}
@@ -170,7 +179,7 @@ const Password = {
 							cdata = DigestAuth.makePassword(nonce, newPassword);
 							cdata.email = $.trim($('#email').val());
 							cdata.sequenceNum = $.trim($('#sequenceNum').val());
-							$.post(Mo.Config.appUrl + '/forgetpassword/checkNewPassword', cdata, function (msg) {
+							$.post(BASE_URL + '/forgetpassword/checkNewPassword', cdata, function (msg) {
 								if (msg.success) {
 									return Password.checkNewPasswordCallback(msg.data);
 								}
@@ -220,12 +229,6 @@ const Password = {
 
 		$(this.newPasswordId).blur(function () {
 			that.newPassBlur($(this));
-			/*if(Mo.Password.oldPasswordId==""){
-				if($(".tipWrapper .tip-icon").hasClass("error-icon")){
-					$(".tipWrapper .tip-info").text("")
-				}
-				$(".tipWrapper .tip-icon").removeClass("error-icon")
-			}*/
 		})
 		$(this.newPasswordId).keyup(function (event) {
 			let password = $(this).val();
@@ -284,7 +287,7 @@ const Password = {
 							that.confirmPassFocus($(that.confirmPasswordId))
 						}
 					} else {
-						if (that.strengthOfPass[$(that.newPasswordTip).find('.correct-tip').text()] < passwordStrengthOfSecurityPolicy) {
+						if (that.strengthOfPass[$(that.newPasswordTip).find('.correct-tip').text()] < passwordStrength) {
 							that.showTips($(that.newPasswordTip), false, "密码不符合强度等级要求")
 							$(that.newPasswordTip).find('.help').hide();
 							$(that.newPasswordId).focus();
@@ -419,7 +422,8 @@ const Password = {
 		let that = this;
 		let oldPassword = $(this.oldPasswordId).val();
 		if (oldPassword != "" && oldPassword != undefined) {
-			let url = Mo.Config.appUrl + "/modifypassword/checkOldPassword";
+    
+			let url = BASE_URL + "/modifypassword/checkOldPassword";
 			let data = {};
 			if ('1' == systemSecurity) {
 				data = DigestAuth.makePassword(oldPassword, oldPassword);
@@ -429,7 +433,7 @@ const Password = {
 			data.username = DigestAuth.username;
 			$.post(url, data, function (msg) {
 				if (msg.success) {
-					$(this.oldPasswordTip).find('.tip-info').text(msg.description);
+					$(that.oldPasswordTip).find('.tip-info').text(msg.description);
 					if (msg.data == "1") {//旧（当前）密码正确
 						that.showTips($(that.oldPasswordTip), true, "密码一致")
 						if (newPass) {
@@ -447,10 +451,7 @@ const Password = {
 				}
 			}, "json").error(function () {
 			});
-		} else {
-			//that.showTips("oldPasswordTip",false,"当前密码不能为空")
-			//$(Mo.Password.oldPasswordId).focus();
-		}
+		} 
 	},
 	showTips: function (passwordTipElement, isCorrect, tips) {
 		if (isCorrect == null) {
@@ -489,8 +490,9 @@ const Password = {
 			if (e.keyCode === 20 && capital) { // 点击Caps大写提示显隐切换
 				capitalTip.toggle();
 			}
-		}).on('focus.caps', function () { capital = false }).on('keypress.caps', function (e) { capsLock(e) }).on('blur.caps', function (e) {
-
+        }).on('focus.caps', function () { capital = false })
+        .on('keypress.caps', function (e) { capsLock(e) })
+        .on('blur.caps', function (e) {
 			//输入框失去焦点，提示隐藏
 			capitalTip.toggle('none');
 		});
@@ -542,10 +544,4 @@ const Password = {
 
 };
 
-let PasswordBtn = {
-	initSaveBtn: function () {
-
-	}
-}
-
-export { Password, PasswordBtn }
+export { Password }

@@ -16,15 +16,16 @@ import '@/styles/commonCSS.scss';
 import '@/styles/reset-artDialog.scss';
 import '@/styles/reset-mCustomScrollbar.scss';
 import '@/styles/reset-easyui.scss';
-import '@/styles/fileuploader.scss';
 import '@/styles/password.scss';
 import '@/utils/password.js';
 import '@/utils/digestAuth.js';
 import '@/utils/common.js';
-import '@/lib/uploader/fileuploader.js';
+
+import '@/lib/uploader';
+import '@/lib/sm';
+import '@/lib/md5';
+
 import '@/utils/utils.js';
-import '@/utils/md5.js';
-import '@/utils/sm.js';
 
 
 import './css/theme.scss';

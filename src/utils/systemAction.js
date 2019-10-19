@@ -1,6 +1,6 @@
 import Store from '@/store';
 import { Throttle } from './utils';
-import { MoAlert, MoTips, MoConfirm } from './common';
+import { MoAlert, MooAlert , MoTips, MoConfirm } from './common';
 
 const BASE_URL = Store.getState('BASE_URL');
 const onlyCurrentIp = Store.getState('user.onlyCurrentIp')
@@ -27,13 +27,12 @@ const RebootTip = {
         }, timeout);
     },
 	getStatus(){
-        var appurl = '/portal';
         $.ajax({
-            url: Mo.Config.appUrl + '/check',
+            url: BASE_URL + '/check',
             method: 'GET',
             timeout: 7000,
             success: function() {
-                let loginUrl = location.href.split(Mo.Config.appUrl)[0] + appurl + '/login';
+                let loginUrl = location.href.split(BASE_URL)[0] + '/portal/login';
                 RebootTip.complete(loginUrl);
             }
         });
@@ -66,6 +65,7 @@ const RebootTip = {
             drag: false,
             esc: false
         });
+        //todo
         RebootTip.progressbar = Portal.Progressbar('#rebootProgressbar', {
             width: 315
         });
@@ -92,7 +92,7 @@ const RebootTip = {
         setTimeout(function() {
             $.dialog({ id: 'rebootProgressDialog' }).close();
             if (RebootTip.runningFlag) {
-                Moo.alert('重启完成，请重新登录生效！', function(r) {
+                MooAlert('重启完成，请重新登录生效！', function(r) {
                     if (r) {
                         window.onbeforeunload = null;
                         location.href = loginUrl;
@@ -131,7 +131,7 @@ function rebootClusterEvent() {
         if (t.success) {
             location.reload();
         } else {
-            MoAlert("重启失败，原因：" + t.description);
+            MoAlert(`重启失败，原因：${t.description}`);
         }
     }, "json").error(function () {
         setTimeout(function () {
@@ -156,7 +156,7 @@ function shutdownClusterEvent() {
         if (t.success) {
             location.reload();
         } else {
-            MoAlert("关机失败，原因：" + t.description);
+            MoAlert(`关机失败，原因：${t.description}`);
         }
     }, "json").error(function () {
         setTimeout(function () {
@@ -177,7 +177,7 @@ function rebootEvent() {
         if (t.success) {
             RebootTip.show();
         } else {
-            MoAlert("重启失败，原因：" + t.description);
+            MoAlert(`重启失败，原因：${t.description || ''}`);
         }
     }, "json").error(function () {
         getRebootStatus(url);
@@ -243,6 +243,7 @@ function getShutdownStatus() {
     });
 }
 
+//todo
 function checkADPassword(callback) {
     $.dialog.open(BASE_URL + "/checkADPassword", {
         id: "checkADPassword",
@@ -254,7 +255,7 @@ function checkADPassword(callback) {
         height: 260,
         close: function () {
             let action = $.dialog.data("action");
-            if (action == "ok" && typeof (callback) == "function") {
+            if (action == "ok") {
                 callback();
             }
         },
@@ -263,6 +264,7 @@ function checkADPassword(callback) {
     }, false);
 };
 
+//todo
 function selectPserverIP(callback1, callback2) {
     $.dialog.open(BASE_URL + "/selectPserverIP", {
         id: "selectPserverIP",
@@ -275,11 +277,9 @@ function selectPserverIP(callback1, callback2) {
         close: function () {
             let action = $.dialog.data("action");
             let needOperateIPCount = $.dialog.data("needOperateIPCount");
-            if (action == "ok" && typeof (callback1) == "function" && needOperateIPCount != 1) {
-                callback2();
-            }
-            if (action == "ok" && typeof (callback2) == "function" && needOperateIPCount == 1) {
-                callback1();
+            if(action == "ok"){
+                needOperateIPCount != 1 && callback2();
+                needOperateIPCount == 1 && callback1();
             }
         },
         cancel: false, // 隐藏关闭按钮
