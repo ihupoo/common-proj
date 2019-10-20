@@ -1,6 +1,6 @@
 import Store from '@/store';
 import { Throttle } from './utils';
-import { MoAlert, MooAlert , MoTips, MoConfirm } from './common';
+import { MoAlert, MooAlert , MoTips, MoConfirm } from '@/components/popup';
 
 const BASE_URL = Store.getState('BASE_URL');
 const onlyCurrentIp = Store.getState('user.onlyCurrentIp')

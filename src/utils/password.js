@@ -1,11 +1,36 @@
 import Store from '@/store';
 import { DigestAuth } from './digestAuth';
-import { MoBaseAccount } from './common';
 
 import { hex_md5 } from '@/lib/md5';
 
 const BASE_URL = Store.getState('BASE_URL');
+const strengthRegular = Store.getState('strengthRegular');
 const passwordStrength = Store.getState('user.passwordStrength')
+
+function getPasswordStrength(pwd) {
+    if (!pwd && '0' != pwd) return "fault";
+
+    if (strengthRegular) {
+        let checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
+        for (let i = 0; i < checkArr.length; i++) {
+            let strength = checkArr[i];
+            if (!!strengthRegular[strength] && !!(eval('/' + strengthRegular[strength] + '/').test(pwd))) {
+                if (strength == '2') {
+                    return "medium";
+                } else if (strength == '3') {
+                    return "strong";
+                } else if (strength == '1') {
+                    return "weak";
+                } else {
+                    return "fault";
+                }
+            }
+        }
+    } else {
+        console.error("密码强认证规则获取失败");
+    }
+    return "fault";
+}
 
 const Password = {
 	oldPasswordId: "#oldPassword",
@@ -522,22 +547,22 @@ const Password = {
 			$(this.newPasswordTip).find('.tip-info').text("弱");
 			return;
 		}
-		if (MoBaseAccount.getPasswordStrength(password) == "weak") {
+		if (getPasswordStrength(password) == "weak") {
 			$(this.newPasswordTip).find('.tip-icon').toggleClass("weak-icon");
 			$(this.newPasswordTip).find('.tip-info').toggleClass("weak-tip");
 			$(this.newPasswordTip).find('.tip-info').text("弱");
 		}
-		if (MoBaseAccount.getPasswordStrength(password) == "medium") {
+		if (getPasswordStrength(password) == "medium") {
 			$(this.newPasswordTip).find('.tip-icon').toggleClass("medium-icon");
 			$(this.newPasswordTip).find('.tip-info').toggleClass("medium-tip");
 			$(this.newPasswordTip).find('.tip-info').text("中");
 		}
-		if (MoBaseAccount.getPasswordStrength(password) == "strong") {
+		if (getPasswordStrength(password) == "strong") {
 			$(this.newPasswordTip).find('.tip-icon').toggleClass("strong-icon");
 			$(this.newPasswordTip).find('.tip-info').toggleClass("strong-tip");
 			$(this.newPasswordTip).find('.tip-info').text("强");
 		}
-		if (MoBaseAccount.getPasswordStrength(password) == "fault") {
+		if (getPasswordStrength(password) == "fault") {
 			this.showTips($(this.newPasswordTip), false, "密码不符合要求")
 		}
 	}

@@ -21,7 +21,9 @@ import { Login } from './js/login';
 import { fetchLoginInfo } from './service';
 import renderHeader from './tpl/sys_logo.art';
 import renderFooter from './tpl/enterprise_introduce.art';
-import store from '@/store/index';
+
+
+import Store from '@/store/index';
 import { i18next , documentTitle } from '@/i18n';
 
 

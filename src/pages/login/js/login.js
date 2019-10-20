@@ -1,7 +1,4 @@
-/**
- * 工具
- * 
- * */
+
 const Login = {
 	min_height: 143, //页面最小高度
 	//min_widht:960,//页面最小宽度
@@ -396,5 +393,8 @@ const Login = {
 		$("#password").focus();
 	}
 };
+
+
+
 
 export default Login;

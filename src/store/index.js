@@ -13,9 +13,12 @@ function get (source, path, defaultValue = undefined) {
 
 class Store{
     state = {
+        BASE_URL: '/',
+
+
         sysBrand: 'kedacom',
         versionYear: '2019',
-        currentuser: {
+        user: {
             userDomainMoid: '',
             serviceDomainMoid: '',
             enableMeeting: '',

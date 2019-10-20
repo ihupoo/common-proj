@@ -1,23 +1,5 @@
- /**
- * 工具
- * 
- * */
 
-// $.namespace("SSO.utils");
-// SSO.utils = {
-// 	getSystemUrl:function(url){
-// 		return BP.config.SYSTEM_URL+'/'+url;
-// 	},
-// 	getStaticUrl:function(){
-// 		return BP.config.STATIC_URL;
-// 	},
-// 	getLang:function(){
-// 		return BP.config.LANG;
-// 	}
-// };
-
-
-const regexEnum = {
+const ENUM_REGEX = {
     account:"^[\u4e00-\u9fa5\\w\\.@]+$", // 中文、英文字母（大小写）、数字、“_”、“@”、“.”
     email:"^[\\w][\\w|-]+(\\.[\\w|-]+)*@[\\w|-]+(\\.[\\w|-]+)+$", // 英文字母（大小写）、数字、“_”、“@”、“.”、“-”
     name: "^[\u4e00-\u9fa5\\w]+$", // 中文、英文字母（大小写）、数字、“_“
@@ -41,7 +23,7 @@ const Validation = {
 		return reg.test(value);
     },
     check(type, value){
-        return validation.checkValue(regexEnum[type], value)
+        return Validation.checkValue(ENUM_REGEX[type], value)
     },
 	//验证长度
 	checkLength(value, len) {
@@ -49,28 +31,44 @@ const Validation = {
 	},
     isAllNumber(value){
         let reg =/^[0-9]*$/;
-        return validation.checkValue(reg,value);
+        return Validation.checkValue(reg,value);
     },
 	//是否为任意数字
 	isNumeric(value){
 		let reg = /^(-|\+)?\d+(\.\d+)?$/;
-		return validation.checkValue(reg,value);
+		return Validation.checkValue(reg,value);
 	},
 	//是否为整数
 	isInteger(value){
 		let reg = /^(-|\+)?\d+$/;
-		return validation.checkValue(reg,value);
+		return Validation.checkValue(reg,value);
 	},
 	//是否为非负整数
 	isUnsignedInteger(value){
 		let reg = /^\d+$/;
-		return validation.checkValue(reg,value);
+		return Validation.checkValue(reg,value);
 	},
 	//是否为正整数
 	isPositiveInteger(value){
 		let reg = /^[0-9]*[1-9][0-9]*$/;
-		return validation.checkValue(reg,value);
+		return Validation.checkValue(reg,value);
     },
+    //账号正确与否
+    checkAccount(value) {
+		if (Validation.isAllNumber(value)) {//账号的检验 新增该规则（不可以纯数字）
+			alert('账号不允许纯数字');
+			return false;
+		}
+		if (!Validation.check('account', value)) {
+			alert('账号仅允许输入英文、数字、汉字、下划线（_）、减号（-）、@、点号（.）且首尾字符仅允许英文、数字、汉字');
+			return false;
+		}
+		if (!Validation.checkLength(value, 40)) {
+			alert('账号长度不能大于40位字符');
+			return false;
+		}
+		return true;
+	},
 };
 
 //loading
@@ -93,8 +91,7 @@ const Loading = {
                 })
                 .appendTo(document.body);
 
-            $(`<div class="loading-mask-msg"></div>`)
-                .html(this.loadingMsg)
+            $(`<div class="loading-mask-msg">${this.loadingMsg}</div>`)
                 .css({
                     display : "block",
                     "z-index" : zindex - 1,
