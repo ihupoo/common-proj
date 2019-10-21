@@ -1,4 +1,5 @@
 import Store from '@/store';
+import { MoAlert } from '@/components/popup';
 import { Throttle } from './utils';
 
 const BASE_URL = Store.getState('BASE_URL');
@@ -97,7 +98,7 @@ const ModifyPortait = {
 	},
 	onSubmit: function (id, fileName) {
 		if (!(fileName && ModifyPortait.reg.test(fileName.toLowerCase()))) {
-			alert('仅支持JPG、PNG、GIF、BMP图片文件');
+			MoAlert('仅支持JPG、PNG、GIF、BMP图片文件');
 			return false;
 		}
 		if (Throttle.isLock(this.url)) {
@@ -120,7 +121,7 @@ const ModifyPortait = {
 				SelectImage.qietuInit(length);
 			}
 		} else {
-			alert(msg.description);
+			MoAlert(msg.description);
 		}
 		$(".img_span").addClass("hidden");
 		Throttle.unLock(this.url);

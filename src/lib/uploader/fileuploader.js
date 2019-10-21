@@ -1,3 +1,5 @@
+import { MoAlert as alert } from '@/components/popup';
+
 var qq = qq || {};
 qq.extend = function(a, b) {
     for (var c in b) a[c] = b[c]

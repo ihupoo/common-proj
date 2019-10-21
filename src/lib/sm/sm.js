@@ -1,3 +1,5 @@
+import { MoAlert as alert } from '@/components/popup';
+
 /****************sm3*******************/
 // 左补0到指定长度
 function leftPad(str, totalLength) {

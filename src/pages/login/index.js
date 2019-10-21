@@ -12,7 +12,8 @@ import './css/theme.scss';
 
 import Store from '@/store/index';
 import { i18next , documentTitle } from '@/i18n';
-import { setBaseUrl } from '@/utils/common';
+import { setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
+import { DigestAuth } from '@/utils/digestAuth';
 import { fetchSystemConfig, fetchLoginInfo } from './service';
 import { Login } from './js/login';
 import TemplateHeader from './tpl/sys_logo.art';
@@ -23,56 +24,15 @@ function isIE() {
     return !!(window.ActiveXObject || "ActiveXObject" in window)
 }
 
-async function fetchInit(){
-    let [ resConfig, resInfo ] = await Promise.all([
-        fetchSystemConfig(),
-        fetchLoginInfo()
-    ])
-    if(resConfig.success && resConfig.data){
-        let system_config = localStorage.getItem('system_config')
-        
-        Store.dispatch({
-            type:'save',
-            payload:{
-                ...resConfig.data
-            }
-        })
-        localStorage.setItem('system_config', resConfig.data)
+function pageRender({ sysBrand , lang = 'zn-CN', versionYear = '2019'} = {}){
+    $('body').addClass(`theme-${sysBrand}`);
+    $('#verifyImage').attr('src', `${Store.getState('BASE_URL')}/verifyImage`)
 
-        const { sysBrand, BASE_URL, lang, versionYear } = Store.getState()
-        $('body').addClass(`theme-${sysBrand}`);
-        $('#verifyImage').attr('src', `${BASE_URL}/verifyImage`)
-
-        i18next.changeLanguage(lang)
-        $('#login_form').localize();
-        $(TemplateHeader({ sysBrand })).localize().appendTo('#login_header .sys_logo');
-        $(TemplateFooter({ sysBrand, versionYear })).localize().appendTo('#footer');
-        document.title = documentTitle(sysBrand)('login')
-
-    }else{
-        //todo
-    }
-    
-    if(resInfo.success && resInfo.data){
-        const { outAlter, showVerifyCode, nonceValue } = resInfo.data
-
-        if (showVerifyCode && showVerifyCode == '1') {
-            $(".verifyCode_input_holder").removeClass("hidden");
-            $('#verifyImage').attr('src',`${Store.getState('BASE_URL')}/verifyImage?random=${new Date().getTime()}`)
-        }
-        
-        if (outAlter == '100012') {
-            $("#login_form .error_msg").text("当前账号在别处登录，请重新登录！").show();
-        }
-        
-        DigestAuth.setValue('nonce', nonceValue);
-
-        Login.init();
-        
-    }else{
-        //todo
-    }
-
+    i18next.changeLanguage(lang)
+    $('#login_form').localize();
+    $('#login_header .sys_logo').empty().append($(TemplateHeader({ sysBrand })).localize())
+    $('#footer').empty().append($(TemplateFooter({ sysBrand, versionYear })).localize())
+    document.title = documentTitle(sysBrand)('login')
 }
 
 setBaseUrl()
@@ -84,11 +44,52 @@ $(function () {
         $("#password").removeAttr("readonly");
     }
 
-    try{
-        fetchInit()
-    }catch(e){
-        //todo
-    }
+
+    (async () => {
+        let [ resConfig, resInfo ] = await Promise.all([
+            fetchSystemConfig(),
+            fetchLoginInfo()
+        ])
+    
+        if(resConfig && resConfig.success && resConfig.data){
+            Store.dispatch({
+                type:'save',
+                payload:{
+                    ...resConfig.data
+                }
+            })
+            localStorage.setItem('system_config', resConfig.data)
+    
+            const { sysBrand, lang, versionYear } = Store.getState()
+            pageRender({ sysBrand, lang, versionYear })
+    
+        }else{
+            pageRender()
+        }
+        
+        if(resInfo && resInfo.success && resInfo.data){
+            const { outAlter, showVerifyCode, nonceValue } = resInfo.data
+    
+            if (showVerifyCode && showVerifyCode == '1') {
+                $(".verifyCode_input_holder").removeClass("hidden");
+                $('#verifyImage').attr('src',`${Store.getState('BASE_URL')}/verifyImage?random=${new Date().getTime()}`)
+            }
+            
+            if (outAlter == '100012') {
+                $("#login_form .error_msg").text("当前账号在别处登录，请重新登录！").show();
+            }
+            
+            DigestAuth.setValue('nonce', nonceValue);
+    
+            Login.init();
+            
+        }else{
+            //todo
+        }
+    })()
+    
+    InputPreventAutocomplete()
+    AjaxComplete()
     
 });
 

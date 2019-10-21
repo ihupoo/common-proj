@@ -1,4 +1,5 @@
 import Store from '@/store';
+import { MoAlert } from '@/components/popup';
 import { Throttle, Validation } from '@/utils/utils';
 import { DigestAuth } from '@/utils/digestAuth';
 
@@ -13,40 +14,9 @@ function getQueryString(name){
 
 const Login = {
     remember: false,
-	setBetwweenWraperAndContentHeight: function () {
-		let minHeight;
-		if ($(".verifyCode_input_holder").hasClass("hidden")) {
-			minHeight = 143;
-		} else {
-			minHeight = 99;
-		}
-		$(".betwweenWraperAndContent").css("height", minHeight);
-		let wh = $(window).height();
-		let wrapH = $("#wrap").outerHeight(true);
-		let contentH = $(".enterprise_introduce_content.clearfix").outerHeight(true);
-		let hh = wh - wrapH - contentH;
-		if (hh > minHeight) {
-			$(".betwweenWraperAndContent").css("height", hh);
-		} else {
-			$(".betwweenWraperAndContent").css("height", minHeight);
-		}
-    },
 	init: function () {
 		this.regEvent();
         this.initAccount();
-        this.setBetwweenWraperAndContentHeight();
-        
-        let that = this;
-		let t = null;
-		$(window).resize(function () {
-			clearTimeout(t);
-			t = setTimeout(function () {
-				that.setBetwweenWraperAndContentHeight();
-                clearTimeout(t);
-                t = null;
-			});
-        });
-        
 	},
 	initAccount: function () {
 		let account = getQueryString("account");
@@ -221,7 +191,7 @@ const Login = {
 								if (t.data[0]) {
 									location.href = `${BASE_URL}/home`;
 								} else {
-									alert("跳转至用户所在平台域", function () {
+									MoAlert("跳转至用户所在平台域", function () {
 										location.href = t.data[1];
 									});
 								}
@@ -261,7 +231,6 @@ const Login = {
 										$("#login_form .error_msg").text('用户名或密码错误！').show();
 									}
 									$(".verifyCode_input_holder").removeClass("hidden");
-									that.setBetwweenWraperAndContentHeight();
 									$("#verifyImage").click();
 								}
 							}
@@ -304,7 +273,6 @@ const Login = {
 									$("#login_form .error_msg").text('用户名或密码错误！').show();
 								}
 								$(".verifyCode_input_holder").removeClass("hidden");
-								that.setBetwweenWraperAndContentHeight();
 								$("#verifyImage").click();
 							}
 							Throttle.unLock(url);
@@ -314,14 +282,12 @@ const Login = {
 				} else {
 					$("#login_form .error_msg").text('系统异常,请与管理员联系！').show();
 					$(".verifyCode_input_holder").removeClass("hidden");
-					that.setBetwweenWraperAndContentHeight();
 					$("#verifyImage").click();
 					Throttle.unLock(url);
 				}
 			}, 'json').error(function () {
 				$("#login_form .error_msg").text('系统异常,请与管理员联系！').show();
 				$(".verifyCode_input_holder").removeClass("hidden");
-				that.setBetwweenWraperAndContentHeight();
 				$("#verifyImage").click();
 				Throttle.unLock(url);
 			});
@@ -334,7 +300,6 @@ const Login = {
 		$("a.password_forget").on("click", function () {
 			$("#login_form").children().hide();
 			$("#forgotPassword-wrapper").show();
-			that.setBetwweenWraperAndContentHeight();
 
 		});
 		//找回密码->返回按钮
@@ -344,7 +309,6 @@ const Login = {
 			$("#reg-email").val("");
 			$("#forgotPassword-wrapper .error_msg").text("");
 			$("#reg-email").siblings().show();
-			that.setBetwweenWraperAndContentHeight();
 		});
 		$(".W_close").on("click", function () {
 			$("#login_form").children().show();

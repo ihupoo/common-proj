@@ -1,3 +1,4 @@
+import { Loading } from '@/components/loading';
 
 const ENUM_REGEX = {
     account:"^[\u4e00-\u9fa5\\w\\.@]+$", // 中文、英文字母（大小写）、数字、“_”、“@”、“.”
@@ -53,22 +54,6 @@ const Validation = {
 		let reg = /^[0-9]*[1-9][0-9]*$/;
 		return Validation.checkValue(reg,value);
     },
-    //账号正确与否
-    checkAccount(value) {
-		if (Validation.isAllNumber(value)) {//账号的检验 新增该规则（不可以纯数字）
-			alert('账号不允许纯数字');
-			return false;
-		}
-		if (!Validation.check('account', value)) {
-			alert('账号仅允许输入英文、数字、汉字、下划线（_）、减号（-）、@、点号（.）且首尾字符仅允许英文、数字、汉字');
-			return false;
-		}
-		if (!Validation.checkLength(value, 40)) {
-			alert('账号长度不能大于40位字符');
-			return false;
-		}
-		return true;
-	},
 };
 
 
@@ -120,6 +105,23 @@ const Throttle = {
 	}	
 };
 
+const isEqual = (val, val2, deep = false) => {
+    if(typeof val === typeof val2 && Object.keys(val).length === Object.keys(val2).length){
+        for (const [ key,value ] of Object.entries(val)) {
+            if(typeof value === 'object' && deep){
+                if(!isEqual(value, val2[key], true)){
+                    return false
+                }
+            }else{
+                if(val2[key] !== value){
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    return false
+}
 
 //todo
 const SimpleSearch = (selector, w) => {
@@ -147,38 +149,11 @@ const SimpleSearch = (selector, w) => {
         .blur();
 }
 
-const isEqual = (val, val2, deep = true) => {
-    if(typeof val === typeof val2){
-        if(Object.keys(val).length === Object.keys(val2).length){
-            for (const [ key,value ] of Object.entries(val)) {
-                if(typeof value === 'object' && deep){
-                    if(!isEqual(value, val2[key], true)){
-                        return false
-                    }
-                }else{
-                    if(val2[key] !== value){
-                        return false
-                    }
-                }
-            }
-            return true
-        }else{
-            return false
-        }
-    }else{
-        return false
-    }
-}
 
-let s = isEqual(
-    {a:1},
-    {a:1}
-    
-    )
-    console.log('s :', s);
 
 
 export {
     Validation,
     Throttle,
+    isEqual
 }

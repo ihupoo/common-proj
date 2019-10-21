@@ -19,7 +19,7 @@ i18next.init({
     jqueryI18next.init(i18next,$)
 })
 
-const documentTitle = (sysBrand, lng = 'zn-CN') => page => resources[lng] ?  resources[lng].translation.home.pagebase[sysBrand][page].title : ''
+const documentTitle = (sysBrand, lng = 'zn-CN') => page => resources[lng] && sysBrand ?  resources[lng].translation.home.pagebase[sysBrand][page].title : ''
 
 export {
     i18next,

@@ -1,3 +1,10 @@
+html,body{
+    height: 100%;
+}
+body{
+    min-height: 813px;
+    position: relative;
+}
 
 .bg {
     background: #ffffff;
@@ -7,6 +14,12 @@
 
 #login_header {
     position: relative;
+}
+
+#footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .company_info_up {

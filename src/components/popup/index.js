@@ -25,7 +25,7 @@ const MooAlert = function (msg, callback, okText, cancelText) {
 
 
 const MoConfirm = function (msg, callback, title) {
-	if (!!!title) {
+	if (!title) {
 		title = '提示';
 	}
 	if (window.top.confirm_msgbox && window.top.confirm_msgbox.isvisible()) {

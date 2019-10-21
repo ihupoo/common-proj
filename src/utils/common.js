@@ -1,47 +1,9 @@
-
-//避免浏览器记住密码后对input输入框的自动回填
-const InputPreventAutocomplete = () => {
-    $("input").each(function(){
-        var type= $(this).attr('type');
-        if(type=='password'){//只给密码框加 避免浏览器记住密码后对input输入框的自动回填
-            $(this).before("<input style='display:none' type='"+type+"'>");
-            $(this).attr("autocomplete","new-password");
-        }else{
-            $(this).attr("autocomplete","off");//避免chrome浏览器对input的默认行为（可下拉勾选输入过的内容）
-        }
-    });
-}
-
-$(function(){
-    InputPreventAutocomplete()
-})
-
-
-import { MoAlert } from '@/components/popup';
-$(function () {
-	//全局对象MessageBox
-	let orgAlert = window.alert;
-	window.alert = function (msg, callback) {
-		if (window.top.MoMessageBox1) {
-			MoAlert(msg, callback)
-		} else {
-			orgAlert(msg);
-		}
-	}
-});
-
-
-
-$(document).ajaxComplete(function (event, xhr, options) {
-	if (xhr.responseJSON && xhr.responseJSON.errorCode && (xhr.responseJSON.errorCode == "100012" || xhr.responseJSON.errorCode == "100011" || xhr.responseJSON.errorCode == "100010" || xhr.responseJSON.errorCode == "100013")) {
-		top.location.href = BASE_URL + "/login";
-	}
-})
-
-
 import Store from '@/store';
+import { Validation } from './utils';
+import { MoAlert } from '@/components/popup';
 
 const BASE_URL = Store.getState('BASE_URL');
+
 
 const Common = {
 	headerEvent: function () {
@@ -141,7 +103,23 @@ const Common = {
 				$(this).attr("src", $(this).attr("data-onerror"));
 			})
 		})
-	}
+    },
+    //账号正确与否
+    checkAccount(value) {
+		if (Validation.isAllNumber(value)) {//账号的检验 新增该规则（不可以纯数字）
+			MoAlert('账号不允许纯数字');
+			return false;
+		}
+		if (!Validation.check('account', value)) {
+			MoAlert('账号仅允许输入英文、数字、汉字、下划线（_）、减号（-）、@、点号（.）且首尾字符仅允许英文、数字、汉字');
+			return false;
+		}
+		if (!Validation.checkLength(value, 40)) {
+			MoAlert('账号长度不能大于40位字符');
+			return false;
+		}
+		return true;
+	},
 };
 
 
@@ -167,6 +145,7 @@ const Size = {
 
 export { Size, Common }
 
+
 //页面进入设置URL
 export function setBaseUrl(){
     const baseUrl = window.location.pathname.split('/')[1];
@@ -177,6 +156,29 @@ export function setBaseUrl(){
         type:'save',
         payload:{
             BASE_URL: `/${baseUrl}`
+        }
+    })
+}
+
+//避免浏览器记住密码后对input输入框的自动回填
+export function InputPreventAutocomplete(){
+    $("input").each(function(){
+        var type= $(this).attr('type');
+        if(type=='password'){//只给密码框加 避免浏览器记住密码后对input输入框的自动回填
+            $(this).before("<input style='display:none' type='"+type+"'>");
+            $(this).attr("autocomplete","new-password");
+        }else{
+            $(this).attr("autocomplete","off");//避免chrome浏览器对input的默认行为（可下拉勾选输入过的内容）
+        }
+    });
+}
+
+
+//全局jq请求拦截
+export function AjaxComplete(){
+    $(document).ajaxComplete(function (event, xhr, options) {
+        if (xhr.responseJSON && xhr.responseJSON.errorCode && (xhr.responseJSON.errorCode == "100012" || xhr.responseJSON.errorCode == "100011" || xhr.responseJSON.errorCode == "100010" || xhr.responseJSON.errorCode == "100013")) {
+            location.href = BASE_URL + "/login";
         }
     })
 }
