@@ -44,6 +44,9 @@ $(function () {
         $("#password").removeAttr("readonly");
     }
 
+    const userName = localStorage.getItem('user')?.name ;
+    $('#email').val(userName)
+
 
     (async () => {
         let [ resConfig, resInfo ] = await Promise.all([

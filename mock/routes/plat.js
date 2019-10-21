@@ -6,7 +6,9 @@ router.get('/getplat', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
             editName: '',   
-            strengthRegular: ''
+            strengthRegular: '',
+        
+            realmName:''
         },
         description: "",
         errorCode: "",

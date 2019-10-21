@@ -8,7 +8,9 @@ router.get('/getresetpassword', async (ctx) => {
             email: '',
             sequenceNum: '',
             securityPolicy: {},
-            strengthRegular: ''
+            strengthRegular: '',
+        
+            realmName:''
         },
         description: "",
         errorCode: "",

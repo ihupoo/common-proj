@@ -17,18 +17,8 @@ router.get('/getmenu', async (ctx) => {
             umcUrl: '',
             kisUrl: '',
             domsUrl: '',
-            cbsUrl: ''
-        },
-        description: "",
-        errorCode: "",
-        success: true,
-    })
-})
-
-//meeting
-router.get('/getmeeting', async (ctx) => {
-    ctx.body = Mock.mock({
-        data: {
+            cbsUrl: '',
+            
             createMeetingUrl: ''
         },
         description: "",
@@ -36,4 +26,5 @@ router.get('/getmeeting', async (ctx) => {
         success: true,
     })
 })
+
 module.exports = router

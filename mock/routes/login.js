@@ -18,8 +18,8 @@ router.get('/getlogin', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
             showVerifyCode: '0',
+            outAlter: '0',
             nonceValue: 'xxxxx',
-            outAlter: '0'
         },
         description: "",
         errorCode: "",
@@ -49,11 +49,11 @@ router.get('/getuser', async (ctx) => {
             jmsType: '',
             licenseInvalidWarn: '',
             onlyCurrentIp: '',
-            username: '',
             umoid: '',
             systemSecurity: '',
             securityPolicy: {},
             brithday: '',
+            username: '',//和name取一
             //
             name: '',
             userDomainMoid: '',

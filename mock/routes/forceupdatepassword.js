@@ -6,7 +6,9 @@ router.get('/getpasswordinfo', async (ctx) => {
   ctx.body = Mock.mock({
     data: {
         strengthRegular: '',
-        description: ''
+        description: '',
+        
+        realmName:''
     },
     description: "",
     errorCode: "",

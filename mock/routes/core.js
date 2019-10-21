@@ -5,7 +5,9 @@ let Mock = require('mockjs');
 router.get('/getcore', async (ctx) => {
   ctx.body = Mock.mock({
     data: {
-      strengthRegular: ''
+      strengthRegular: '',
+        
+      realmName:''
     },
     description: "",
     errorCode: "",
