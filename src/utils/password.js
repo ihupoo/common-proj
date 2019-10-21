@@ -1,7 +1,7 @@
 import Store from '@/store';
 import { DigestAuth } from './digestAuth';
 
-import { hex_md5 } from '@/lib/md5';
+import { hex_md5 } from '@/lib/md5/md5';
 
 const BASE_URL = Store.getState('BASE_URL');
 const strengthRegular = Store.getState('strengthRegular');

@@ -1,12 +1,15 @@
 const router = require('koa-router')()
 let Mock = require('mockjs');
 
-
-router.get('/getplat', async (ctx) => {
+//获取页面通用数据，存入缓存
+router.get('/', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
-            editName: '',   
-            strengthRegular: ''
+            systemMode: '0',
+            domainType: '1',
+            lang: 'zn-CN',
+            sysBrand: 'kedacom',
+            versionYear: '2019',
         },
         description: "",
         errorCode: "",

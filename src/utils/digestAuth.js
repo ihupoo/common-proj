@@ -1,4 +1,4 @@
-import { sm3_encrypt, sm4_encrypt_ecb, addH16ZeroTwo, sm3_byte, toTwoHex } from '@/lib/sm';
+import { sm3_encrypt, sm4_encrypt_ecb, addH16ZeroTwo, sm3_byte, toTwoHex } from '@/lib/sm/sm';
 
 
 function Utf8Encode(string) {
@@ -74,7 +74,10 @@ const DigestAuth = {
 	algorithm: "",
 	username: "",
 	password: "",
-	header: null,
+    header: null,
+    setValue: function(key, value){
+        DigestAuth[key] = value
+    },
 	ajax: function (param) {
 		let err = param.error;
 		param.error = function (XMLHttpRequest, textStatus, errorThrown) {

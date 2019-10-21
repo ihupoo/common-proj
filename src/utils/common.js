@@ -144,25 +144,13 @@ const Common = {
 	}
 };
 
-const MoCommon = {
-	homeInit: function (data) {
-		document.title = data.title;
-		let headerHtml = template('logo', data);
-		document.getElementById('header_title_logo').innerHTML = headerHtml;
-	},
-	aboutInit: function (data) {
-		let aboutHtml = template('company_info', Mo.CompanyInfo);
-		document.getElementById('about_info').innerHTML = aboutHtml;
-	},
-
-};
 
 const Size = {
 	init: function () {
 		var height = $(window).height() - 185;
 		$(".content").css("min-height", height);
 		$(window).resize(function () {
-			SSO.Size.experirdpageInit();
+			Size.experirdpageInit();
 		})
 	},
 
@@ -176,7 +164,23 @@ const Size = {
 	}
 }
 
+
 export { Size, Common }
+
+//页面进入设置URL
+export function setBaseUrl(){
+    const baseUrl = window.location.pathname.split('/')[1];
+    if(baseUrl !== 'portal' && baseUrl !== 'portalCore'){
+        // throw new Error('路径错误')   //todo，跳转404
+    }
+    Store.dispatch({
+        type:'save',
+        payload:{
+            BASE_URL: `/${baseUrl}`
+        }
+    })
+}
+
 
 
 

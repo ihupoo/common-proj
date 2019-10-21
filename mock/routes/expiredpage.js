@@ -2,11 +2,10 @@ const router = require('koa-router')()
 let Mock = require('mockjs');
 
 
-router.get('/getplat', async (ctx) => {
+router.get('/getexpired', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
-            editName: '',   
-            strengthRegular: ''
+            message: ''
         },
         description: "",
         errorCode: "",

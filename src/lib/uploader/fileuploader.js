@@ -688,3 +688,6 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         this._xhrs[a] && (this._xhrs[a].abort(), this._xhrs[a] = null)
     }
 });
+
+
+export default qq
