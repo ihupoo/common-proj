@@ -14,8 +14,7 @@ function get (source, path, defaultValue = undefined) {
 class Store{
     state = {
         BASE_URL: '/',
-
-
+        strengthRegular: {"3":"^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[._])[0-9a-zA-Z._]{8,16}$","2":"(?!^([0-9]+|[a-zA-Z]+|[._]+)$)^[0-9a-zA-Z._?]{8,16}$","1":"^[A-Za-z0-9]{8,16}$"},
         sysBrand: 'kedacom',
         versionYear: '2019',
         user: {
@@ -65,6 +64,5 @@ class Store{
     } 
 
 }
-
 
 export default new Store()

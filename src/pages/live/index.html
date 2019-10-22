@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>直播列表</title>
+</head>
+<body>
+    <div class="wrap">
+        <%@ include file="/inc/page_head_nav.jsp"%>
+        <div id="inner-main-content" class="inner-main-content">
+            <div class="tree-wrapper">
+                <div class="wrapper-header">
+                    <div id="tree-search" class="search-wrapper mo-simple-search">
+                        <input class="mo-simple-search-input" mo-hint="请输入用户域名称搜索" maxlength="60"/><a class="mo-simple-search-icon"></a>
+                    </div>
+                </div>
+                <div class="tree-body">
+                    <ul id="tree"></ul>
+                </div>
+            </div>
+            <div class="video-wrapper">
+                <div class="wrapper-header">
+                    <span id="live-type-title">直播列表</span>
+                    <div id="video-search" class="search-wrapper mo-simple-search">
+                        <input class="mo-simple-search-input " mo-hint="搜索" maxlength="60"/><a class="mo-simple-search-icon"></a>
+                    </div>
+                </div>
+                <div id="live-room"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

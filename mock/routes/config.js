@@ -10,6 +10,7 @@ router.get('/', async (ctx) => {
             lang: 'zn-CN',
             sysBrand: 'kedacom',
             versionYear: '2019',
+            realmName: ''
         },
         description: "",
         errorCode: "",

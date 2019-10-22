@@ -1,3 +1,7 @@
+import '@/lib/artDialog/4.1.7/skins/simple.css';
+import '@/styles/reset-artDialog.scss';
+import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
+
 (function ($,artDialog) {
 	if(window.MoMessageBox1){ return }
     

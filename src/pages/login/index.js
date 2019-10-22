@@ -11,7 +11,7 @@ import './css/login.scss';
 import './css/theme.scss';
 
 import Store from '@/store/index';
-import { i18next , documentTitle } from '@/i18n';
+import { i18next, documentTitle } from '@/i18n';
 import { setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
 import { DigestAuth } from '@/utils/digestAuth';
 import { fetchSystemConfig, fetchLoginInfo } from './service';
@@ -24,7 +24,7 @@ function isIE() {
     return !!(window.ActiveXObject || "ActiveXObject" in window)
 }
 
-function pageRender({ sysBrand , lang = 'zn-CN', versionYear = '2019'} = {}){
+function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
     $('body').addClass(`theme-${sysBrand}`);
     $('#verifyImage').attr('src', `${Store.getState('BASE_URL')}/verifyImage`)
 
@@ -37,6 +37,9 @@ function pageRender({ sysBrand , lang = 'zn-CN', versionYear = '2019'} = {}){
 
 setBaseUrl()
 
+Login.init();
+
+
 $(function () {
     $('input[type="checkbox"]').ezMark();
 
@@ -44,56 +47,54 @@ $(function () {
         $("#password").removeAttr("readonly");
     }
 
-    const userName = localStorage.getItem('user')?.name ;
-    $('#email').val(userName)
+    const userName = localStorage.getItem('user')?.userName;
+    $('#email').val(userName);
 
-
-    (async () => {
-        let [ resConfig, resInfo ] = await Promise.all([
+    ;(async () => {
+        let [resConfig, resInfo] = await Promise.all([
             fetchSystemConfig(),
             fetchLoginInfo()
         ])
-    
-        if(resConfig && resConfig.success && resConfig.data){
+        if (resConfig && resConfig.success && resConfig.data) {
             Store.dispatch({
-                type:'save',
-                payload:{
+                type: 'save',
+                payload: {
                     ...resConfig.data
                 }
             })
             localStorage.setItem('system_config', resConfig.data)
-    
+
             const { sysBrand, lang, versionYear } = Store.getState()
             pageRender({ sysBrand, lang, versionYear })
-    
-        }else{
+
+        } else {
             pageRender()
         }
-        
-        if(resInfo && resInfo.success && resInfo.data){
+
+
+        if (resInfo && resInfo.success && resInfo.data) {
             const { outAlter, showVerifyCode, nonceValue } = resInfo.data
-    
+
             if (showVerifyCode && showVerifyCode == '1') {
                 $(".verifyCode_input_holder").removeClass("hidden");
-                $('#verifyImage').attr('src',`${Store.getState('BASE_URL')}/verifyImage?random=${new Date().getTime()}`)
+                $('#verifyImage').attr('src', `${Store.getState('BASE_URL')}/verifyImage?random=${new Date().getTime()}`)
             }
-            
+
             if (outAlter == '100012') {
                 $("#login_form .error_msg").text("当前账号在别处登录，请重新登录！").show();
             }
-            
+
             DigestAuth.setValue('nonce', nonceValue);
-    
-            Login.init();
-            
-        }else{
+
+
+        } else {
             //todo
         }
     })()
-    
+
     InputPreventAutocomplete()
     AjaxComplete()
-    
+
 });
 
 

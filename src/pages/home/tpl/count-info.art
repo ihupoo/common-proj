@@ -1,0 +1,29 @@
+<div class="meeting-count-data-description description">
+    <ul class="meeting-count-info-content {{id}}">
+        <li class="description-item description-item-header">
+            <span class="description-blank count-tile"></span>
+            <span class="count-header-title name1"><span class="multi-point-title">{{title.name1}}</span> </span>
+            <span class="count-header-title name2"><span class="point-point-title">{{title.name2}}</span></span>
+            <span class="count-header-title name3"><span
+                    class="point-point-title sum-title">{{title.name3}}</span></span>
+        </li>
+        <li class="description-item maxCount">
+            <span class="count-title">{{maxData.name}}</span>
+            <span class="count-value name1">{{maxData.value1}}</span>
+            <span class="count-value name2">{{maxData.value2}}</span>
+            <span class="count-value name3">{{maxData.value3}}</span>
+        </li>
+        <li class="description-item minCount">
+            <span class="count-title">{{minData.name}}</span>
+            <span class="count-value name1">{{minData.value1}}</span>
+            <span class="count-value name2">{{minData.value2}}</span>
+            <span class="count-value name3">{{minData.value3}}</span>
+        </li>
+        <li class="description-item averageCount">
+            <span class="count-title">{{averageData.name}}</span>
+            <span class="count-value name1">{{averageData.value1}}</span>
+            <span class="count-value name2">{{averageData.value2}}</span>
+            <span class="count-value name3">{{averageData.value3}}</span>
+        </li>
+    </ul>
+</div>

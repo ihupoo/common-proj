@@ -1,0 +1,99 @@
+a:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #000000
+}
+
+.icp a {
+    font-family: "Microsoft Yahei";
+    color: #606060;
+    margin-left: 22px;
+}
+
+.icp a:hover {
+    color: #007ac0;
+    text-decoration: underline;
+}
+
+.meun-short {
+    width: 775px;
+    height: 82px;
+    margin: 0 auto;
+    overflow: hidden;
+    float: left;
+}
+
+.menu-long {
+    height: 82px;
+    /*     text-align: left; */
+    margin: auto;
+}
+
+#sys_nav .menu-long a {
+    text-align: center;
+    margin-left: 48px;
+    margin-right: 48px;
+}
+
+.a_left {
+    float: left;
+    margin-top: 10px;
+    visibility: hidden;
+}
+
+.a_right {
+    float: left;
+    margin-top: 10px;
+    margin-left: 20px;
+    visibility: hidden;
+}
+
+#sys_nav {
+    margin: 0 auto;
+    width: 900px;
+}
+
+.btn-wrapper .color-6 {
+    color: #616060
+}
+
+.hidden {
+    display: none;
+}
+
+.mo-btn-x-left {
+    margin-right: 6px;
+}
+
+div.preview_div {
+    overflow: hidden;
+}
+
+.about-content.mo-dialog-content {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.about-content.mo-dialog-content .title {
+    margin-top: 0px;
+}
+
+.mo-dialog-content .info {
+    margin-left: 34px;
+    margin-right: 34px;
+    margin-top: 0px;
+}
+
+#wrap {
+    padding-bottom: 80px;
+}
+
+.about_x .about_netAddress1 {
+    color: #007ac0;
+    text-decoration: underline;
+}

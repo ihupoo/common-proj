@@ -2,9 +2,6 @@ import Store from '@/store';
 import { Validation } from './utils';
 import { MoAlert } from '@/components/popup';
 
-const BASE_URL = Store.getState('BASE_URL');
-
-
 const Common = {
 	headerEvent: function () {
 		$(".li").on("mouseover", function () {
@@ -47,24 +44,24 @@ const Common = {
 
 		$("#modifyUser").on("click", function () {
 			$(".setting-list").hide();
-			location.href = BASE_URL + "/set#profile";
+			location.href = Store.getState('BASE_URL') + "/set#profile";
 		});
 
 		$("#modifyPassword").on("click", function () {
 			$(".setting-list").hide();
-			location.href = BASE_URL + "/set#password";
+			location.href = Store.getState('BASE_URL') + "/set#password";
 		});
 		$("#gmt").on("click", function () {
 			$(".setting-list").hide();
-			location.href = BASE_URL + "/set#gmt";
+			location.href = Store.getState('BASE_URL') + "/set#gmt";
 		});
 		$("#language").on("click", function () {
 			$(".setting-list").hide();
-			location.href = BASE_URL + "/set#language";
+			location.href = Store.getState('BASE_URL') + "/set#language";
 		});
 		$("#modifyPortrait").on("click", function () {
 			$(".setting-list").hide();
-			location.href = BASE_URL + "/set#portrait";
+			location.href = Store.getState('BASE_URL') + "/set#portrait";
 		});
 		$("#about").on("click", function () {
 			$(".setting-list").hide();
@@ -86,7 +83,7 @@ const Common = {
 	},
 	initPortrait: function (portrait, portraitDomain) {
 		if (!portrait) {
-			portrait = BASE_URL + '/static/images/avator.png?v=1';
+			portrait = Store.getState('BASE_URL') + '/static/images/avator.png?v=1';
 		} else if (portraitDomain) {
 			portrait = '//' + portraitDomain + '/' + portrait;
 		}
@@ -178,7 +175,7 @@ export function InputPreventAutocomplete(){
 export function AjaxComplete(){
     $(document).ajaxComplete(function (event, xhr, options) {
         if (xhr.responseJSON && xhr.responseJSON.errorCode && (xhr.responseJSON.errorCode == "100012" || xhr.responseJSON.errorCode == "100011" || xhr.responseJSON.errorCode == "100010" || xhr.responseJSON.errorCode == "100013")) {
-            location.href = BASE_URL + "/login";
+            location.href = Store.getState('BASE_URL') + "/login";
         }
     })
 }

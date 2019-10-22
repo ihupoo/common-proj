@@ -1,0 +1,36 @@
+<div id="aboutWrapper" style="width: 400px;height:300px;">
+    <div class="about-content mo-dialog-content">
+        <div class="title">
+            <span>关于</span>
+            <a href="javascript:void(0);" class="w-close" hidefocus="true"></a>
+        </div>
+        <div class="separater"></div>
+        <div id="about_info">
+            <div class="about_company">
+                <span class="mo-icons-logo-bg about_company_logo"></span>
+                <span class="mo-icons-logo-bg about_company-alternate-logo"></span>
+            </div>
+            <div class="about_sys">
+                <span class="about_systemModeAbbr" data-i18n="[append]home.pagebase.{{sysBrand}}.home.systemModeAbbr">/&nbsp;</span>
+            </div>
+            <div class="about_corpright" >
+                <p class="about_x about_companyName">
+                    <span data-i18n="home.pagebase.{{sysBrand}}.companyName"></span>&nbsp;
+                    <span data-i18n="home.pagebase.copyright"></span>
+                </p>
+                <p class="about_x">Copyright &copy;
+                <span class="about_establishYear" data-i18n="home.pagebase.{{sysBrand}}.establishYear"></span>
+                <span class="version_year">{{versionYear}}</span>
+                <span class="about_companyDomainName"  data-i18n="home.pagebase.{{sysBrand}}.companyDomainName"></span>. All rights reserved.</p>
+                <p class="about_x">
+                    <span>Version:<span class="version">{{version}}</span></span>
+                    <a class="about_netAddress1" data-i18n="[href]home.pagebase.{{sysBrand}}.netAddress1Href;home.pagebase.{{sysBrand}}.netAddress1Txt"></a>
+                </p>
+                <p class="about_x about_netAddress">
+                    <a class="about_netAddress11" data-i18n="[href]home.pagebase.{{sysBrand}}.home.netAddress11Href;home.pagebase.{{sysBrand}}.home.netAddress11Txt"></a>
+                    <a class="about_netAddress2" data-i18n="[href]home.pagebase.{{sysBrand}}.home.netAddress2Href;home.pagebase.{{sysBrand}}.home.netAddress2Txt"></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+@import '~@/theme';
+
+.company-header-title{
+    height: 13px;
+    line-height: 13px;
+    font-size: 13px;
+}
+
+#about_info .about_corpright{
+    font-size: 14px;
+    width: 330px;
+    line-height: 14px;
+}
+
+.mo-icons-logo-bg{
+    @include themify('mo-icons-logo-bg');
+}
+
+.sys-info .header-logo{
+    @include themify('.sys-info .header-logo');
+}
+
+.slash{
+    @include themify('slash');
+}
+
+.about_company_logo{
+    @include themify('about_company_logo');
+}
+
+.about_company-alternate-logo{
+    @include themify('about_company-alternate-logo');
+}
+
+.about_company .about_company_logo{
+    @include themify('.about_company .about_company_logo');
+}
+
+.about_company .about_company-alternate-logo{
+    @include themify('.about_company .about_company-alternate-logo');
+}
+
+.about_netAddress1{
+    @include themify('about_netAddress1');
+}
+
+.about_netAddress11{
+    @include themify('about_netAddress11');
+}
+
+.about_netAddress2{
+    @include themify('about_netAddress2');
+}
+

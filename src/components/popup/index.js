@@ -1,3 +1,4 @@
+import '@/lib/messagebox/messageboxCustom';
 
 const MoAlert = function (msg, callback) {
 	if (window.top.g_msgbox && window.top.g_msgbox.isvisible()) {

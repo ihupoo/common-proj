@@ -1,74 +1,67 @@
-// import $ from 'jquery-migrate';
-// import 'jquery.namespace';
-// import 'ezmark'
+import $ from 'jquery-migrate';
 
-// import '@/styles/reset.scss';
+import '@/styles/reset.scss';
 
-// import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
-// import '@/lib/imgareaselect/imgareaselect-default.css';
-// import '@/lib/artDialog/4.1.7/skins/simple.css';
-// import '@/lib/ezmark/ezmark.scss';
-// import '@/lib/portal/mo-portal.css';
+import '@/lib/ezmark/ezmark.scss';
+import '@/lib/artDialog/4.1.7/skins/simple.css';
+import '@/lib/imgareaselect/imgareaselect-default.css';
+import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
 
-// import '@/styles/common.scss';
-// import '@/styles/commonCSS.scss';
-// import '@/styles/reset-artDialog.scss';
-// import '@/styles/reset-mCustomScrollbar.scss';
-// import '@/styles/reset-easyui.scss';
-// import '@/utils/common.js';
+import '@/styles/common.scss';
+import '@/styles/commonCSS.scss';
+import '@/styles/reset-artDialog.scss';
+import '@/styles/reset-mCustomScrollbar.scss';
+import '@/styles/reset-easyui.scss';
 
 
-// import './css/home.scss';
-// import './css/boot.scss';
-// import './css/theme.scss';
+import './css/boot.scss';
+import './css/home.scss';
+import './css/theme.scss';
+import '@/lib/portal/mo-portal.css';
 
 
-// import './js/initTemplate.js';
-// import './js/home.js';
-// import './js/detail.js';
+import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
+import 'jquery-easyui-original';
+import '@/lib/mousewheel/3.1.13/jquery.mousewheel.min';
+import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar';
+import 'ezmark'
+import '@/lib/imgareaselect/jquery.imgareaselect.pack'
 
-// import renderHeader from './tpl/header.art';
-// import renderFooter from './tpl/footer.art';
+//todo
+{/* <script src="${RESOUCE_STATIC_URL}/js/jlib/echarts.min.js?t=6.0.2692493846"></script>
+<script src="${RESOUCE_STATIC_URL}/js/jlib/components/mo-portal.min.js?t=6.0.2184442885"></script>
+<script type="text/javascript" src="${RESOUCE_STATIC_URL}/${sysBrand}/js/home.js?t=5.2.2722389346"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/controller.js?t=6.0.133564478"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/events.js?t=6.0.909632798"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/event.js?t=6.0.1442163845"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/initTemplate.js?t=6.0.2490832047"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/drawGraph.js?t=6.0.3537542513"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/panels/panel.js?t=6.0.3363915707"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/panels/meetingCountPanel.js?t=6.0.2733153060"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/panels/platformResourcePanel.js?t=6.0.1086334492"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/panels/meetingCalendarPanel.js?t=6.0.3659021699"></script>
+<script src="${RESOUCE_STATIC_URL}/js/home/header-email.js?t=6.0.3480032774"></script> */}
 
-// import store from '@/store/index';
-// import { i18nUtil } from '@/utils/i18n.js';
 
-// let sysBrand = store.getState('sysBrand');
-// let versionYear = store.getState('versionYear');
+import { setBaseUrl, AjaxComplete } from '@/utils/common';
 
-// $(function () {
+import { i18next, documentTitle } from '@/i18n';
+import TemplateLogo from '@/tpl/logo.art';
 
-//     $('body').addClass(`theme-${sysBrand}`);
-//     i18nUtil(renderFooter, { sysBrand, versionYear }, '#footer .footer_content');
-//     i18nUtil(renderHeader, { sysBrand }, '#header_title_logo');
 
-//     Home.Data.init();
-//     initHome.init();
-//     envent.initEvent();
-//     // $(".setting").on("click", function (e) {
-//     //     if ($(this).hasClass('disabled')) {
-//     //         return
-//     //     }
-//     //     $("#nav-sublist-notify").removeClass("hover");
-//     //     $(".setting-list").toggle();
-//     //     if (e.stopPropagation)
-//     //         e.stopPropagation();
-//     //     else
-//     //         e.cancelBubble = true;
-//     // })
-//     // $(document).on("click", function () {
-//     //     $(".setting-list").hide();
-//     //     $(".public-private-cloud").hide(0, function () {
-//     //         $(".cloud-name").removeClass("active");
-//     //         $(".arrow").removeClass("active");
-//     //     });
-//     // });
 
-//     // $("#modifyUser").on("click", function () {
-//     //     $(".setting-list").hide();
-//     //     location.href = 'core.html';
-//     // });
+function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
+    $('body').addClass(`theme-${sysBrand}`);
 
+    i18next.changeLanguage(lang)
+    $('#header_title_logo').empty().append($(TemplateLogo({ sysBrand })).localize())
+    document.title = documentTitle(sysBrand)('home')
+}
+
+setBaseUrl()
+
+$(function () {
     
     
-// })
+    AjaxComplete()
+})

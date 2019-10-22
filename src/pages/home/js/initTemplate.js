@@ -2,7 +2,6 @@ import { getAllModules } from '../service';
 import renderHeaderModules from '../tpl/header-modules.art';
 import renderContentModules from '../tpl/content-modules.art';
 import renderResourceModules from '../tpl/resource-data.art';
-import { i18nUtil } from '@/utils/i18n.js';
 import {controller} from  './controller.js';
 
 $.namespace("initHome");

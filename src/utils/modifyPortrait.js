@@ -2,8 +2,6 @@ import Store from '@/store';
 import { MoAlert } from '@/components/popup';
 import { Throttle } from './utils';
 
-const BASE_URL = Store.getState('BASE_URL');
-
 //图片剪切
 const SelectImage = {
 	getSelectLength: function () {
@@ -79,7 +77,7 @@ const ModifyPortait = {
 	_X: 0,   //原始宽度
 	_Y: 0,	//原始长度
 	fileName: "",//上传后的文件名称
-    url: BASE_URL + "/system/user/uploadPortrait",
+    url: Store.getState('BASE_URL') + "/system/user/uploadPortrait",
     
 	initUpLoad: function () {
 		this.uploader = new qq.FileUploader({
@@ -111,8 +109,8 @@ const ModifyPortait = {
 	},
 	onComplete: function (id, fileName, msg) {
 		if (msg.success) {
-			$("#img_side_320").attr("src", BASE_URL + "/" + msg.data + "?t=" + Math.random());
-			$(".preview_div").find("img").attr("src", BASE_URL + "/" + msg.data + "?t=" + Math.random());
+			$("#img_side_320").attr("src", Store.getState('BASE_URL') + "/" + msg.data + "?t=" + Math.random());
+			$(".preview_div").find("img").attr("src", Store.getState('BASE_URL') + "/" + msg.data + "?t=" + Math.random());
 			ModifyPortait.setFileName(msg.data);
 			ModifyPortait.setXY(msg.data);
 			let length = 0;

@@ -2,10 +2,6 @@ import Store from '@/store';
 import { Throttle } from './utils';
 import { MoAlert, MooAlert , MoTips, MoConfirm } from '@/components/popup';
 
-const BASE_URL = Store.getState('BASE_URL');
-const onlyCurrentIp = Store.getState('user.onlyCurrentIp')
-
-
 const RebootTip = {
     intervalId: null,
     progressbar: null,
@@ -27,6 +23,7 @@ const RebootTip = {
         }, timeout);
     },
 	getStatus(){
+        const BASE_URL = Store.getState('BASE_URL');
         $.ajax({
             url: BASE_URL + '/check',
             method: 'GET',
@@ -120,7 +117,7 @@ function beforeSave() {
 };
 
 function rebootClusterEvent() {
-    let url = BASE_URL + "/reboot";
+    let url = Store.getState('BASE_URL') + "/reboot";
     if (Throttle.isLock(url)) {
         return false;
     }
@@ -141,7 +138,7 @@ function rebootClusterEvent() {
 }
 
 function shutdownClusterEvent() {
-    let url = BASE_URL + "/shutdown";
+    let url = Store.getState('BASE_URL') + "/shutdown";
     if (Throttle.isLock(url)) {
         return false;
     }
@@ -166,7 +163,7 @@ function shutdownClusterEvent() {
 }
 
 function rebootEvent() {
-    let url = BASE_URL + "/reboot";
+    let url = Store.getState('BASE_URL') + "/reboot";
     if (Throttle.isLock(url)) {
         return false;
     }
@@ -186,7 +183,7 @@ function rebootEvent() {
 }
 
 function shutdownEvent() {
-    let url = BASE_URL + "/shutdown";
+    let url = Store.getState('BASE_URL') + "/shutdown";
     if (Throttle.isLock(url)) {
         return false;
     }
@@ -211,7 +208,7 @@ function shutdownEvent() {
 
 
 function getRebootStatus(url) {
-    $.get(BASE_URL + '/check', function () {
+    $.get(Store.getState('BASE_URL') + '/check', function () {
         setTimeout(function () {
             getRebootStatus();
         }, 3000);
@@ -228,7 +225,7 @@ function getRebootStatus(url) {
 }
 
 function getShutdownStatus() {
-    $.get(BASE_URL + '/check', function () {
+    $.get(Store.getState('BASE_URL') + '/check', function () {
         setTimeout(function () {
             getShutdownStatus();
         }, 3000);
@@ -245,7 +242,7 @@ function getShutdownStatus() {
 
 //todo
 function checkADPassword(callback) {
-    $.dialog.open(BASE_URL + "/checkADPassword", {
+    $.dialog.open(Store.getState('BASE_URL') + "/checkADPassword", {
         id: "checkADPassword",
         lock: true,
         opacity: 0.50,  // 透明度
@@ -266,7 +263,7 @@ function checkADPassword(callback) {
 
 //todo
 function selectPserverIP(callback1, callback2) {
-    $.dialog.open(BASE_URL + "/selectPserverIP", {
+    $.dialog.open(Store.getState('BASE_URL') + "/selectPserverIP", {
         id: "selectPserverIP",
         lock: true,
         opacity: 0.50,  // 透明度
@@ -293,6 +290,7 @@ export default {
         // 重启
         $("#reboot").on('click', function () {
             checkADPassword(function () {
+                const onlyCurrentIp = Store.getState('user.onlyCurrentIp')
                 if (!!onlyCurrentIp) {
                     MoConfirm(`您将要重启设备${onlyCurrentIp},重启过程中请勿切断电源！`, function (result) {
                         if (!result) {
@@ -311,6 +309,7 @@ export default {
         // 关机
         $("#shutdown").on('click', function () {
             checkADPassword(function () {
+                const onlyCurrentIp = Store.getState('user.onlyCurrentIp')
                 if (!!onlyCurrentIp) {
                     MoConfirm(`您将要关闭设备${onlyCurrentIp},关闭过程中请勿切断电源！`, function (result) {
                         if (!result) {

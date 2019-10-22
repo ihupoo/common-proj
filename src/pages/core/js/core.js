@@ -1,31 +1,8 @@
-let currentuser = store.getState('currentuser');
-import { getCoreData } from './service.js';
-
-const CoreData = {
-	username: currentuser.account,
-	portrait40: currentuser.portrait40,
-	portrait64: currentuser.portrait64,
-	portrait128: currentuser.portrait128,
-	portrait256: currentuser.portrait256,
-	editName: '',
-	realmName: '',
-	systemSecurity: '',
-	strengthRegular: '',
-	passwordStrengthOfSecurityPolicy: '',
-	portraitDomain: '',
-	init() {
-		getCoreData().then(res => {
-			if (res.success && res.data) {
-				this.editName = res.data.editName;
-				this.realmName = res.data.realmName;
-				this.systemSecurity = res.data.systemSecurity;
-				this.strengthRegular = res.data.strengthRegular;
-				this.passwordStrengthOfSecurityPolicy = res.data.securityPolicy.passwordStrength;
-				this.portraitDomain = res.data.portraitDomain;
-			}
-		})
-	}
-}
+import { DigestAuth } from '@/utils/digestAuth'
+import { Password } from '@/utils/password'
+import { Validation, Throttle } from '@/utils/utils'
+import { MoAlert } from '@/components/popup'
+import { Common, Size } from '@/utils/common'
 
 const CoreFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
@@ -51,11 +28,9 @@ const CoreFrame = {
 
 	setSize: function () {
 		let win = this.getWindowSize();
-
 		if (win.w < this.main_min_width) {
 			win.w = this.main_min_width;
 		}
-
 		if (win.h < this.main_min_height) {
 			win.h = this.main_min_height;
 		}
@@ -68,6 +43,7 @@ const CoreFrame = {
 		let viewHeight = innerHeight - (this.fixLineHeight * 2);
 		$(".wrapcontent").height(viewHeight);
 	},
+
 	initCoreSetPage: function () {
 		let wH = $(window).height();
 		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
@@ -91,7 +67,7 @@ const CoreFrame = {
 	}
 }
 
-const UpdataAccount = {
+const CoreUpdataAccount = {
 	accountInput: '',
 
 	init: function () {
@@ -106,7 +82,8 @@ const UpdataAccount = {
 			$('#account').hide()
 			$("#account-readonly").show();
 		}
-		this.accountInput = Mo.Portal.AccountInput("#account", {
+		//portal如何使用  ？？？
+		this.accountInput = portal.AccountInput("#account", {
 			label: '账号',
 			labelWidth: 120,
 			value: username,
@@ -134,7 +111,7 @@ const UpdataAccount = {
 			},
 			comfirmFun: function (cb) {
 				let value = $('#account .base-input').val();
-				if (!MoBaseAccount.checkAccount(value)) {
+				if (!Common.checkAccount(value)) {
 					return false
 				}
 				cb();
@@ -150,22 +127,24 @@ const UpdataAccount = {
 	}
 }
 
-const Set = {
+const CoreSet = {
 	profileHref: false,//记录是否从个人设置tab标签页进入的密码修改页面 默认false
+
 	init: function () {
-		FormStore.storePass = $(".password-form").html()
+		CoreFormStore.storePass = $(".password-form").html()
 		this.initTab();
 		this.initEvent();
-		SetChange.init();
+		CoreSetChange.init();
 		Size.init();
 	},
+
 	initEvent: function () {
 		$("#detail-btn-cancel").click(function () {
 			location.href = BP.config.SYSTEM_URL + "/home";
 		});
 		$("#detail-btn-save").click(function () {
 			if (!($("#detail-btn-save").hasClass("disabled"))) {
-				Set.save();
+				CoreSet.save();
 			}
 		});
 		$(".tab-item").click(function () {
@@ -176,7 +155,7 @@ const Set = {
 			}
 		});
 
-		SSO.common.headerEvent();
+		Common.headerEvent();
 	},
 	save: function () {
 		let tabname = this.getTabName();
@@ -211,6 +190,8 @@ const Set = {
 		if (Throttle.isLock(url)) {
 			return false;
 		}
+
+		// Throttle.lock(url);
 		let newAccount = $('#account .base-input').val();
 		let account = "";//超管传
 		if (DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
@@ -226,29 +207,29 @@ const Set = {
 			seat: $.trim($("#officeLocation").val())
 		};
 		if (!newAccount) {
-			alert("请输入账号");
+			MoAlert("请输入账号");
 			return false;
 		}
 		//校验方法
-		if (data.mobile && !SSO.verify.mobile(data.mobile)) {
-			// alert('手机长度不超过15,只允许输入"数字、.、_、-、*、#、空格"');
-			alert('请输入11位数字的手机号码');
+		if (data.mobile && !Validation.check('mobile', data.mobile)) {
+			// MoAlert('手机长度不超过15,只允许输入"数字、.、_、-、*、#、空格"');
+			MoAlert('请输入11位数字的手机号码');
 			$("#mobile").focus();
 			return false;
 		}
-		if (data.email && !SSO.verify.email(data.email)) {
-			alert("请输入正确的邮箱地址");
+		if (data.email && !Validation.check('email', data.email)) {
+			MoAlert("请输入正确的邮箱地址");
 			$("#email").focus();
 			return false;
 		}
 
-		if (data.email && !SSO.Base.validation.checkLength(data.email, 64)) {
-			alert("邮箱地址长度不能大于64位字符");
+		if (data.email && !Validation.checkLength(data.email, 64)) {
+			MoAlert("邮箱地址长度不能大于64位字符");
 			$("#email").focus();
 			return false;
 		}
-		if (data.seat && !SSO.Base.validation.checkLength(data.seat, 60)) {
-			alert("请输入联系地址长度不超过60");
+		if (data.seat && !Validation.checkLength(data.seat, 60)) {
+			MoAlert("请输入联系地址长度不超过60");
 			$("#officeLocation").focus();
 			return false;
 		}
@@ -258,7 +239,7 @@ const Set = {
 		$("#officeLocation").attr("value", data.seat);
 		if (data.seat) {
 			if (!(data.seat.match(/^[\u4E00-\u9FA5a-zA-Z0-9_]+$/))) {
-				alert('办公位置只能为中英文和数字及下划线组成', function () {
+				MoAlert('办公位置只能为中英文和数字及下划线组成', function () {
 					$('#officeLocation').focus();
 				});
 				Throttle.unLock(url);
@@ -273,9 +254,9 @@ const Set = {
 			dataType: 'json',
 			success: function (msg) {
 				if (msg.success) {
-					FormStore.set("profile");
+					CoreFormStore.set("profile");
 				}
-				alert(msg.description);
+				MoAlert(msg.description);
 				Throttle.unLock(url);
 				let newAccount = $('#account .base-input').val();
 				if (username && newAccount && (username != newAccount)) {//修改了账号 回到登陆页面
@@ -285,7 +266,7 @@ const Set = {
 				}
 			},
 			error: function () {
-				alert("修改个人资料失败，请与系统管理员联系！");
+				MoAlert("修改个人资料失败，请与系统管理员联系！");
 				Throttle.unLock(url);
 			}
 		});
@@ -299,7 +280,7 @@ const Set = {
 
 		let selection_str = $("#selection").val();
 		if (!selection_str) {
-			alert("请先选择图片");
+			MoAlert("请先选择图片");
 			Throttle.unLock(url);
 			return false;
 		}
@@ -319,15 +300,15 @@ const Set = {
 			success: function (msg) {
 				if (msg.success) {
 					MoAlert("头像修改成功", function () {
-						Set.loadPage(msg.data);
+						CoreSet.loadPage(msg.data);
 					});
 				} else {
-					alert(msg.description);
+					MoAlert(msg.description);
 				}
 				Throttle.unLock(url);
 			},
 			error: function () {
-				alert("头像修改失败");
+				MoAlert("头像修改失败");
 				Throttle.unLock(url);
 			}
 		});
@@ -368,39 +349,39 @@ const Set = {
 		};
 
 		if ('' == $.trim(data.oldPassword)) {
-			alert("请输入当前密码。");
+			MoAlert("请输入当前密码。");
 			$("#oldPassword").focus();
 			Throttle.unLock(url);
 			return false;
 		}
 		if ('' == $.trim(data.newPassword)) {
-			alert("请输入新密码");
+			MoAlert("请输入新密码");
 			$("#newPassword").focus();
 			Throttle.unLock(url);
 			return false;
 		}
 
 		if ('' == $.trim(data.confirmPassword)) {
-			alert("请输入确认密码");
+			MoAlert("请输入确认密码");
 			$("#confirmPassword").focus();
 			Throttle.unLock(url);
 			return false;
 		}
-		if (data.newPassword.length > 32 || !SSO.Base.validation.isRegExp(regexEnum.password, data.newPassword)) {
-			alert('密码由1-32个字符组成，支持字母大小写、数字、"_"、"."(不包括空格)');
+		if (data.newPassword.length > 32 || !Validation.isRegExp(regexEnum.password, data.newPassword)) {
+			MoAlert('密码由1-32个字符组成，支持字母大小写、数字、"_"、"."(不包括空格)');
 			$("#newPassword").focus();
 			Throttle.unLock(url);
 			return false;
 		};
 
 		if ($.trim(data.oldPassword) == $.trim(data.newPassword)) {
-			alert("新密码不能与旧密码一致");
+			MoAlert("新密码不能与旧密码一致");
 			$("#newPassword").focus();
 			Throttle.unLock(url);
 			return false;
 		}
 		if ($.trim(data.newPassword) != $.trim(data.confirmPassword)) {
-			alert("新密码、确认密码不一致，请确认后重新输入。");
+			MoAlert("新密码、确认密码不一致，请确认后重新输入。");
 			$("#confirmPassword").focus();
 			Throttle.unLock(url);
 			return false;
@@ -420,27 +401,27 @@ const Set = {
 			dataType: 'json',
 			success: function (msg) {
 				if (msg.success) {
-					FormStore.reset();
-					alert("密码修改成功，请重新登录。", function () {
+					CoreFormStore.reset();
+					MoAlert("密码修改成功，请重新登录。", function () {
 						location.href = BP.config.SYSTEM_URL + "/loginout";
 					});
 				} else {
-					alert(msg.description);
+					MoAlert(msg.description);
 				}
 				Throttle.unLock(url);
 			},
 			error: function () {
-				alert("密码修改失败");
+				MoAlert("密码修改失败");
 				Throttle.unLock(url);
 			}
 		});
 	},
 	gmtSave: function () {
-		alert("时区Build3实现");
+		MoAlert("时区Build3实现");
 	},
 
 	languageSave: function () {
-		alert("语言包Build3实现");
+		MoAlert("语言包Build3实现");
 	},
 
 	getHash: function () {
@@ -461,7 +442,6 @@ const Set = {
 		});
 	},
 	activeTab: function (tab) { //tab = .password
-		let username = "jihuiqin";
 		if (tab == '.profile') {
 			this.profileHref = true;
 		}
@@ -471,28 +451,25 @@ const Set = {
 		if (name == 'password') {
 			if (username && newAccount && (username != newAccount)) {//修改了账号
 				if ($('.bmc-accountInput-edit').css("display") == "none") {//是编辑状态
-					alert('账号已修改，请先确认新账号');
+					MoAlert('账号已修改，请先确认新账号');
 					return false;
 				}
 			}
 		}
 		if (this.before(name)) {
-			SetChange.show(name);
+			CoreSetChange.show(name);
 			return false;
 		}
 		if (name == 'password') {//切换至修改密码时 个人信息中账号要还原至原状态
-			UpdataAccount.accountInput.setValue(username);
-			UpdataAccount.accountInput.setReadonly();//账号设置只读状态
+			CoreUpdataAccount.accountInput.setValue(username);
+			CoreUpdataAccount.accountInput.setReadonly();//账号设置只读状态
 		} else if (name == 'profile') {
-			UpdataAccount.init();
+			CoreUpdataAccount.init();
 		}
 		if (userMoids == 'mooooooo-oooo-oooo-oooo-defaultadmin') {
 			let _this = this;
 			if (name == 'password') {
 				$(".tipPass").show();
-				// Moo.alert('密码修改后，请牢记新密码！'+'<br/>'+'未配置邮箱将密码丢失后无法找回，需返厂进行初始化。',function(){
-				//     $(".showTip").show();
-				// },'重置密码','取消')
 				$.dialog({
 					padding: 0,
 					id: "passwordUpdate",
@@ -532,14 +509,9 @@ const Set = {
 			return false;
 		}
 
-		// if(this.before(name)){
-		// 	SetChange.show(name);
-		// 	return false;
-		// }
-
 		$(".tab-item").removeClass("active");
 		$(tab).addClass("active");
-		$("form").hide();
+		$('.set-tab-forms').hide();
 		$("." + name + "-form").show();
 		$(".tab-tip").hide();
 		$("." + name + "-tip").show();
@@ -553,8 +525,7 @@ const Set = {
 				$(".imgareaselect-outer").css("display", "none");
 			}
 		}
-		FormStore.set(name);
-		/*SetFrame.loadPassword();*/
+		CoreFormStore.set(name);
 	},
 
 	getTabName: function () {
@@ -563,32 +534,34 @@ const Set = {
 
 	dialog: null,
 	before: function (name) {
-		return FormStore.isChange();
+		return CoreFormStore.isChange();
 	}
 }
 
-const SetChange = {
+const CoreSetChange = {
 	name: null,
+
 	init: function () {
 		this.initEvent();
 	},
+
 	initEvent: function () {
 		let that = this;
 		//取消
 		$(".w-close", "#changeWrapper").on("click", function () {
 			that.close();
-			FormStore.reset();
-			Set.activeTab("." + that.name);
+			CoreFormStore.reset();
+			CoreSet.activeTab("." + that.name);
 		});
 		$(".cancel", "#changeWrapper").on("click", function () {
 			that.close();
-			FormStore.reset();
-			Set.activeTab("." + that.name);
+			CoreFormStore.reset();
+			CoreSet.activeTab("." + that.name);
 		});
 
 		$(".save", "#changeWrapper").on("click", function () {
 			that.close();
-			Set.save();
+			CoreSet.save();
 		});
 	},
 	show: function (name) {
@@ -607,9 +580,9 @@ const SetChange = {
 		$("#detail-btn-save").removeClass("disabled");
 		$.dialog({ id: 'changeWindow' }).close();
 	}
-};
+}
 
-const FormStore = {
+const CoreFormStore = {
 	store: [],
 	storeH: [],
 	storePass: [],
@@ -622,20 +595,17 @@ const FormStore = {
 	},
 	reset: function () {
 		if (this.lastKey == "password") {
-			$("." + this.lastKey + "-form").html(FormStore.storePass)
+			$("." + this.lastKey + "-form").html(CoreFormStore.storePass)
 		} else {
 			$("." + this.lastKey + "-form").html(this.storeH[this.lastKey]);
 		}
 		Password.init(options);
-		Password.capitalTip("oldPassword")
-		Password.capitalTip("newPassword")
-		Password.capitalTip("confirmPassword");
 	},
 	set: function (name) {
-		this.lastKey = name;
-		this.store[name] = this.getSerialize(name);
-		this.storeH[name] = this.getHtml(name);
-
+		let that = this;
+		that.lastKey = name;
+		that.store[name] = that.getSerialize(name);
+		that.storeH[name] = that.getHtml(name);
 	},
 	isChange: function (name) {
 		if (this.lastKey == null) {
@@ -645,4 +615,5 @@ const FormStore = {
 	}
 }
 
-export { CoreData, CoreFrame, UpdataAccount, Set, SetChange, FormStore }
+export { CoreFrame, CoreUpdataAccount, CoreSet }
+

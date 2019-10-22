@@ -1,9 +1,8 @@
 import Store from '@/store';
 import { MoAlert } from '@/components/popup';
 import { Throttle, Validation } from '@/utils/utils';
+import { hex_md5 } from '@/lib/md5/md5';
 import { DigestAuth } from '@/utils/digestAuth';
-
-const BASE_URL = Store.getState('BASE_URL');
 
 function getQueryString(name){
 	let reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, "i");
@@ -119,6 +118,7 @@ const Login = {
             });
 
 		$("#login-submit").on("click", function () {
+            const BASE_URL = Store.getState('BASE_URL');
 
 			let url = `${BASE_URL}/slogin`;
 			if (Throttle.isLock(url)) {
@@ -152,7 +152,7 @@ const Login = {
 			let suffix = `?source=web&timestamp=${new Date().getTime()}${that.remember ? '&_spring_security_remember_me=true': '' }`;
             let cdata = {};
             
-			Throttle.lock(url);
+            Throttle.lock(url);
 			$.post(`${BASE_URL}/systemSecurity`, {
 				username: email
 			}, function (t) {
@@ -167,6 +167,7 @@ const Login = {
                             }
                         }
                     })
+                    const realmName = Store.getState('realmName')
 					if (systemSecurity != '1') {
                         DigestAuth.setValue('password', hex_md5(password));
                         DigestAuth.setValue('realm', realmName);
@@ -294,7 +295,7 @@ const Login = {
 		});
 
 		$("#verifyImage").on("click", function () {
-            $('#verifyImage').attr('src',`${BASE_URL}/verifyImage?random=${new Date().getTime()}`)
+            $('#verifyImage').attr('src',`${Store.getState('BASE_URL')}/verifyImage?random=${new Date().getTime()}`)
 		});
 
 		$("a.password_forget").on("click", function () {
@@ -319,7 +320,7 @@ const Login = {
 		});
 
 		$("#send_email").on("click", function () {
-			let url = `${BASE_URL}/forgetpassword/sendemail`;
+			let url = `${Store.getState('BASE_URL')}/forgetpassword/sendemail`;
 			if (Throttle.isLock(url)) {
 				return false;
 			}

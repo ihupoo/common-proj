@@ -1,0 +1,22 @@
+<div id="turnOffWrapper" style="width: 400px;height:260px;">
+    <div class="about-content mo-dialog-content" style="overflow:visible;">
+        <div class="title">
+            <span class="title_name"></span>
+            <a href="javascript:void(0);" class="w-close" hidefocus="true"></a>
+        </div>
+        <div class="separater"></div>
+        <div id="device-wrap">
+            <span class="label"></span>
+            <div id="device-info"></div>
+            <p class="friendTips"></p>
+        </div>
+        <div id="turnOffFooter">
+            <a class="mo-btn-gray confirm mo-btn-x mo-btn-x-left" data-action="ok" href="javascript:">确定</a>
+            <a class="mo-btn-gray cancel mo-btn-x mo-btn-x-left" data-action="cancel" href="javascript:"
+                style="margin-left:6px;">取消</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- css:style/pserver-dialog.scss  js部分：pserverIpSelect-dialog.jsp -->

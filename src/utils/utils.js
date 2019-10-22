@@ -123,7 +123,7 @@ const isEqual = (val, val2, deep = false) => {
     return false
 }
 
-//todo
+//todo（live直播列表中使用）
 const SimpleSearch = (selector, w) => {
     let width = w || 130;
     $(selector)

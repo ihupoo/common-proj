@@ -3,39 +3,30 @@ import { DigestAuth } from './digestAuth';
 
 import { hex_md5 } from '@/lib/md5/md5';
 
-const BASE_URL = Store.getState('BASE_URL');
-const strengthRegular = Store.getState('strengthRegular');
-const passwordStrength = Store.getState('user.passwordStrength')
 
 function getPasswordStrength(pwd) {
-    if (!pwd && '0' != pwd) return "fault";
-
-    if (strengthRegular) {
-        let checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
-        for (let i = 0; i < checkArr.length; i++) {
-            let strength = checkArr[i];
-            if (!!strengthRegular[strength] && !!(eval('/' + strengthRegular[strength] + '/').test(pwd))) {
-                if (strength == '2') {
-                    return "medium";
-                } else if (strength == '3') {
-                    return "strong";
-                } else if (strength == '1') {
-                    return "weak";
-                } else {
-                    return "fault";
-                }
-            }
-        }
-    } else {
-        console.error("密码强认证规则获取失败");
-    }
-    return "fault";
+    const strengthRegular = Store.getState('strengthRegular');
+	if (!pwd && '0' != pwd) return "fault";
+	if (strengthRegular) {
+		let checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
+		for (let i = 0; i < checkArr.length; i++) {
+			let strength = checkArr[i];
+			if (strengthRegular[strength] && (new RegExp(strengthRegular[strength]).test(pwd))) {
+				let result = strength == '2' ? "medium" : strength == '3' ? "strong" : strength == '1' ? "weak" : "fault";
+				return result;
+			}
+		}
+	} else {
+		console.error("密码强认证规则获取失败");
+	}
+	return "fault";
 }
 
 const Password = {
 	oldPasswordId: "#oldPassword",
 	newPasswordId: "#newPassword",
 	confirmPasswordId: "#confirmPassword",
+	passwordObj: { oldPassword: 'oldPassword', newPassword: 'newPassword', confirmPassword: 'confirmPassword' },
 	oldPasswordEye: "",
 	newPasswordEye: "",
 	confirmPasswordEye: "",
@@ -47,10 +38,10 @@ const Password = {
 	saveBtnId: "#detail-btn-save",
 	strengthOfPass: { '弱': 1, '中': 2, '强': 3 },
 	init: function (options) {
-		this.oldPasswordId = options.oldPasswordId;
-		this.newPasswordId = options.newPasswordId;
-		this.confirmPasswordId = options.confirmPasswordId;
 		this.strongAuthentication = options.strongAuthentication;
+		for (let i in this.passwordObj) {
+			this.capitalTip(this.passwordObj[i]);
+		}
 		if (options.checkUsed) {
 			this.checkUsed = true;
 		}
@@ -152,7 +143,8 @@ const Password = {
 		}
 	},
 	newPassBlur: function ($this) {
-		let that = this;
+        let that = this;
+        const BASE_URL = Store.getState('BASE_URL')
 		if ($this.next().hasClass("showHidePassword")) {
 			if (!$this.next().hasClass("click")) {
 				if (that.newPasswordEye.hasClass("show-password")) {
@@ -173,7 +165,7 @@ const Password = {
 							this.showTips($(that.newPasswordTip), null)
 							return false;
 						} else {
-							if (this.strengthOfPass[$(that.newPasswordTip).find('.tip-info').text()] < passwordStrength) {
+							if (this.strengthOfPass[$(that.newPasswordTip).find('.tip-info').text()] < Store.getState('user.passwordStrength')) {
 								this.showTips($(that.newPasswordTip), false, "密码不符合强度等级要求")
 								$(that.newPasswordTip).find('.help').hide();
 								$(that.newPasswordId).focus();
@@ -312,7 +304,7 @@ const Password = {
 							that.confirmPassFocus($(that.confirmPasswordId))
 						}
 					} else {
-						if (that.strengthOfPass[$(that.newPasswordTip).find('.correct-tip').text()] < passwordStrength) {
+						if (that.strengthOfPass[$(that.newPasswordTip).find('.correct-tip').text()] < Store.getState('user.passwordStrength')) {
 							that.showTips($(that.newPasswordTip), false, "密码不符合强度等级要求")
 							$(that.newPasswordTip).find('.help').hide();
 							$(that.newPasswordId).focus();
@@ -447,8 +439,8 @@ const Password = {
 		let that = this;
 		let oldPassword = $(this.oldPasswordId).val();
 		if (oldPassword != "" && oldPassword != undefined) {
-    
-			let url = BASE_URL + "/modifypassword/checkOldPassword";
+
+			let url = Store.getState('BASE_URL') + "/modifypassword/checkOldPassword";
 			let data = {};
 			if ('1' == systemSecurity) {
 				data = DigestAuth.makePassword(oldPassword, oldPassword);
@@ -476,7 +468,7 @@ const Password = {
 				}
 			}, "json").error(function () {
 			});
-		} 
+		}
 	},
 	showTips: function (passwordTipElement, isCorrect, tips) {
 		if (isCorrect == null) {
@@ -515,12 +507,12 @@ const Password = {
 			if (e.keyCode === 20 && capital) { // 点击Caps大写提示显隐切换
 				capitalTip.toggle();
 			}
-        }).on('focus.caps', function () { capital = false })
-        .on('keypress.caps', function (e) { capsLock(e) })
-        .on('blur.caps', function (e) {
-			//输入框失去焦点，提示隐藏
-			capitalTip.toggle('none');
-		});
+		}).on('focus.caps', function () { capital = false })
+			.on('keypress.caps', function (e) { capsLock(e) })
+			.on('blur.caps', function (e) {
+				//输入框失去焦点，提示隐藏
+				capitalTip.toggle('none');
+			});
 		function capsLock(e) {
 			let keyCode = e.keyCode || e.which;// 按键的keyCode
 			let isShift = e.shiftKey || keyCode === 16 || false;// shift键是否按住
@@ -540,6 +532,8 @@ const Password = {
 		}
 	},
 	showStrength: function (password) {
+		let passwordType = getPasswordStrength(password);
+		let obj = { 'weak': '弱', 'medium': '中', 'strong': '强' };
 		$(".help").show();
 		if (password.length < 8 && !this.strongAuthentication) {
 			$(this.newPasswordTip).find('.tip-icon').toggleClass("weak-icon");
@@ -547,23 +541,13 @@ const Password = {
 			$(this.newPasswordTip).find('.tip-info').text("弱");
 			return;
 		}
-		if (getPasswordStrength(password) == "weak") {
-			$(this.newPasswordTip).find('.tip-icon').toggleClass("weak-icon");
-			$(this.newPasswordTip).find('.tip-info').toggleClass("weak-tip");
-			$(this.newPasswordTip).find('.tip-info').text("弱");
-		}
-		if (getPasswordStrength(password) == "medium") {
-			$(this.newPasswordTip).find('.tip-icon').toggleClass("medium-icon");
-			$(this.newPasswordTip).find('.tip-info').toggleClass("medium-tip");
-			$(this.newPasswordTip).find('.tip-info').text("中");
-		}
-		if (getPasswordStrength(password) == "strong") {
-			$(this.newPasswordTip).find('.tip-icon').toggleClass("strong-icon");
-			$(this.newPasswordTip).find('.tip-info').toggleClass("strong-tip");
-			$(this.newPasswordTip).find('.tip-info').text("强");
-		}
-		if (getPasswordStrength(password) == "fault") {
+
+		if (passwordType == "fault") {
 			this.showTips($(this.newPasswordTip), false, "密码不符合要求")
+		} else {
+			$(this.newPasswordTip).find('.tip-icon').toggleClass(passwordType + "-icon");
+			$(this.newPasswordTip).find('.tip-info').toggleClass(passwordType + "-tip");
+			$(this.newPasswordTip).find('.tip-info').text(obj[passwordType]);
 		}
 	}
 

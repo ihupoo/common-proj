@@ -1,0 +1,37 @@
+<div class="graph-wrapper">
+    <div class="graph-container">
+        {{if contentId=='book_meeting_count'}}
+        <div class="book_meeting_data_container">
+            <ul>
+                <li class="value-li"><span class="title">最大值</span><span
+                        class="book_meeting_value maxValue">{{max}}</span></li>
+                <li class="value-li"><span class="title">最小值</span><span
+                        class="book_meeting_value minValue">{{min}}</span></li>
+                <li class="value-li"><span class="title">平均值</span><span
+                        class="book_meeting_value averageValue">{{average}}</span></li>
+            </ul>
+        </div>
+        {{/if}}
+        <div id="{{contentId}}-graph" class="graph-content">
+
+        </div>
+        {{if contentId=='platform_resource'||contentId=='meeting_count'}}
+        {{if contentId=='platform_resource'}}<div class="platform_resource_graph_value">{{}}</div>{{/if}}
+        <div class="time-adjust-container">
+            <div class="time-minus-plus">
+                <span class="mo-icons-bg minus" onclick="minusTime('{{contentId}}')"></span>
+                <span class="time-title">时间</span>
+                <span class="mo-icons-bg plus" onclick="plusTime('{{contentId}}')"></span>
+            </div>
+        </div>
+        <div class="time-move-container">
+            <div class="time-left-move">
+                <div class="mo-icons-bg leftMove" onclick="leftMoveTime('{{contentId}}')"></div>
+            </div>
+            <div class="time-right-move">
+                <div class="mo-icons-bg rightMove hidden" onclick="rightMoveTime('{{contentId}}')"></div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>

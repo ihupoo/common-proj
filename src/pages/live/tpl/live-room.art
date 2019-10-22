@@ -1,0 +1,46 @@
+{{if domain.length > 0}}
+        {{each domain as domaindata i}}
+        <div class="domain-name">{{domaindata.domainname}} ({{domaindata.count}})</div>
+        {{if domaindata.roomstate.length > 0}}
+        <div class="vrs-live-container">
+            {{each domaindata.roomstate as roomdata i}}
+            <div class="comm_video">
+                <div class="{{if type=='live'}}comm_video_img{{else}}comm_video_forthcomImg{{/if}} mo-icons-bg">
+                    {{if type=='live'}}<a class="comm_video_img_btn mo-icons-bg"></a>{{/if}}
+                    <div class="video-encrypt-icon">
+                        <a class="mo-icons-bg {{if type=='appointment'}}appointment{{/if}} {{if roomdata.encmode==2}} aes-icon {{else}}{{if roomdata.encmode==4}} gm-icon {{/if}}{{/if}}"></a>
+                    </div>
+                </div>
+                <ul>
+                    {{if type=='live'}}
+                    <li class="comm_video_time">{{roomdata.elapse | formatTime '00:00:00'}}</li>
+                    <li class="comm_video_num">{{roomdata.livestatnum | formatNum}}</li>
+                    <li class="comm_video_viewImg mo-icons-bg"></li>
+                    {{else}}
+                    <li class="comm_video_time">{{roomdata.livetime}}</li>
+                    {{/if}}
+                </ul>
+                <div class="comm_video_title" title="{{roomdata.roomname}}">{{roomdata.roomname}}</div>
+            </div>
+            {{/each}}
+        </div>
+        {{else if domaindata.roomstate.length <= 0}}
+        <div class="no-data-wrapper">
+            <div class="no-data">
+                <span class="mo-icons-bg warm-icon"></span>
+                <span class="warm-text">暂无直播</span>
+            </div>
+        </div>
+        {{/if}}
+        {{if domain.length-1 != i}}
+        <div class="divider"></div>
+        {{/if}}
+        {{/each}}
+        {{else if domain.length <= 0}}
+        <div class="no-data-wrapper">
+            <div class="no-data">
+                <span class="mo-icons-bg warm-icon"></span>
+                <span class="warm-text">暂无直播</span>
+            </div>
+        </div>
+        {{/if}}

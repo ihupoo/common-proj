@@ -1,0 +1,36 @@
+<div
+    class="item-resource-info-content-wrapper oneRowMedia {{if item_resource_data[1].show}}twoColumnMedia{{else}}oneColumnMedia{{/if}}">
+    <div class="row">
+        {{each item_resource_data as item_resource i}}
+        {{if item_resource.show}}
+        <div class="item-resource-info-content magrin-left-142">
+            <div id="{{item_resource.id}}" class="pie pieMedia"></div>
+            <div id="{{item_resource.id}}_gray" class="pie gray-pie pieMedia"></div>
+            <div class="item-resource-info-detail">
+                <ul>
+                    <li class="item-li item-name">{{item_resource.name}}</li>
+                    <li class="item-li used-num">
+                        <span class="item-title item-title-media">{{if i==0}}已召开数{{else}}已使用数{{/if}}</span>
+                        <span
+                            class="item-value {{if item_resource.percent>=85}}moreThan85{{else}} lessThan85{{/if}}">{{item_resource.used}}</span>
+                    </li>
+                    <li class="item-li used-num">
+                        <span class="item-title item-title-media">其他占用数</span>
+                        <span
+                            class="item-value {{if item_resource.percent>=85}}moreThan85{{/if}}">{{item_resource.other}}</span>
+                    </li>
+                    <li class="item-li used-num">
+                        <span class="item-title item-title-media">预计可{{if i==0}}召开{{else}}使用{{/if}}数</span>
+                        <span class="item-value number-green">{{item_resource.available}}</span>
+                    </li>
+                    <li class="item-li total-num">
+                        <span class="item-title item-title-media">总数</span>
+                        <span class="item-value">{{item_resource.total}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+</div>
