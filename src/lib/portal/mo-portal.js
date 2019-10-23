@@ -5004,8 +5004,7 @@
       // import 'script-loader!ezmark/js/jquery.ezmark.min.js';
 
 
-      $.namespace("Mo.Portal");
-      Mo.Portal = {
+      window.Portal = {
         AccountInput: function AccountInput(id, config, data) {
           return initInstant(bmc_account_input_src, id, config, data, 'accountInput');
         },

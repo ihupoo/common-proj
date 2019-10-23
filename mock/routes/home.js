@@ -2,7 +2,7 @@ const router = require('koa-router')()
 let Mock = require('mockjs');
 
 //menu
-router.get('/getmenu', async (ctx) => {
+router.get('/menu', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
             liveUrl: '',

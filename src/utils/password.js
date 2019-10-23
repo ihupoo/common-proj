@@ -1,11 +1,11 @@
 import Store from '@/store';
 import { DigestAuth } from './digestAuth';
-
 import { hex_md5 } from '@/lib/md5/md5';
 
+let { systemSecurity } = Store.getState('user');
 
 function getPasswordStrength(pwd) {
-    const strengthRegular = Store.getState('strengthRegular');
+	const strengthRegular = Store.getState('strengthRegular');
 	if (!pwd && '0' != pwd) return "fault";
 	if (strengthRegular) {
 		let checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
@@ -143,8 +143,8 @@ const Password = {
 		}
 	},
 	newPassBlur: function ($this) {
-        let that = this;
-        const BASE_URL = Store.getState('BASE_URL')
+		let that = this;
+		const BASE_URL = Store.getState('BASE_URL')
 		if ($this.next().hasClass("showHidePassword")) {
 			if (!$this.next().hasClass("click")) {
 				if (that.newPasswordEye.hasClass("show-password")) {

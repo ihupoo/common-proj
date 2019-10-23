@@ -1,7 +1,11 @@
 <p class="clearfix company_info">
     <!-- 公司名称-->
     <span class="companyName" data-i18n="home.pagebase.{{sysBrand}}.companyName"></span>
-    <span class="copyright" >Copyright &copy;<span class="establishYear" data-i18n="home.pagebase.{{sysBrand}}.establishYear"></span><span class="version_year">{{versionYear}}</span>&nbsp;<span class="companyDomainName" data-i18n="home.pagebase.{{sysBrand}}.companyDomainName"></span><span>.&nbspAll rights reserved.</span>
+    <span class="copyright" >Copyright &copy;
+    <span class="establishYear" data-i18n="home.pagebase.{{sysBrand}}.establishYear"></span>
+    <span class="version_year">{{versionYear}}</span>
+    <span class="companyDomainName" data-i18n="home.pagebase.{{sysBrand}}.companyDomainName"></span>
+    <span>.&nbspAll rights reserved.</span>
     <!-- 科达视讯无备案号 摩云视讯有备案号 阿里云电信有备案号 DX6000无备案号 -->
     <span class="icp">
         <a target="_blank" data-i18n="[href]home.pagebase.{{sysBrand}}.icpInfoHref;home.pagebase.{{sysBrand}}.icpInfoTxt"></a>

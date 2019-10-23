@@ -7,7 +7,7 @@
 
 <body class="bg">
     <div class="header-wrapper">
-        <input type="hidden" id="moid" value="${currentuser.moid}" />
+        <input type="hidden" id="moid" value="" />
         <div id="header-logo"></div>
     </div>
     <div id="wrap" class="clearfix wrapcontent">
@@ -26,10 +26,8 @@
                                 <a href="#profile" class="tab-item profile mo-btn-x" data-tab="profile">个人信息</a>
                                 <a href="#password" class="tab-item password mo-btn-x" data-tab="password">修改密码</a>
                                 <a class="tipPass" style="color:#d21e1e; display:none">请设置强度等级为中或强的密码</a>
-                                <span class="password-tip tab-tip hidden"
-                                    style="height:23px;line-height:23px;color:#d21e1e;font-weight:bold;">
-                                    <c:if test="${securityPolicy.passwordStrength==2}">密码等级应为中或者强</c:if>
-                                    <c:if test="${securityPolicy.passwordStrength==3}">密码等级应为强</c:if>
+                                <span class="password-tip tab-tip hidden" style="height:23px;line-height:23px;color:#d21e1e;font-weight:bold;">
+                                    
                                 </span>
                             </div>
                             <div class="operate">
@@ -41,7 +39,7 @@
 
                         <div class="detail-body" style="height:auto;">
                             <div class="detail-content">
-                                <form class="profile-form">
+                                <div class="profile-form set-tab-forms">
                                     <ul id="editor-ui">
                                         <li class="data-li">
                                             <table style="table-layout:fixed">
@@ -50,10 +48,10 @@
                                                     <tr id="account-readonly">
                                                         <td class="title">账号</td>
                                                         <td class="input">
-                                                            <div class="inputDiv">
-                                                                <input type="hidden" id="account1" name="account1"
+                                                            <div class="inputDiv" id="account1">
+                                                                <input type="hidden" name="account1"
                                                                     readonly class="input-text" value="adminTest"
-                                                                    maxlength="21">${currentuser.account}
+                                                                    maxlength="21">
                                                             </div>
                                                         </td>
                                                         <td class="operate"></td>
@@ -69,7 +67,8 @@
                                                         <td class="input">
                                                             <div class="inputDiv">
                                                                 <input type="text" id="mobile" name="mobile"
-                                                                    class="e-input" value="${currentuser.mobile}" maxlength="11" />
+                                                                    class="e-input" value=""
+                                                                    maxlength="11" />
                                                             </div>
                                                         </td>
                                                         <td class="operate">
@@ -87,7 +86,8 @@
                                                         <td class="input">
                                                             <div class="inputDiv">
                                                                 <input type="text" id="email" name="email"
-                                                                    class="e-input" value="${currentuser.email}" maxlength="64" />
+                                                                    class="e-input" value=""
+                                                                    maxlength="64" />
                                                             </div>
                                                         </td>
                                                         <td class="operate">
@@ -104,7 +104,8 @@
                                                         <td class="input">
                                                             <div class="inputDiv">
                                                                 <input type="text" id="officeLocation"
-                                                                    name="officeLocation" class="e-input" value="${fn:escapeXml(currentuser.seat)}"
+                                                                    name="officeLocation" class="e-input"
+                                                                    value=""
                                                                     maxlength="60" />
                                                             </div>
                                                         </td>
@@ -115,9 +116,9 @@
                                             </table>
                                         </li>
                                     </ul>
-                                </form>
+                                </div>
                                 <!--password---->
-                                <form class="password-form">
+                                <div class="password-form set-tab-forms">
                                     <ul>
 
                                         <li class="data-li">
@@ -237,9 +238,9 @@
                                             </table>
                                         </li>
                                     </ul>
-                                </form>
+                                </div>
                                 <!--portrait---->
-                                <form class="portrait-form">
+                                <form class="portrait-form set-tab-forms">
                                     <input type="hidden" id="fileName">
                                     <input type="hidden" id="selection">
                                     <div class="mo-dialog-content" style="padding-top: 32px;">
@@ -336,22 +337,11 @@
             </div>
         </div>
     </div>
-    <div id="footer" class="clearfix footerWrap" style="height: 85px;">
+    <div id="footer" class="clearfix footerWrap">
         <div class="footer_content">
         </div>
     </div>
-    <div class="hidden">
-        <div id="aboutWrapper" style=" width: 400px;height:300px;">
-            <div class="about-content mo-dialog-content">
-                <div class="title">
-                    <span>关于</span>
-                    <a href="javascript:void(0);" class="w-close" hidefocus="true"></a>
-                </div>
-                <div class="separater"></div>
-                <div id="about_info"></div>
-            </div>
-        </div>
-    </div>
+    <!-- 引入about.art的模板 -->
 </body>
 
 </html>

@@ -1,4 +1,5 @@
 import Store from '@/store';
+import qq from '@/lib/uploader/fileuploader'
 import { MoAlert } from '@/components/popup';
 import { Throttle } from './utils';
 

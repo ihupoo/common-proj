@@ -1,3 +1,3 @@
 import axios from '@/api/axios';
 
-export const getPlatData = () => axios.get('/plat/getplatedata');
+export const fetchPlat = () => axios.get('/plat/getplat');

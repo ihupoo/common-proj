@@ -20,12 +20,12 @@ import './css/theme.scss';
 import '@/lib/portal/mo-portal.css';
 
 
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import 'jquery-easyui-original';
-import '@/lib/mousewheel/3.1.13/jquery.mousewheel.min';
-import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar';
-import 'ezmark'
-import '@/lib/imgareaselect/jquery.imgareaselect.pack'
+// import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
+// import 'jquery-easyui-original';
+// import '@/lib/mousewheel/3.1.13/jquery.mousewheel.min';
+// import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar';
+// import 'ezmark'
+// import '@/lib/imgareaselect/jquery.imgareaselect.pack'
 
 //todo
 {/* <script src="${RESOUCE_STATIC_URL}/js/jlib/echarts.min.js?t=6.0.2692493846"></script>
@@ -43,25 +43,29 @@ import '@/lib/imgareaselect/jquery.imgareaselect.pack'
 <script src="${RESOUCE_STATIC_URL}/js/home/header-email.js?t=6.0.3480032774"></script> */}
 
 
-import { setBaseUrl, AjaxComplete } from '@/utils/common';
+// import { setBaseUrl, AjaxComplete } from '@/utils/common';
+// import { fetchSystemConfig, fetchUserInfo } from '@/api/service';
+// import { fetchHomeMenu } from './service';
 
-import { i18next, documentTitle } from '@/i18n';
-import TemplateLogo from '@/tpl/logo.art';
+// import { i18next, documentTitle } from '@/i18n';
+// import TemplateHeader from '@/tpl/header.art';
 
 
 
-function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
-    $('body').addClass(`theme-${sysBrand}`);
+// function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
+//     $('body').addClass(`theme-${sysBrand}`);
 
-    i18next.changeLanguage(lang)
-    $('#header_title_logo').empty().append($(TemplateLogo({ sysBrand })).localize())
-    document.title = documentTitle(sysBrand)('home')
-}
+//     i18next.changeLanguage(lang)
+//     $('#header_title_logo').empty().append($(TemplateHeader({ sysBrand })).localize())
+//     document.title = documentTitle(sysBrand)('home')
+// }
 
-setBaseUrl()
+// setBaseUrl()
 
-$(function () {
+// $(function () {
+
+
     
     
-    AjaxComplete()
-})
+//     AjaxComplete()
+// })

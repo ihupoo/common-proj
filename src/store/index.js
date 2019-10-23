@@ -1,53 +1,82 @@
-function get (source, path, defaultValue = undefined) {
+function get(source, path, defaultValue = undefined) {
     const paths = path.replace(/\[(\d+)\]/g, '.$1').split('.')
     let result = source
     for (const p of paths) {
-      result = Object(result)[p]
-      if (result === undefined) {
-        return defaultValue
-      }
+        result = Object(result)[p]
+        if (result === undefined) {
+            return defaultValue
+        }
     }
     return result
-  }
+}
 
 
-class Store{
+class Store {
     state = {
         BASE_URL: '/',
-        strengthRegular: {"3":"^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[._])[0-9a-zA-Z._]{8,16}$","2":"(?!^([0-9]+|[a-zA-Z]+|[._]+)$)^[0-9a-zA-Z._?]{8,16}$","1":"^[A-Za-z0-9]{8,16}$"},
+        strengthRegular: { "3": "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[._])[0-9a-zA-Z._]{8,16}$", "2": "(?!^([0-9]+|[a-zA-Z]+|[._]+)$)^[0-9a-zA-Z._?]{8,16}$", "1": "^[A-Za-z0-9]{8,16}$" },
         sysBrand: 'kedacom',
         versionYear: '2019',
         user: {
-            userDomainMoid: '',
-            serviceDomainMoid: '',
-            enableMeeting: '',
+            passwordExpire: '',
+            cloudModeInfo: '',
+            vrsShow: '',
+            cbsShow: '',
+            domsShow: '',
+            enableNexvision: '',
+            tpsIP: '',
+            kisIP: '',
+            vrsIP: '',
+            show_sh: '0',
+            portraintDomain: '',
+            isUserDomainAdmin: '',
+            isServiceDomainAdmin: '',
+            isUsualUser: '',
+            jmsConfigGuideUrl: '',
+            jmsType: '',
+            licenseInvalidWarn: '',
+            onlyCurrentIp: '',
+            umoid: '',
+            systemSecurity: '1',
+            securityPolicy: {},
+            brithday: '',
+            username: '8cd66490-3463-46fe-9b86-5fc4ae390ee2',//和name取一
+            //
+            name: 'jihuiqin',
+            userDomainMoid: '2sh5wxryttt19qf6gs5kvzlc',
+            userDomainAdmin: '',
+            moid: '2sh5wxryttt19qf6gs5kvzlc',
+            account: 'haha',
+            mobile: '15236095272',
+            email: '2551044074@qq.com',
+            sex: '',
+            seat: '办公地址',
+            extNum: '',
+            e164: '',
+            depts: '',
+            fax: '',
             meetingAdmin: '',
+            serviceDomainMoid: 'mooooooo-oooo-oooo-oooo-defaultserdo',
+            enableMeeting: '',
             enableNM: '',
-            
-            name: '',
-            account: 'jihuiqin',
-            moid: '2cd61302-fafe-45b0-883b-f0671929b974',
+            enableWeibo: '',
+            enableBMC: '',
+            enableVRS: '',
+            enableLive: '',
+            enableKIS: '',
+            enablePublicCloudAccess: '',
+            cloudModelDisplay: '',
+            virMachineroomMoid: '',
+            cloudModelName: '',
             portrait40: '',
             portrait64: '',
             portrait128: '',
-            email: '',
-            mobile: '',
-            extNum: '',
-            e164: '',
-            sex: '',
-            fax: '',
-            seat: '',
-            depts: '',
-            portrait256: '',
-            cloudModelDisplay: '0',
-            cloudModelName: '555',
-            virMachineroomMoid: '7777',
-            show_sh: '1',   //重启和关机是否显示
+            portrait256: ''
         }
     }
 
     reducers = {
-        save(payload){
+        save(payload) {
             this.state = {
                 ...this.state,
                 ...payload
@@ -55,13 +84,13 @@ class Store{
         }
     }
 
-    getState(param){
-       return param ? get(this.state, param) : this.state
+    getState(param) {
+        return param ? get(this.state, param) : this.state
     }
 
-    dispatch({ type, payload = {} }){
+    dispatch({ type, payload = {} }) {
         this.reducers[type] ? this.reducers[type].call(this, payload) : null
-    } 
+    }
 
 }
 

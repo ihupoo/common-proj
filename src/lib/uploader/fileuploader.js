@@ -1,4 +1,5 @@
 import { MoAlert as alert } from '@/components/popup';
+import './fileuploader.scss'
 
 var qq = qq || {};
 qq.extend = function(a, b) {

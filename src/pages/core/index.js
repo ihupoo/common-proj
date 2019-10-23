@@ -1,82 +1,107 @@
-// import $ from 'jquery-migrate';
-// import 'jquery.namespace';
-// import 'ezmark'
+import $ from 'jquery-migrate';
+import 'ezmark'
 
-// import '@/styles/reset.scss';
+import '@/styles/reset.scss';
 
-// import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
-// import '@/lib/imgareaselect/imgareaselect-default.css';
-// import '@/lib/artDialog/4.1.7/skins/simple.css';
-// import '@/lib/ezmark/ezmark.scss';
-// import '@/lib/portal/mo-portal.css';
-// import '@/lib/portal/mo-portal.js';
+import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
+import '@/lib/imgareaselect/imgareaselect-default.css';
+import '@/lib/artDialog/4.1.7/skins/simple.css';
+import '@/lib/ezmark/ezmark.scss';
+import '@/lib/portal/mo-portal.css';
 
-// import '@/styles/common.scss';
-// import '@/styles/commonCSS.scss';
-// import '@/styles/reset-artDialog.scss';
-// import '@/styles/reset-mCustomScrollbar.scss';
-// import '@/styles/reset-easyui.scss';
-// import '@/styles/password.scss';
+import '@/styles/common.scss';
+import '@/styles/commonCSS.scss';
+import '@/styles/reset-artDialog.scss';
+import '@/styles/reset-mCustomScrollbar.scss';
+import '@/styles/reset-easyui.scss';
+import '@/styles/password.scss';
 
-// import { Password } from '@/utils/password.js';
-// import { DigestAuth } from '@/utils/digestAuth.js';
-// import '@/utils/common.js';
+import './css/theme.scss';
+import './css/set.scss';
+import './css/core.scss';
 
-// import '@/lib/uploader';
-// import '@/lib/sm';
-// import '@/lib/md5';
+import ModifyPortrait from '@/utils/modifyPortrait';
+import { Common, setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
+import { Password } from '@/utils/password';
+import { CoreSetFrame, CoreUpdataAccount, CoreSet } from './js/core';
 
-// import '@/utils/utils.js';
+import Store from '@/store/index';
+import { i18next, documentTitle } from '@/i18n';
+import { fetchCore } from './service';
+import TemplateHeader from '@/tpl/header.art';
+import TemplateFooter from '@/tpl/footer.art';
 
-// import './css/theme.scss';
-// import './css/set.scss';
-// import './css/core.scss';
-// import { UpdataAccount } from './js/core';
+function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
+    $('body').addClass(`theme-${sysBrand}`);
+    i18next.changeLanguage(lang)
+    $('#header-logo').empty().append($(TemplateHeader({ sysBrand, user, BASE_URL })).localize())
+    $('#footer .footer_content').empty().append($(TemplateFooter({ sysBrand, versionYear })).localize())
+    document.title = documentTitle(sysBrand)('home')
+}
 
-// import { i18next, documentTitle } from '@/i18n';
-// import renderHeader from '@/tpl/header.art';
-// import renderFooter from '@/tpl/footer.art';
-// import store from '@/store/index';
+setBaseUrl()
 
-// let sysBrand = store.getState('sysBrand');
-// let versionYear = store.getState('versionYear');
-// let options = {
-//     oldPasswordId: "#oldPassword",
-//     newPasswordId: "#newPassword",
-//     confirmPasswordId: "#confirmPassword",
-//     strongAuthentication: true,
-//     checkUsed: true
-// }
+let options = {
+    strongAuthentication: true,
+    checkUsed: true
+}
+const { sysBrand, lang, versionYear, user, BASE_URL } = Store.getState();
 
-// $(function () {
-//     $('body').addClass(`theme-${sysBrand}`);
-//     $(renderHeader({ sysBrand, currentuser })).localize().appendTo('#header-logo');
-//     $(renderFooter({ sysBrand, versionYear })).localize().appendTo('#footer .footer_content');
-//     document.title = documentTitle(sysBrand)('home');
+$(function () {
+    $("#modifyPortrait").hide();
 
-//     CoreData.init();
-//     DigestAuth.realm = CoreData.realmName;
-//     DigestAuth.username = currentuser.moid;
-//     UpdataAccount.init();
-//     $("#modifyPortrait").hide();
-//     Set.init();
-//     CoreFrame.initCoreSetPage();
-//     $(window).resize(function () {
-//         CoreFrame.initCoreSetPage();
-//     });
-//     Password.init(options);
-//     Password.capitalTip("oldPassword")
-//     Password.capitalTip("newPassword")
-//     Password.capitalTip("confirmPassword");
-//     ModifyPortait.initUpLoad();
-//     Common.setDefaultImg('.user-info');
-//     Common.initPortrait(portrait40, portraitDomain);
-//     if (portrait256 && portraitDomain) {
-//         var domain = '//' + portraitDomain + '/';
-//         $('.img_32').attr('src', domain + portrait40);
-//         $('.img_64').attr('src', domain + portrait64);
-//         $('.img_128').attr('src', domain + portrait128);
-//         $('.img_256').attr('src', domain + portrait256);
-//     }
-//     $("#help").attr("href", "${RESOUCE_STATIC_URL}/${sysBrand}/help/default.html");
-// })
+    (async () => {
+        let [core] = await Promise.all([
+            fetchCore()
+        ])
+        if (core && core.success && core.data) {
+            Store.dispatch({
+                type: 'save',
+                payload: {
+                    ...core.data
+                }
+            })
+            pageRender({ sysBrand, lang, versionYear, user, BASE_URL })
+        } else {
+            pageRender()
+        }
+
+        if (core && core.success && core.data) {
+            //处理页面中数据
+            let passwordStrength = user.securityPolicy.passwordStrength;
+            if (passwordStrength == 2) {
+                $('.password-tip').text('密码等级应为中或者强');
+            } else if (passwordStrength == 3) {
+                $('.password-tip').text('密码等级应为强');
+            }
+            $('#moid').val(user.moid);
+            $('#account1').text(user.account);
+            $('#mobile').val(user.mobile);
+            $('#email').val(user.email);
+            $('#officeLocation').val(user.seat);
+            
+            //调用
+            CoreSetFrame.initCoreSetPage();
+            $(window).resize(function () {
+                CoreSetFrame.initCoreSetPage();
+            });
+            CoreUpdataAccount.init();
+            CoreSet.init();
+            ModifyPortrait.initUpload();
+            Common.setDefaultImg('.user-info');
+            Common.initPortrait(user.portrait40, user.portraitDomain);
+            if (user.portrait256 && user.portraitDomain) {
+                let domain = '//' + portraitDomain + '/';
+                $('.img_32').attr('src', domain + user.portrait40);
+                $('.img_64').attr('src', domain + user.portrait64);
+                $('.img_128').attr('src', domain + user.portrait128);
+                $('.img_256').attr('src', domain + user.portrait256);
+            }
+            Password.init(options);
+        }
+    })()
+
+    InputPreventAutocomplete()
+    AjaxComplete()
+
+})

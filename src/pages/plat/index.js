@@ -1,141 +1,107 @@
-// import $ from 'jquery-migrate';
-// import 'jquery.namespace';
-// import 'ezmark'
+import $ from 'jquery-migrate';
+import 'ezmark'
 
-// import '@/styles/reset.scss';
+import '@/styles/reset.scss';
 
-// import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
-// import '@/lib/imgareaselect/imgareaselect-default.css';
-// import '@/lib/artDialog/4.1.7/skins/simple.css';
-// import '@/lib/ezmark/ezmark.scss';
-// import '@/lib/portal/mo-portal.css';
-// import '@/lib/portal/mo-portal.js';
+import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
+import '@/lib/imgareaselect/imgareaselect-default.css';
+import '@/lib/artDialog/4.1.7/skins/simple.css';
+import '@/lib/ezmark/ezmark.scss';
+import '@/lib/portal/mo-portal.css';
 
-// import '@/styles/common.scss';
-// import '@/styles/commonCSS.scss';
-// import '@/styles/reset-artDialog.scss';
-// import '@/styles/reset-mCustomScrollbar.scss';
-// import '@/styles/reset-easyui.scss';
-// import '@/styles/password.scss';
-// import '@/utils/password.js';
-// import '@/utils/digestAuth.js';
-// import '@/utils/common.js';
+import '@/styles/common.scss';
+import '@/styles/commonCSS.scss';
+import '@/styles/reset-artDialog.scss';
+import '@/styles/reset-mCustomScrollbar.scss';
+import '@/styles/reset-easyui.scss';
+import '@/styles/password.scss';
 
-// import '@/lib/uploader';
-// import '@/lib/sm';
-// import '@/lib/md5';
+import './css/theme.scss';
+import './css/plat.scss';
+import './css/set.scss';
 
-// import '@/utils/utils.js';
+import ModifyPortrait from '@/utils/modifyPortrait';
+import { Common, setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
+import { Password } from '@/utils/password';
+import {  } from './js/plat';
 
+import Store from '@/store/index';
+import { i18next, documentTitle } from '@/i18n';
+import { fetchPlat } from './service';
+import TemplateHeader from '@/tpl/header.art';
+import TemplateFooter from '@/tpl/footer.art';
 
-// import './css/theme.scss';
-// import './css/set.scss';
-// import './css/plat.scss';
-// import './js/plat.js';
+function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
+    $('body').addClass(`theme-${sysBrand}`);
+    i18next.changeLanguage(lang)
+    $('#header-logo').empty().append($(TemplateHeader({ sysBrand, user, BASE_URL })).localize())
+    $('#footer .footer_content').empty().append($(TemplateFooter({ sysBrand, versionYear })).localize())
+    document.title = documentTitle(sysBrand)('home')
+}
 
-// import { i18nUtil, i18nHomeTitle } from '@/utils/i18n.js';
-// import renderHeader from '@/tpl/header.art';
-// import renderFooter from '@/tpl/footer.art';
-// import store from '@/store/index';
-// import { getPlatData } from './service.js';
+setBaseUrl()
 
-// //注入的数据，标记ajax
-// let sysBrand = store.getState('sysBrand');
-// let versionYear = store.getState('versionYear');
-// let currentuser = store.getState('currentuser');
-// $.namespace("Plat.Data");
-// Plat.Data = {
-//     username: currentuser.account,
-//     portrait40: currentuser.portrait40,
-//     portrait64: currentuser.portrait64,
-//     portrait128: currentuser.portrait128,
-//     portrait256: currentuser.portrait256,
-//     editName: '',
-//     realmName: '',
-//     systemSecurity: '',
-//     strengthRegular: '',
-//     passwordStrengthOfSecurityPolicy: '',
-//     portraitDomain: '',
-//     init() {
-//         getPlatData().then(res => {
-//             if (res.success && res.data) {
-//                 this.editName = res.data.editName;
-//                 this.realmName = res.data.realmName;
-//                 this.systemSecurity = res.data.systemSecurity;
-//                 this.strengthRegular = res.data.strengthRegular;
-//                 this.passwordStrengthOfSecurityPolicy = res.data.securityPolicy.passwordStrength;
-//                 this.portraitDomain = res.data.portraitDomain;
-//             }
-//         })
-//     }
-// }
-// let options = {
-//     oldPasswordId: "#oldPassword",
-//     newPasswordId: "#newPassword",
-//     confirmPasswordId: "#confirmPassword",
-//     strongAuthentication: true,
-//     checkUsed: true
-// }
+let options = {
+    strongAuthentication: true,
+    checkUsed: true
+}
+const { sysBrand, lang, versionYear, user, BASE_URL } = Store.getState();
 
-// $(function () {
-//     //引入头部底部模板文件
-//     $('body').addClass(`theme-${sysBrand}`);
-//     i18nUtil(renderHeader, { sysBrand, currentuser }, '#header-logo');
-//     i18nUtil(renderFooter, { sysBrand, versionYear }, '#footer .footer_content');
-//     i18nHomeTitle(sysBrand);
+$(function () {
+    $("#modifyPortrait").hide();
 
-//     //如何获取art模板中的$('.setting') ???
-//     $(".setting").on("click", function (e) {
-//         if ($(this).hasClass('disabled')) {
-//             return
-//         }
-//         $("#nav-sublist-notify").removeClass("hover");
-//         $(".setting-list").toggle();
-//         if (e.stopPropagation)
-//             e.stopPropagation();
-//         else
-//             e.cancelBubble = true;
-//     })
-//     $(document).on("click", function () {
-//         $(".setting-list").hide();
-//         $(".public-private-cloud").hide(0, function () {
-//             $(".cloud-name").removeClass("active");
-//             $(".arrow").removeClass("active");
-//         });
-//     });
+    (async () => {
+        let [plat] = await Promise.all([
+            fetchPlat()
+        ])
+        if (plat && plat.success && plat.data) {
+            Store.dispatch({
+                type: 'save',
+                payload: {
+                    ...plat.data
+                }
+            })
+            pageRender({ sysBrand, lang, versionYear, user, BASE_URL })
+        } else {
+            pageRender()
+        }
 
-//     $("#modifyUser").on("click", function () {
-//         $(".setting-list").hide();
-//         location.href = 'core.html';
-//     });
-//     if (currentuser.cloudModelDisplay == '0') {
-//         $('#cloudstyle').css('display', 'none');
-//     }
+        if (plat && plat.success && plat.data) {
+            //处理页面中数据
+            // let passwordStrength = user.securityPolicy.passwordStrength;
+            // if (passwordStrength == 2) {
+            //     $('.password-tip').text('密码等级应为中或者强');
+            // } else if (passwordStrength == 3) {
+            //     $('.password-tip').text('密码等级应为强');
+            // }
+            // $('#moid').val(user.moid);
+            // $('#account1').text(user.account);
+            // $('#mobile').val(user.mobile);
+            // $('#email').val(user.email);
+            // $('#officeLocation').val(user.seat);
+            
+            //调用
+            CoreSetFrame.initCoreSetPage();
+            $(window).resize(function () {
+                CoreSetFrame.initCoreSetPage();
+            });
+            CoreUpdataAccount.init();
+            CoreSet.init();
+            ModifyPortrait.initUpload();
+            Common.setDefaultImg('.user-info');
+            Common.initPortrait(user.portrait40, user.portraitDomain);
+            if (user.portrait256 && user.portraitDomain) {
+                let domain = '//' + portraitDomain + '/';
+                $('.img_32').attr('src', domain + user.portrait40);
+                $('.img_64').attr('src', domain + user.portrait64);
+                $('.img_128').attr('src', domain + user.portrait128);
+                $('.img_256').attr('src', domain + user.portrait256);
+            }
+            Password.init(options);
+        }
+    })()
 
-//     //各种初始化
-//     Plat.Data.init();
-//     Mo.Base.DigestAuth.realm = Plat.Data.realmName;
-//     Mo.Base.DigestAuth.username = currentuser.moid;
-//     Mo.updataAccount.init();
-//     Mo.ExtNum.init();
-//     Mo.Set.init();
-//     Mo.SetFrame.loadPlatSet();
-//     $(window).resize(function () {
-//         Mo.SetFrame.loadPlatSet();
-//     });
-//     Mo.Password.init(options);
-//     Mo.Password.capitalTip("oldPassword");
-//     Mo.Password.capitalTip("newPassword");
-//     Mo.Password.capitalTip("confirmPassword");
-//     SSO.common.modifyPortait.initUpLoad();
-//     SSO.common.setDefaultImg('.user-info');
-//     SSO.common.initPortrait(Plat.Data.portrait40, Plat.Data.portraitDomain);
-//     if (Plat.Data.portrait256 && Plat.Data.portraitDomain) {
-//         var domain = '//' + portraitDomain + '/';
-//         $('.img_32').attr('src', domain + portrait40);
-//         $('.img_64').attr('src', domain + portrait64);
-//         $('.img_128').attr('src', domain + portrait128);
-//         $('.img_256').attr('src', domain + portrait256);
-//     }
-//     $("#help").attr("href", "${RESOUCE_STATIC_URL}/${sysBrand}/help/default.html");
-// })
+    InputPreventAutocomplete()
+    AjaxComplete()
+
+})

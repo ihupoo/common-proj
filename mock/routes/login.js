@@ -14,12 +14,12 @@ router.get('/getreal', async (ctx) => {
 })
 
 //登录之前，获取的数据
-router.get('/getlogin', async (ctx) => {
+router.get('/info', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
             showVerifyCode: '0',
             outAlter: '0',
-            nonceValue: 'xxxxx',
+            nonceValue: '',
         },
         description: "",
         errorCode: "",
@@ -28,7 +28,7 @@ router.get('/getlogin', async (ctx) => {
 })
 
 //登录成功后，获取用户信息，存入缓存
-router.get('/getuser', async (ctx) => {
+router.get('/user', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
             passwordExpire: '',

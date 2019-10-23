@@ -98,6 +98,7 @@ const Common = {
 		$(parent + " img[data-onerror]").each(function (i) {
 			$(this).on("error", function () {
 				$(this).attr("src", $(this).attr("data-onerror"));
+				$(this).off('error')
 			})
 		})
     },

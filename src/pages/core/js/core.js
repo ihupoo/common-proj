@@ -3,8 +3,12 @@ import { Password } from '@/utils/password'
 import { Validation, Throttle } from '@/utils/utils'
 import { MoAlert } from '@/components/popup'
 import { Common, Size } from '@/utils/common'
+import Store from '@/store/index';
+import '@/lib/portal/mo-portal';
 
-const CoreFrame = {
+let { username } = Store.getState('user');
+
+const CoreSetFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
 	default_detail_paddingLeft: 0, // 默认详细表单左边偏移量
 	main_min_width: 1280,
@@ -12,58 +16,19 @@ const CoreFrame = {
 	main_min_height: 650,
 	main_padding_bottom: 83,
 	main_top_height: 98,
+
 	fixLineHeight: 2,
 
-	init: function () {
-		this.setSize();
-		this.initEvent();
-	},
-
-	initEvent: function () {
-		let that = this;
-		$(window).resize(function () {
-			that.setSize();
-		})
-	},
-
-	setSize: function () {
-		let win = this.getWindowSize();
-		if (win.w < this.main_min_width) {
-			win.w = this.main_min_width;
-		}
-		if (win.h < this.main_min_height) {
-			win.h = this.main_min_height;
-		}
-		let wrapW = win.w - (this.main_padding_left * 2);
-		let wrapH = win.h;
-		$(".wrap-all").width(wrapW);
-		$(".wrap-all").height(win.h);
-		let innerHeight = win.h - this.main_top_height - this.main_padding_bottom;
-		$("#inner-main").height(innerHeight);
-		let viewHeight = innerHeight - (this.fixLineHeight * 2);
-		$(".wrapcontent").height(viewHeight);
-	},
-
 	initCoreSetPage: function () {
-		let wH = $(window).height();
-		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
-		let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
+		var wH = $(window).height();
+		var innerHeight = wH - this.main_top_height - this.main_padding_bottom;
+		var viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
 		$(".wrapcontent").css("min-height", viewHeight);
 		if ('password' == $(".tabs .active").attr("data-tab")) {
 			$("#detail-btn-save").addClass('disabled');
 		} else {
 			$("#detail-btn-save").removeClass('disabled');
 		}
-	},
-
-	getWindowSize: function () {
-		let w = ($(window).width());
-		let h = ($(window).height());
-		return { w: w, h: h };
-	},
-
-	getSideW: function () {
-		return 0;
 	}
 }
 
@@ -82,8 +47,7 @@ const CoreUpdataAccount = {
 			$('#account').hide()
 			$("#account-readonly").show();
 		}
-		//portal如何使用  ？？？
-		this.accountInput = portal.AccountInput("#account", {
+		this.accountInput = Portal.AccountInput("#account", {
 			label: '账号',
 			labelWidth: 120,
 			value: username,
@@ -186,7 +150,7 @@ const CoreSet = {
 	//保存更改后的个人信息
 	profileSave: function () {
 
-		let url = BP.config.SYSTEM_URL + "/system/user/updateuser";
+		let url = Store.getState('BASE_URL') + "/system/user/updateuser";
 		if (Throttle.isLock(url)) {
 			return false;
 		}
@@ -206,10 +170,10 @@ const CoreSet = {
 			email: $.trim($("#email").val()),
 			seat: $.trim($("#officeLocation").val())
 		};
-		if (!newAccount) {
-			MoAlert("请输入账号");
-			return false;
-		}
+		// if (!newAccount) {
+		// 	MoAlert("请输入账号");
+		// 	return false;
+		// }
 		//校验方法
 		if (data.mobile && !Validation.check('mobile', data.mobile)) {
 			// MoAlert('手机长度不超过15,只允许输入"数字、.、_、-、*、#、空格"');
@@ -261,7 +225,7 @@ const CoreSet = {
 				let newAccount = $('#account .base-input').val();
 				if (username && newAccount && (username != newAccount)) {//修改了账号 回到登陆页面
 					setTimeout(function () {
-						window.location.href = "./loginout"
+						window.location.href = "/"
 					}, 1000)
 				}
 			},
@@ -615,5 +579,5 @@ const CoreFormStore = {
 	}
 }
 
-export { CoreFrame, CoreUpdataAccount, CoreSet }
+export { CoreSetFrame, CoreUpdataAccount, CoreSet }
 

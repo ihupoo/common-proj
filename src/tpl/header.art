@@ -8,7 +8,7 @@
     </a>
     <div class="info">
         <div class="public-private-cloud-content" id="cloudstyle">
-            <span class="cloud-name" value="{{currentuser.virMachineroomMoid}}">{{currentuser.cloudModelName}}</span>
+            <span class="cloud-name" value="{{user.virMachineroomMoid}}">{{user.cloudModelName}}</span>
             <span class="mo-icons-bg arrow"></span>
             <div class="public-private-cloud pulldown" style="display:none;">
                 <div class="pullDownContent">
@@ -25,11 +25,18 @@
                 </div>
             </div>
         </div>
-        <a class="info-i user-info"
-            title="${(fn:escapeXml(currentuser.name) != null && fn:escapeXml(currentuser.name) != '')? fn:escapeXml(currentuser.name) : currentuser.account}">
-            <img class="user-portrait hidden" data-onerror="${RESOUCE_STATIC_URL}/images/avator.png?v=1" />
-            <span class="user-name ${currentuser.name }">
-                <c:out value="${(currentuser.name != null && currentuser.name != '')? currentuser.name : currentuser.account}" />
+        <a class="info-i user-info" title="{{if user.name != null && user.name != ''}}
+                    {{user.name}}
+                {{else}}
+                    {{user.account}}
+                {{/if}}">
+            <img class="user-portrait hidden" data-onerror="{{BASE_URL}}/images/avator.png" />
+            <span class="user-name {{user.name}}">
+                {{if user.name != null && user.name != ''}}
+                    {{user.name}}
+                {{else}}
+                    {{user.account}}
+                {{/if}}
             </span>
             <a>
                 <div class="setting-wrapper">
@@ -55,7 +62,7 @@
                             <span class="li">
                                 <a id="about">关于</a>
                             </span>
-                            {{if currentuser.show_sh == '1'}}
+                            {{if user.show_sh == '1'}}
                             <span class="li li-sh">
                                 <a id="reboot" href="javascript:">重启</a>
                             </span>

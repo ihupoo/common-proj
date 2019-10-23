@@ -1,5 +1,4 @@
 import $ from 'jquery-migrate';
-import 'jquery.namespace';
 import 'ezmark'
 
 import '@/styles/reset.scss';
