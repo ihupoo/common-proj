@@ -28,8 +28,8 @@ import {  } from './js/plat';
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';
 import { fetchPlat } from './service';
-import TemplateHeader from '@/tpl/header.art';
-import TemplateFooter from '@/tpl/footer.art';
+import TemplateHeader from '@/components/tpl/header.art';
+import TemplateFooter from '@/components/tpl/footer.art';
 
 function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
     $('body').addClass(`theme-${sysBrand}`);

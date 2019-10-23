@@ -17,8 +17,8 @@ import { DigestAuth } from '@/utils/digestAuth';
 import { fetchSystemConfig } from '@/api/service';
 import { fetchLoginInfo } from './service';
 import { Login } from './js/login';
-import TemplateHeader from './tpl/sys_logo.art';
-import TemplateFooter from './tpl/enterprise_introduce.art';
+import TemplateHeader from './tpl/header.art';
+import TemplateFooter from './tpl/footer.art';
 
 
 function isIE() {

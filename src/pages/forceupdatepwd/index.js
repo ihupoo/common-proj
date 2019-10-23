@@ -32,8 +32,8 @@
 // //core-set.js  home.js
 
 // import { i18next, documentTitle } from '@/i18n';
-// import renderHeader from '@/tpl/header.art';
-// import renderFooter from '@/tpl/footer.art';
+// import renderHeader from '@/components/tpl/header.art';
+// import renderFooter from '@/components/tpl/footer.art';
 // import store from '@/store/index';
 
 // $(function () {

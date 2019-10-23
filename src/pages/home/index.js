@@ -48,7 +48,7 @@ import '@/lib/portal/mo-portal.css';
 // import { fetchHomeMenu } from './service';
 
 // import { i18next, documentTitle } from '@/i18n';
-// import TemplateHeader from '@/tpl/header.art';
+// import TemplateHeader from '@/components/tpl/header.art';
 
 
 

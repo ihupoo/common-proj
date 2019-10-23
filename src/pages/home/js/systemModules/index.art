@@ -1,8 +1,0 @@
-<div class="modules" style="width: {{width}}px">
-    {{each modules module i}}
-    <a class="module {{module.class_name}} {{module.show}}" {{if !!module.url}}href="{{module.url}}"{{/if}}>
-        <div class="mo-icons-bg module-bg {{module.class_name}}"></div>
-        <div class="module-name {{module.class_name}}">{{module.name}}</div>
-    </a>
-    {{/each}}
-</div>
