@@ -15,9 +15,9 @@ import '@/styles/reset-artDialog.scss';
 import '@/styles/reset-mCustomScrollbar.scss';
 import '@/styles/reset-easyui.scss';
 import '@/styles/password.scss';
+import '@/styles/set.scss';
 
 import './css/theme.scss';
-import './css/set.scss';
 import './css/core.scss';
 
 import ModifyPortrait from '@/utils/modifyPortrait';
@@ -28,7 +28,7 @@ import { CoreSetFrame, CoreUpdataAccount, CoreSet } from './js/core';
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';
 import { fetchCore } from './service';
-import TemplateHeader from '@/components/tpl/header.art';
+import TemplateHeader from '@/components/tpl/header/index.art';
 import TemplateFooter from '@/components/tpl/footer.art';
 
 function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
@@ -69,6 +69,10 @@ $(function () {
         if (core && core.success && core.data) {
             //处理页面中数据
             let passwordStrength = user.securityPolicy.passwordStrength;
+            let moid = user.moid;
+            if( moid == 'mooooooo-oooo-oooo-oooo-defaultadmin'){
+                $('.tipPass').text('请设置强度等级为中或强的密码');
+            }
             if (passwordStrength == 2) {
                 $('.password-tip').text('密码等级应为中或者强');
             } else if (passwordStrength == 3) {

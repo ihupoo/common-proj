@@ -20,11 +20,10 @@ import './css/theme.scss';
 import '@/lib/portal/mo-portal.css';
 
 
-// import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
+import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
 // import 'jquery-easyui-original';
-// import '@/lib/mousewheel/3.1.13/jquery.mousewheel.min';
-// import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar';
-// import 'ezmark'
+import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar';
+import 'ezmark'
 // import '@/lib/imgareaselect/jquery.imgareaselect.pack'
 
 //todo
@@ -43,29 +42,40 @@ import '@/lib/portal/mo-portal.css';
 <script src="${RESOUCE_STATIC_URL}/js/home/header-email.js?t=6.0.3480032774"></script> */}
 
 
-// import { setBaseUrl, AjaxComplete } from '@/utils/common';
-// import { fetchSystemConfig, fetchUserInfo } from '@/api/service';
-// import { fetchHomeMenu } from './service';
+import Store from '@/store/index';
+import { setBaseUrl, AjaxComplete } from '@/utils/common';
+import { fetchSystemConfig, fetchUserInfo } from '@/api/service';
+import { fetchHomeMenu } from './service';
 
-// import { i18next, documentTitle } from '@/i18n';
-// import TemplateHeader from '@/components/tpl/header.art';
-
-
-
-// function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
-//     $('body').addClass(`theme-${sysBrand}`);
-
-//     i18next.changeLanguage(lang)
-//     $('#header_title_logo').empty().append($(TemplateHeader({ sysBrand })).localize())
-//     document.title = documentTitle(sysBrand)('home')
-// }
-
-// setBaseUrl()
-
-// $(function () {
+import { i18next, documentTitle } from '@/i18n';
+import TemplateHeader from '@/components/tpl/header';
 
 
+
+function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
+    $('body').addClass(`theme-${sysBrand}`);
+
+    i18next.changeLanguage(lang)
+    $('.sys-info-wrapper').empty().append($(TemplateHeader({ sysBrand })).localize())
+    document.title = documentTitle(sysBrand)('home')
+}
+
+setBaseUrl()
+
+$(function () {
+    const config = localStorage.getItem('system_config') || {}
+    Store.dispatch({
+        type: 'save',
+        payload: {
+            ...config
+        }
+    })
+    const { sysBrand, lang, versionYear, BASE_URL } = Store.getState()
+
+
+
+    pageRender({ sysBrand, lang, versionYear, BASE_URL, user, cloudModelList })
     
     
-//     AjaxComplete()
-// })
+    AjaxComplete()
+})

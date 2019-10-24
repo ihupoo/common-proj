@@ -1,11 +1,8 @@
-import TemplateAbout from './about.art';
+import TemplateIndex from './index.art';
 
-class About{
-    bindEvent(){
-        $(".w-close", "#aboutWrapper").on("click", () => this.hide());
-    }
+const About = {
     show(){
-        const content = TemplateAbout({ sysBrand, versionYear})
+        const content = TemplateIndex({ sysBrand, versionYear})
         $.dialog({
             padding: 0,
             id: "aboutWindow",
@@ -15,14 +12,11 @@ class About{
             cancel:false, // 隐藏关闭按钮
             drag: false // 不允许拖拽
         });
-    }
+        $(".w-close", "#aboutWrapper").off('click').on("click", () => this.hide());
+    },
     hide(){
         $.dialog({id: 'aboutWindow'}).close();
     }
 }
 
-export default {
-    init(app){
-        app.About = new About(app.options.About)
-    }
-}
+export default About

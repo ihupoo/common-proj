@@ -6,71 +6,7 @@
 <body>
     <div class="header-wrapper">
         <div class="header">
-            <div class="sys-info-wrapper">
-                <a id="header_title_logo" class="sys-info" href="./home">
-                
-                </a>
-                <div class="header-info">
-                    <div class="public-private-cloud-content" style='<c:if test="${!!!currentuser.cloudModelDisplay}">display:none</c:if>' >
-                        <span class="cloud-name" value="${currentuser.virMachineroomMoid}">${currentuser.cloudModelName}</span>
-                        <span class="mo-icons-bg arrow"></span>
-                        <div class="public-private-cloud pulldown" style="display:none;">
-                            <div class="pullDownContent">
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="user-info" titile="${(fn:escapeXml(currentuser.name) != null && fn:escapeXml(currentuser.name) != '')? fn:escapeXml(currentuser.name) : currentuser.account}">
-                        <img class="user-portrait hidden" data-onerror="${RESOUCE_STATIC_URL}/images/avator.png?v=1"/>
-                        <span class="user-name">${(fn:escapeXml(currentuser.name) != null && fn:escapeXml(currentuser.name) != '')? fn:escapeXml(currentuser.name) : currentuser.account}</span>
-                    </div>
-                    <div class="setting-wrapper">
-                        <div class="seetings">
-                            <a class="email nav-notify-item mo-icons-bg" id="nav-notify-item"><p></p></a>
-                            <a class="setting  mo-icons-bg"></a>
-                            <a class="logout  mo-icons-bg"></a>
-                        </div>
-                        <div class="pulldown email-list nav-sublist-notify" id="nav-sublist-notify">
-                            <div class="pullDownContent nav-notify-wrap">
-                                    <div class="menu-line-wrap title">
-                                        <span class="text">通知消息</span>
-                                        <a class="clear" action-type="clearMeetingNotify">清空</a>
-                                    </div>
-                                    <div class="notify-loading clearfix"><span>加载中，请稍候...</span></div>
-                                    <div class="nav-notify-content">
-                                        <ul class="nav-sublist-list nav-meeting-notify-list"></ul>
-                                    </div>
-                            </div>
-                        </div>
-                        <div class="pulldown setting-list" style="display:none;">
-                            <div class="pullDownContent">
-                                <span class="li" style="display:none;">
-                                    <a id="jmsConfig" class="nav-tab-item">设置向导</a>
-                                </span>
-                                <span class="li">
-                                    <a id="modifyUser" href="javascript:" >个人设置</a>
-                                </span>
-                                <span class="li" <c:if test="${domaintype == 0}">style="display:none;"</c:if>>
-                                    <a id="modifyPortrait" href="javascript:">头像</a>
-                                </span>
-                                <span class="li">
-                                    <a id="modifyPassword" href="javascript:">修改密码</a>
-                                </span>
-                                <span class="li">
-                                    <a id="help" href="${RESOUCE_STATIC_URL}/${sysBrand}/help/default.html" class="li-a" target="_blank">帮助信息</a>
-                                </span>
-                                <span class="li">
-                                    <a id="about" href="javascript:">关于</a>
-                                </span>
-                                <c:if test="${show_sh == '1'}">
-                                     <%@ include file="/inc/system_linux.jsp"%>
-                                </c:if>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
+            <div class="sys-info-wrapper"></div>
             <div class="module-entry-wrapper"></div>
         </div>
     </div>

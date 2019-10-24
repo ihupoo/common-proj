@@ -2,27 +2,14 @@
 <html lang="en">
 
 <head>
-    <title>个人设置</title>
+    <title>强制修改密码</title>
 </head>
 
-<body class="bg" id="wrap">
-    <input type="hidden" id="moid" value="${currentuser.moid}" />
-    <div class="head-nav-bg-temp"></div>
-    <div id="header" class="hd-main clearfix">
-        <!-- 科达视讯（摩云视讯）和电信（阿里云电信和DX6000电信）有区别 -->
-        <a id="header_title_logo" class="sys-info" href="<c:url value='/home' />"></a>
-        <div class="info">
-            <a class="info-i user-info"
-                title="${(fn:escapeXml(currentuser.name) != null && fn:escapeXml(currentuser.name) != '')? fn:escapeXml(currentuser.name) : currentuser.account}">
-                <img class="user-portrait hidden" data-onerror="${RESOUCE_STATIC_URL}/images/avator.png?v=1" />
-                <span class="admin">
-                    <c:out
-                        value="${(fn:escapeXml(currentuser.name) != null && fn:escapeXml(currentuser.name) != '')? fn:escapeXml(currentuser.name) : currentuser.account}" />
-                </span>
-            </a>
-        </div>
+<body class="bg">
+    <div class="header-wrapper">
+        <input type="hidden" id="moid" value="" />
+        <div id="header-logo"></div>
     </div>
-
     <div class="clearfix wrapcontent">
         <div id="inner-main" class="inner-main">
             <div id="inner-main-content" class="inner-main-content">
@@ -49,11 +36,7 @@
                                                                 <input type="text" id="errMsg" name="errMsg"
                                                                     class="e-input"
                                                                     style="border:none;font-weight:600;color:red"
-                                                                    readonly value="${description}<c:if test="
-                                                                    ${securityPolicy.passwordStrength==2}">密码等级应为中或者强。
-                                                                </c:if>
-                                                                <c:if test="${securityPolicy.passwordStrength==3}">
-                                                                    密码等级应为强。</c:if>" maxlength="16" />
+                                                                    readonly value="" maxlength="16" />
                                                             </div>
                                                         </td>
                                                         <td class="operate">
@@ -86,7 +69,7 @@
                                                         <td class="operate">
                                                         </td>
                                                     </tr>
-                                                    </tbody>
+                                                </tbody>
                                             </table>
                                         </li>
                                         <li class="data-li">
@@ -139,7 +122,7 @@
                                                         <td class="operate">
                                                         </td>
                                                     </tr>
-                                                    </tbody>
+                                                </tbody>
                                             </table>
                                         </li>
                                         <li class="data-li">
@@ -168,7 +151,7 @@
                                                         <td class="operate">
                                                         </td>
                                                     </tr>
-                                                    </tbody>
+                                                </tbody>
                                             </table>
                                         </li>
                                         <div class="operate" style="text-align:center;margin-top: 55px;">
@@ -187,27 +170,10 @@
             </div>
         </div>
     </div>
-    <div id="footer" class="clearfix">
+    <div id="footer" class="clearfix footerWrap">
         <div class="footer_content">
-            <p class="clearfix company_info keda">
-                <span class="">苏州科达科技股份有限公司</span>
-                <span class="" style="margin-left: 16px">Copyright &copy; 1995-<span
-                        class="version_year">${versionYear}</span> KEDACOM. All rights reserved.</span>
-                <!-- 科达视讯无备案号 摩云视讯有备案号 阿里云电信有备案号 DX6000无备案号 -->
-                <span class="displayNone icp movision" style="margin-left:22px;"><a href="http://www.beian.miit.gov.cn/"
-                        target="_blank">苏ICP备12015396号-1</a></span>
-            </p>
-
-            <p class="clearfix company_info telecom" style="display:none">
-                <span>中国电信视频服务产品（上海）运营中心</span>
-                <span class="" style="margin-left: 16px">Copyright &copy;<span
-                        class="version_year">${versionYear}</span>. All rights reserved.</span>
-                <span class="icp" style="margin-left:22px;"><a href="http://www.beian.miit.gov.cn/"
-                        target="_blank">沪ICP备05000141号-15</a></span>
-            </p>
         </div>
     </div>
-
     <!-- 引入about.art的模板 -->
 </body>
 

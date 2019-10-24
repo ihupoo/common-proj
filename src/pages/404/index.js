@@ -1,17 +1,21 @@
+import $ from 'jquery-migrate';
+import 'ezmark'
 
+import '@/styles/reset.scss';
 
+import '@/lib/mCustomScrollbar/3.1.5/jquery.mCustomScrollbar.css';
+import '@/lib/imgareaselect/imgareaselect-default.css';
+import '@/lib/artDialog/4.1.7/skins/simple.css';
+import '@/lib/ezmark/ezmark.scss';
+import '@/lib/portal/mo-portal.css';
 
-// var path = SSO.utils.getSystemUrl('home');
-// var c = 30;
-// var url = "http://" + location.host + path;
-// function go() {
-//     document.getElementById('font_color').innerHTML = c
-//     c = c - 1
-//     if (c > -1) {
-//         if (c == 0) {
-//             location.href = url;
-//         }
-//         t = setTimeout("go()", 1000);
-//     }
-//     document.getElementById('home').href = url;
-// }
+import '@/styles/common.scss';
+import '@/styles/commonCSS.scss';
+import '@/styles/reset-artDialog.scss';
+import '@/styles/reset-mCustomScrollbar.scss';
+import '@/styles/reset-easyui.scss';
+import '@/styles/password.scss';
+import '@/styles/master.scss';
+import '@/styles/reset-error.scss';
+
+import './css/error.scss';

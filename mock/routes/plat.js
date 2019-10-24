@@ -5,7 +5,7 @@ let Mock = require('mockjs');
 router.get('/getplat', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
-            editName: '',   
+            editName: true,   
             strengthRegular: '',
         
             realmName:''

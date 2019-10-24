@@ -20,9 +20,9 @@ const CoreSetFrame = {
 	fixLineHeight: 2,
 
 	initCoreSetPage: function () {
-		var wH = $(window).height();
-		var innerHeight = wH - this.main_top_height - this.main_padding_bottom;
-		var viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
+		let wH = $(window).height();
+		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
+		let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
 		$(".wrapcontent").css("min-height", viewHeight);
 		if ('password' == $(".tabs .active").attr("data-tab")) {
 			$("#detail-btn-save").addClass('disabled');
@@ -104,7 +104,7 @@ const CoreSet = {
 
 	initEvent: function () {
 		$("#detail-btn-cancel").click(function () {
-			location.href = BP.config.SYSTEM_URL + "/home";
+			location.href = Store.getState('BASE_URL') + "/home";
 		});
 		$("#detail-btn-save").click(function () {
 			if (!($("#detail-btn-save").hasClass("disabled"))) {
@@ -236,7 +236,7 @@ const CoreSet = {
 		});
 	},
 	portraitSave: function () {
-		let url = BP.config.SYSTEM_URL + "/system/user/confirmPortrait";
+		let url = Store.getState('BASE_URL') + "/system/user/confirmPortrait";
 		if (Throttle.isLock(url)) {
 			return false;
 		}
@@ -281,7 +281,7 @@ const CoreSet = {
 		Common.initPortrait(data.portraitUrl40, window.portraitDomain);
 	},
 	passwordSave: function () {
-		let url = BP.config.SYSTEM_URL + "/system/user/updatepassword";
+		let url = Store.getState('BASE_URL') + "/system/user/updatepassword";
 		let securityPolicyObj = { "弱": 1, "中": 2, "强": 3 };
 		let newPasswordStrength = securityPolicyObj[$(".newPasswordTip .tip-info").text()];
 		if (passwordStrengthOfSecurityPolicy != "") {
@@ -367,7 +367,7 @@ const CoreSet = {
 				if (msg.success) {
 					CoreFormStore.reset();
 					MoAlert("密码修改成功，请重新登录。", function () {
-						location.href = BP.config.SYSTEM_URL + "/loginout";
+						location.href = Store.getState('BASE_URL') + "/loginout";
 					});
 				} else {
 					MoAlert(msg.description);
@@ -562,6 +562,10 @@ const CoreFormStore = {
 			$("." + this.lastKey + "-form").html(CoreFormStore.storePass)
 		} else {
 			$("." + this.lastKey + "-form").html(this.storeH[this.lastKey]);
+		}
+		let options = {
+			strongAuthentication: true,
+			checkUsed: true
 		}
 		Password.init(options);
 	},

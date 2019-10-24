@@ -1,5 +1,5 @@
-.header-logo.mo-icons-logo-bg{
-	margin-top: 36px !important;
+.header-logo.mo-icons-logo-bg {
+    margin-top: 36px !important;
 }
 
 a:link {
@@ -10,14 +10,17 @@ a:link {
 a:visited {
     color: #000000
 }
-.icp a{
-    font-family:"Microsoft Yahei";
-    color:#606060;
+
+.icp a {
+    font-family: "Microsoft Yahei";
+    color: #606060;
 }
-.icp a:hover{
-    color:#007ac0;
-    text-decoration:underline;
+
+.icp a:hover {
+    color: #007ac0;
+    text-decoration: underline;
 }
+
 .meun-short {
     width: 775px;
     height: 82px;
@@ -55,58 +58,71 @@ a:visited {
     margin: 0 auto;
     width: 900px;
 }
-.btn-wrapper .color-6{
-    color : #616060
+
+.btn-wrapper .color-6 {
+    color: #616060
 }
-.btn-wrapper .color-6:hover{
-    color : #ffffff
+
+.btn-wrapper .color-6:hover {
+    color: #ffffff
 }
+
 .hidden {
     display: none;
 }
+
 .mo-btn-x-left {
     margin-right: 6px;
 }
-div.preview_div{
-    overflow:hidden;
+
+div.preview_div {
+    overflow: hidden;
 }
 
-.about-content.mo-dialog-content{
+.about-content.mo-dialog-content {
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 16px;
     padding-right: 16px;
 }
-.about-content.mo-dialog-content .title{
+
+.about-content.mo-dialog-content .title {
     margin-top: 0px;
 }
 
-.mo-dialog-content .info{
+.mo-dialog-content .info {
     margin-left: 34px;
     margin-right: 34px;
     margin-top: 0px;
 }
-#wrap{
+
+#wrap {
     padding-bottom: 80px;
 }
+
 .about_x .about_netAddress1 {
     color: #007ac0;
     text-decoration: underline;
 }
-.header-wrapper{
-    padding-left:128px;
-    padding-right:128px;
-}
-.icp a{
-    margin-left:22px;
-}
-.footerWrap{
+
+.header-wrapper {
     padding-left: 128px;
     padding-right: 128px;
 }
-.public-private-cloud-content{
+
+.icp a {
+    margin-left: 22px;
+}
+
+.footerWrap {
+    padding-left: 128px;
+    padding-right: 128px;
+}
+
+.public-private-cloud-content {
     display: none;
 }
+
 .change-account .warn-info {
     position: relative;
     top: 55px;
@@ -116,11 +132,13 @@ div.preview_div{
     font-size: 12px;
     margin-left: 27px;
 }
-.change-account .tipImage{
-    top:55px;
+
+.change-account .tipImage {
+    top: 55px;
     height: 28px;
     margin-left: 0;
 }
-.base-input-wrap .bmc-accountInput-tipMsg{
-    top:18px;
+
+.base-input-wrap .bmc-accountInput-tipMsg {
+    top: 18px;
 }

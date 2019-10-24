@@ -28,6 +28,10 @@ export default {
                     newPassword: '新密码',
                     oldPassword: '当前密码',
                 },
+                btn: {
+                    confirm: '确定',
+                    cancel: '取消',
+                },
                 info: {
                     format: '密码由1-32个字符组成，支持字母大小写、数字、"_"、"."(不包括空格)'
                 }

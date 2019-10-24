@@ -1,10 +1,14 @@
 import { DigestAuth } from '@/utils/digestAuth'
 import { Password } from '@/utils/password'
-import { Throttle } from '@/utils/utils'
+import { Validation, Throttle } from '@/utils/utils'
 import { MoAlert } from '@/components/popup'
 import { Size, Common } from '@/utils/common'
+import '@/lib/portal/mo-portal';
+import Store from '@/store/index';
 
-const PlatFrame = {
+let { username, securityPolicy } = Store.getState('user');
+
+const PlatSetFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
 	default_detail_paddingLeft: 0, // 默认详细表单左边偏移量
 	main_min_width: 1280,
@@ -14,44 +18,10 @@ const PlatFrame = {
 	main_top_height: 98,
 	fixLineHeight: 2,
 
-	init: function () {
-		this.setSize();
-		this.initEvent();
-	},
-
-	initEvent: function () {
-		var that = this;
-		$(window).resize(function () {
-			that.setSize();
-		})
-
-	},
-
-	setSize: function () {
-		var win = this.getWindowSize();
-		if (win.w < this.main_min_width) {
-			win.w = this.main_min_width;
-		}
-
-		if (win.h < this.main_min_height) {
-			win.h = this.main_min_height;
-		}
-		var wrapW = win.w - (this.main_padding_left * 2);
-		var wrapH = win.h;
-		var tabname = PlatSet.getTabName();
-		$(".wrap-all").width(wrapW);
-		$(".wrap-all").height(win.h);
-		var innerHeight = win.h - this.main_top_height - this.main_padding_bottom;
-
-		$("#inner-main").height(innerHeight);
-		var viewHeight = innerHeight - (this.fixLineHeight * 2);
-		$("#main-content").height(viewHeight);
-		$(".detail-body").height(viewHeight - $(".detail-footer").height() - $(".detail-header").height());
-	},
 	loadPlatSet: function () {
-		var wH = $(window).height();
-		var innerHeight = wH - this.main_top_height - this.main_padding_bottom;
-		var viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
+		let wH = $(window).height();
+		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
+		let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
 		$(".set-content").css("min-height", viewHeight);
 		if ('password' == $(".tabs .active").attr("data-tab")) {
 			$("#detail-btn-save").addClass('disabled');
@@ -59,15 +29,6 @@ const PlatFrame = {
 			$("#detail-btn-save").removeClass('disabled');
 		}
 	},
-	getWindowSize: function () {
-		var w = ($(window).width());
-		var h = ($(window).height());
-		return { w: w, h: h };
-	},
-
-	getSideW: function () {
-		return 0;
-	}
 }
 
 const PlatUpdataAccount = {
@@ -85,7 +46,7 @@ const PlatUpdataAccount = {
 			$('#account').hide()
 			$("#account-readonly").show();
 		}
-		this.accountInput = Mo.Portal.AccountInput("#account", {
+		this.accountInput = Portal.AccountInput("#account", {
 			label: '账号',
 			labelWidth: 120,
 			value: username,
@@ -112,7 +73,7 @@ const PlatUpdataAccount = {
 				});
 			},
 			comfirmFun: function (cb) {
-				var value = $('#account .base-input').val();
+				let value = $('#account .base-input').val();
 				if (!Common.checkAccount(value)) {
 					return false
 				}
@@ -131,6 +92,7 @@ const PlatUpdataAccount = {
 
 const PlatSet = {
 	profileHref: false,//记录是否从个人设置tab标签页进入的密码修改页面 默认false
+	dialog: null,
 	init: function () {
 		PlatFormStore.storePass = $(".password-form").html()
 		this.initEvent();
@@ -141,7 +103,7 @@ const PlatSet = {
 	initEvent: function () {
 
 		$("#detail-btn-cancel").on("click", function () {
-			location.href = BP.config.SYSTEM_URL + "/home";
+			location.href = Store.getState('BASE_URL') + "/home";
 		});
 		$("#detail-btn-save").on("click", function () {
 			if (!($("#detail-btn-save").hasClass("disabled"))) {
@@ -158,8 +120,8 @@ const PlatSet = {
 		Common.headerEvent();
 	},
 	save: function () {
-		var tabname = this.getTabName();
-		var that = this;
+		let tabname = this.getTabName();
+		let that = this;
 		switch (tabname) {
 			case "profile": {
 				this.profileSave();
@@ -184,14 +146,14 @@ const PlatSet = {
 		}
 	},
 	getProfileData: function () {
-		var newAccount = $('#account .base-input').val();
-		var account = "";//超管传
+		let newAccount = $('#account .base-input').val();
+		let account = "";//超管传
 		if (DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
 			if (username && newAccount && (username != newAccount)) {//并修改了账号
 				account = newAccount
 			}
 		}
-		var data = {
+		let data = {
 			moid: $("#moid").val(),
 			account: account,
 			name: $.trim($("#username").val()),
@@ -281,13 +243,13 @@ const PlatSet = {
 		return data;
 	},
 	profileSave: function () {
-		var url = BP.config.SYSTEM_URL + "/system/user/updatePlatFormUser";
+		let url = Store.getState('BASE_URL') + "/system/user/updatePlatFormUser";
 		if (Throttle.isLock(url)) {
 			return false;
 		}
 		Throttle.lock(url);
 
-		var data = this.getProfileData();
+		let data = this.getProfileData();
 		if (!data) {
 			Throttle.unLock(url);
 			return false;
@@ -318,7 +280,7 @@ const PlatSet = {
 				}
 				MoAlert(msg.description);
 				Throttle.unLock(url);
-				var newAccount = $('#account .base-input').val();
+				let newAccount = $('#account .base-input').val();
 				if (username && newAccount && (username != newAccount)) {//修改了账号 回到登陆页面
 					setTimeout(function () {
 						window.location.href = "./loginout"
@@ -333,19 +295,19 @@ const PlatSet = {
 	},
 
 	portraitSave: function () {
-		var url = BP.config.SYSTEM_URL + "/system/user/confirmPortrait";
+		let url = Store.getState('BASE_URL') + "/system/user/confirmPortrait";
 		if (Throttle.isLock(url)) {
 			return false;
 		}
 		Throttle.lock(url);
 
-		var selection_str = $("#selection").val();
+		let selection_str = $("#selection").val();
 		if (!selection_str) {
 			MoAlert("请先选择图片");
 			Throttle.unLock(url);
 			return false;
 		}
-		var selection = JSON.parse(selection_str);
+		let selection = JSON.parse(selection_str);
 		$.ajax({
 			type: 'post',
 			url: url,
@@ -377,9 +339,10 @@ const PlatSet = {
 		Common.initPortrait(data.portraitUrl40, window.portraitDomain);
 	},
 	passwordSave: function () {
-		var url = BP.config.SYSTEM_URL + "/system/user/updatepassword";
-		var securityPolicyObj = { "弱": 1, "中": 2, "强": 3 };
-		var newPasswordStrength = securityPolicyObj[$(".newPasswordTip .tip-info").text()];
+		let url = Store.getState('BASE_URL') + "/system/user/updatepassword";
+		let securityPolicyObj = { "弱": 1, "中": 2, "强": 3 };
+		let newPasswordStrength = securityPolicyObj[$(".newPasswordTip .tip-info").text()];
+		let passwordStrengthOfSecurityPolicy = securityPolicy.passwordStrength;
 		if (passwordStrengthOfSecurityPolicy != "") {
 			if (newPasswordStrength < passwordStrengthOfSecurityPolicy) {
 				if (passwordStrengthOfSecurityPolicy == 3) {
@@ -401,7 +364,7 @@ const PlatSet = {
 			return false;
 		}
 		Throttle.lock(url);
-		var data = {
+		let data = {
 			moid: $("#moid").val(),
 			oldPassword: $.trim($("#oldPassword").val()),
 			newPassword: $.trim($("#newPassword").val()),
@@ -449,12 +412,12 @@ const PlatSet = {
 			return false;
 		}
 
-		var cdata = {};
+		let cdata = {};
 		if ('1' == systemSecurity) {
 			cdata = DigestAuth.makePassword(data.oldPassword, data.newPassword);
 		} else {
 			cdata = DigestAuth.makePassword(hex_md5(data.oldPassword), data.newPassword);
-			var params = DigestAuth.makePassword(hex_md5(data.oldPassword), data.oldPassword);
+			let params = DigestAuth.makePassword(hex_md5(data.oldPassword), data.oldPassword);
 			cdata['key'] = params['knonce'] + '_' + params['ciphertext'] + '_' + params['hmac'];
 		}
 
@@ -467,7 +430,7 @@ const PlatSet = {
 				if (msg.success) {
 					PlatFormStore.reset();
 					MoAlert("密码修改成功，请重新登录。", function () {
-						location.href = BP.config.SYSTEM_URL + "/loginout";
+						location.href = Store.getState('BASE_URL') + "/loginout";
 					});
 				} else {
 					MoAlert(msg.description);
@@ -489,15 +452,15 @@ const PlatSet = {
 	},
 
 	getHash: function () {
-		var hash;
+		let hash;
 		hash = (!window.location.hash) ? "#perfile" : window.location.hash;
 		return hash.substring(1, hash.length);
 	},
 	initTab: function () {
-		var hash = this.getHash();
+		let hash = this.getHash();
 		this.activeTab("." + hash);
 
-		var that = this;
+		let that = this;
 		$(".tab-item").on("click", function () {
 			return that.activeTab(this);
 		})
@@ -509,9 +472,9 @@ const PlatSet = {
 		if (tab == '.profile') {
 			this.profileHref = true;
 		}
-		var name = $(tab).data("tab");
-		var userMoids = $("#moid").val();
-		var newAccount = $('#account .base-input').val();
+		let name = $(tab).data("tab");
+		let userMoids = $("#moid").val();
+		let newAccount = $('#account .base-input').val();
 		if (name == 'password') {
 			if (username && newAccount && (username != newAccount)) {//修改了账号
 				if ($('.bmc-accountInput-edit').css("display") == "none") {//是编辑状态
@@ -531,7 +494,7 @@ const PlatSet = {
 			PlatUpdataAccount.init();
 		}
 		if (userMoids == 'mooooooo-oooo-oooo-oooo-defaultadmin') {
-			var _this = this;
+			let _this = this;
 			if (name == 'password') {
 				$(".tipPass").show();
 				// Moo.MoAlert('密码修改后，请牢记新密码！'+'<br/>'+'未配置邮箱将密码丢失后无法找回，需要返厂进行初始化。',function(){
@@ -577,12 +540,6 @@ const PlatSet = {
 			return false;
 		}
 
-
-		// if(this.before(name)){
-		// 	PlatSetChange.show(name);
-		// 	return false;
-		// }
-
 		$(".tab-item").removeClass("active");
 		$(tab).addClass("active");
 
@@ -607,19 +564,18 @@ const PlatSet = {
 		return $(".tab-item.active").data("tab");
 	},
 
-	dialog: null,
 	before: function (name) {
 		return PlatFormStore.isChange();
 	}
 }
 
 const PlatSetChange = {
+	name: null,
 	init: function () {
 		this.initEvent();
 	},
-	name: null,
 	initEvent: function () {
-		var that = this;
+		let that = this;
 		//取消
 		$(".w-close", "#changeWrapper").on("click", function () {
 			that.close();
@@ -663,9 +619,9 @@ const PlatFormStore = {
 	lastKey: null,
 
 	getSerialize: function (name) {
-		var data_serialize = "";
+		let data_serialize = "";
 		if (name == "profile") {
-			var data = {
+			let data = {
 				moid: $("#moid").val(),
 				name: $.trim($("#username").val()),
 				email: $.trim($("#email").val()),
@@ -695,6 +651,10 @@ const PlatFormStore = {
 		} else {
 			$("." + this.lastKey + "-form").html(this.storeH[this.lastKey]);
 		}
+		let options = {
+			strongAuthentication: true,
+			checkUsed: true
+		}
 		Password.init(options);
 	},
 	set: function (name) {
@@ -710,7 +670,7 @@ const PlatFormStore = {
 	},
 	resetText: function () {
 		if (this.lastKey == "profile") {
-			var dataStore = JSON.parse(this.store[this.lastKey]);
+			let dataStore = JSON.parse(this.store[this.lastKey]);
 			$("#username").val(dataStore.name);
 			$("#email").val(dataStore.email);
 			$("#mobile").val(dataStore.mobile);
@@ -740,61 +700,61 @@ const ExtNum = {
 	},
 	tiplabel: function () {
 		$("#extNum1").on("focus", function () {
-			var dom = $(this);
-			var pDom = dom.parent(".extNum_input_wrapper");
+			let dom = $(this);
+			let pDom = dom.parent(".extNum_input_wrapper");
 			$(".tip_label", pDom).hide();
 		}).on("blur", function () {
-			var dom = $(this);
-			var val = dom.val();
+			let dom = $(this);
+			let val = dom.val();
 			if (null == val || "" == val) {
-				var pDom = dom.parent(".extNum_input_wrapper");
+				let pDom = dom.parent(".extNum_input_wrapper");
 				$(".tip_label", pDom).show();
 			}
 		});
 		$("#extNum2").on("focus", function () {
-			var dom = $(this);
-			var pDom = dom.parent(".extNum_input_wrapper");
+			let dom = $(this);
+			let pDom = dom.parent(".extNum_input_wrapper");
 			$(".tip_label", pDom).hide();
 		}).on("blur", function () {
-			var dom = $(this);
-			var val = dom.val();
+			let dom = $(this);
+			let val = dom.val();
 			if (null == val || "" == val) {
-				var pDom = dom.parent(".extNum_input_wrapper");
+				let pDom = dom.parent(".extNum_input_wrapper");
 				$(".tip_label", pDom).show();
 			}
 		});
 		$("#extNum3").on("focus", function () {
-			var dom = $(this);
-			var pDom = dom.parent(".extNum_input_wrapper");
+			let dom = $(this);
+			let pDom = dom.parent(".extNum_input_wrapper");
 			$(".tip_label", pDom).hide();
 		}).on("blur", function () {
-			var dom = $(this);
-			var val = dom.val();
+			let dom = $(this);
+			let val = dom.val();
 			if (null == val || "" == val) {
-				var pDom = dom.parent(".extNum_input_wrapper");
+				let pDom = dom.parent(".extNum_input_wrapper");
 				$(".tip_label", pDom).show();
 			}
 		});
 
 		$(".extNum_input_wrapper .tip_label").on("click", function () {
-			var dom = $(this);
-			var inputDom = dom.prev("input");
+			let dom = $(this);
+			let inputDom = dom.prev("input");
 			inputDom.focus();
 		});
 	},
 
 	initExtNum: function () {
-		var extNum = $("#extNum").val();
+		let extNum = $("#extNum").val();
 		if (extNum != "" && extNum != null) {
-			var parNum = extNum.split("-");
+			let parNum = extNum.split("-");
 			$("#extNum1").val(parNum[0]);
 			$("#extNum2").val(parNum[1]);
 			$("#extNum3").val(parNum[2]);
 		}
 
 		$(".tip_label").each(function (i, item) {
-			var dom = $(this);
-			var inputDom = dom.prev("input");
+			let dom = $(this);
+			let inputDom = dom.prev("input");
 			if (inputDom.val() != null && inputDom.val() != "") {
 				dom.hide();
 			} else {
@@ -806,4 +766,4 @@ const ExtNum = {
 }
 
 
-export { PlatFrame, PlatUpdataAccount, PlatSet, ExtNum }
+export { PlatSetFrame, PlatUpdataAccount, PlatSet, ExtNum }

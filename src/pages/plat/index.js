@@ -15,20 +15,26 @@ import '@/styles/reset-artDialog.scss';
 import '@/styles/reset-mCustomScrollbar.scss';
 import '@/styles/reset-easyui.scss';
 import '@/styles/password.scss';
+import '@/styles/set.scss';
 
 import './css/theme.scss';
 import './css/plat.scss';
-import './css/set.scss';
 
+import '@/lib/easyui/1.8.5/themes/icon.css';
+import '@/lib/easyui/1.8.5/themes/default/easyui.css';
+import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
+import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
+
+import '@/lib/portal/mo-portal';
 import ModifyPortrait from '@/utils/modifyPortrait';
 import { Common, setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
 import { Password } from '@/utils/password';
-import {  } from './js/plat';
+import { PlatSetFrame, PlatUpdataAccount, ExtNum, PlatSet } from './js/plat';
 
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';
 import { fetchPlat } from './service';
-import TemplateHeader from '@/components/tpl/header.art';
+import TemplateHeader from '@/components/tpl/header/index.art';
 import TemplateFooter from '@/components/tpl/footer.art';
 
 function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
@@ -68,25 +74,38 @@ $(function () {
 
         if (plat && plat.success && plat.data) {
             //处理页面中数据
-            // let passwordStrength = user.securityPolicy.passwordStrength;
-            // if (passwordStrength == 2) {
-            //     $('.password-tip').text('密码等级应为中或者强');
-            // } else if (passwordStrength == 3) {
-            //     $('.password-tip').text('密码等级应为强');
-            // }
-            // $('#moid').val(user.moid);
-            // $('#account1').text(user.account);
-            // $('#mobile').val(user.mobile);
-            // $('#email').val(user.email);
-            // $('#officeLocation').val(user.seat);
-            
+            let data = plat.data;
+            let passwordStrength = user.securityPolicy.passwordStrength;
+            if (passwordStrength == 2) {
+                $('.password-tip').text('密码等级应为中或者强');
+            } else if (passwordStrength == 3) {
+                $('.password-tip').text('密码等级应为强');
+            }
+            if (data.editName) {
+                $('#name > input').attr('type', 'text');
+                $('#name > input').val(user.name);
+            } else {
+                $('#name > span').text(user.name);
+            }
+            $('#moid').val(user.moid);
+            $('#account1').text(user.account);
+            $('#mobile').val(user.mobile);
+            $('#email').val(user.email);
+            $('#seat').val(user.seat);
+            $('#extNum').val(user.extNum);
+            $('#e164').text(user.e164);
+            $('#birthday').datebox(user.birthday);
+            $('#fax').val(user.fax);
+            $('#flagName').text(user.depts);   //todo
+            $('#flagPosition').text(user.depts);    //todo
             //调用
-            CoreSetFrame.initCoreSetPage();
+            PlatSetFrame.loadPlatSet();
             $(window).resize(function () {
-                CoreSetFrame.initCoreSetPage();
+                PlatSetFrame.loadPlatSet();
             });
-            CoreUpdataAccount.init();
-            CoreSet.init();
+            PlatUpdataAccount.init();
+            ExtNum.init();
+            PlatSet.init();
             ModifyPortrait.initUpload();
             Common.setDefaultImg('.user-info');
             Common.initPortrait(user.portrait40, user.portraitDomain);

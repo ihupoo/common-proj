@@ -9,7 +9,7 @@ router.get('/getresetpassword', async (ctx) => {
             sequenceNum: '',
             securityPolicy: {},
             strengthRegular: '',
-        
+            nonce: '',
             realmName:''
         },
         description: "",

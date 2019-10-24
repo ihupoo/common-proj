@@ -38,7 +38,8 @@ class Store {
             onlyCurrentIp: '',
             umoid: '',
             systemSecurity: '1',
-            securityPolicy: {},
+            securityPolicy: {passwordStrength: '1'},
+            nonce: '',
             brithday: '',
             username: '8cd66490-3463-46fe-9b86-5fc4ae390ee2',//和name取一
             //
@@ -52,8 +53,8 @@ class Store {
             sex: '',
             seat: '办公地址',
             extNum: '',
-            e164: '',
-            depts: '',
+            e164: '77777777',
+            depts: {},
             fax: '',
             meetingAdmin: '',
             serviceDomainMoid: 'mooooooo-oooo-oooo-oooo-defaultserdo',
