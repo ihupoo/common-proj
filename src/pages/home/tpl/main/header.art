@@ -1,0 +1,36 @@
+<div class="header-div">
+    {{if head_titles.length > 1}}
+        <ul class="header-titles tab">
+            {{each head_titles head_title i}}
+                <li class="header-title {{if i==0}}active{{/if}}">
+                    <span class="title">{{head_title}}</span>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <ul class="header-titles">
+            <li class="header-title one-title">
+                <span class="title">{{head_titles[0]}}</span>
+            </li>
+        </ul>
+    {{/if}}
+
+    <ul class="header-titles header-more">
+        {{each head_more mores i}}
+        <li class="header-title">
+            <span>
+                {{if mores.more ==='创建会议' }}
+                    <a href="{{mores.url}}" target="_blank" class="mo-icons-bg create-meeting"></a>
+                    <a href="{{mores.url}}" target="_blank"{{/if}}>创建会议</a>
+                {{else if mores.more === '显示自定义服务器'}}
+                    <a href="javascript:;"  class="mo-icons-bg isPersonalSetting no-checked"></a>
+                    <a href="javascript:;" >显示自定义服务器</a>
+                    <a href="javascript:;" class="mo-icons-bg personalSetting "></a>
+                {{else}}
+                    <a href="{{mores.url}}" target="_blank">{{mores.more}}</a>
+                {{/if}}
+            </span>
+        </li>
+        {{/each}}
+    </ul>
+</div>

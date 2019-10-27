@@ -1,11 +1,13 @@
 import TemplateSystemModules from '../tpl/systemModules';
+import TemplateMain from '../tpl/main';
 
 const Home = {
     render({ user, menu }){
-        $('.module-entry-wrapper').empty().append(TemplateSystemModules({ user, menu }))
-        
-        $('#row').empty().append()
+        TemplateSystemModules.render('.module-entry-wrapper', { user, menu })
+        TemplateMain.render('main', { user, menu })
 
+
+        
     }   
 }
 

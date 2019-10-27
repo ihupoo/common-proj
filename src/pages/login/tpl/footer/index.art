@@ -22,6 +22,6 @@
     </div>
     
     <div class="company_info_down">
-        {{include '../../../components/tpl/footer.art'}}
+        {{include '../../../../components/tpl/footer.art'}}
     </div>
 </div>

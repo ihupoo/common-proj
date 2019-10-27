@@ -1,7 +1,0 @@
-{{each }}
-    <div class="col-md-4 {{contentId}}">
-        <div class="content_panel">
-            
-        </div>
-    </div>
-{{/each}}

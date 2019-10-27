@@ -1,6 +1,6 @@
 import TemplateIndex from './index.art';
 
-const About = {
+export default {
     show(){
         const content = TemplateIndex({ sysBrand, versionYear})
         $.dialog({
@@ -19,4 +19,3 @@ const About = {
     }
 }
 
-export default About

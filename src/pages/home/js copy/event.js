@@ -10,19 +10,19 @@ var envent = {
     	SSO.common.headerEvent();
     },
     headerEvent:function(){//面板头部点击事件
-    	$(".module",".module-entry-wrapper").on("click",function(e){ //点击部分连接时，需要先获取token
-    		var me = $(this);
-    		if(!me.hasClass("disable") && (me.hasClass("umc") || me.hasClass("kis") || me.hasClass("vrs") || me.hasClass("live"))){
-    			e.preventDefault();
-        		controller.getSsoToken(function(token){
-        			if(me.hasClass("umc")){
-        				window.location.href = me.attr("href") + "?SSO_COOKIE_KEY=" + token;
-        			}else{
-        				window.location.href = me.attr("href") + "?" + envent.base64encode(envent.utf16to8("sso_token="+token));
-        			}
-        		});
-    		}
-    	})
+    	// $(".module",".module-entry-wrapper").on("click",function(e){ //点击部分连接时，需要先获取token
+    	// 	var me = $(this);
+    	// 	if(!me.hasClass("disable") && (me.hasClass("umc") || me.hasClass("kis") || me.hasClass("vrs") || me.hasClass("live"))){
+    	// 		e.preventDefault();
+        // 		controller.getSsoToken(function(token){
+        // 			if(me.hasClass("umc")){
+        // 				window.location.href = me.attr("href") + "?SSO_COOKIE_KEY=" + token;
+        // 			}else{
+        // 				window.location.href = me.attr("href") + "?" + envent.base64encode(envent.utf16to8("sso_token="+token));
+        // 			}
+        // 		});
+    	// 	}
+    	// })
     	$(".live_room .more,.living .more").on("click",function(e){
     		var me = $(this);
     		if(me.attr("href").indexOf("?") == -1){

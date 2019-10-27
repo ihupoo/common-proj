@@ -1,0 +1,26 @@
+{{if moduleList.length > 1}}
+<div class="container">
+    <div class="row" id="row">
+        {{each moduleList module i}}
+            <div class="col-md-4 {{module.contentId}}">
+                <div class="content_panel">
+                    {{if Object.prototype.toString.call(module) === "[object Array]"}}
+                        {{each module x}}
+                            {{include './wrapper.art' x}}
+                        {{/each}}
+                    {{else}}
+                        {{include './wrapper.art' module}}
+                    {{/if}}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+{{else}}
+<div class="no-main-panel">
+    <div class="no-data">
+        <span class="mo-icons-bg warm-icon"></span>
+        <span class="warm-text">暂无内容</span>
+    </div>
+</div>
+{{/if}}

@@ -52,30 +52,30 @@ import TemplateHeader from '@/components/tpl/header';
 
 
 
-function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
-    $('body').addClass(`theme-${sysBrand}`);
+// function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
+//     $('body').addClass(`theme-${sysBrand}`);
 
-    i18next.changeLanguage(lang)
-    $('.sys-info-wrapper').empty().append($(TemplateHeader({ sysBrand })).localize())
-    document.title = documentTitle(sysBrand)('home')
-}
+//     i18next.changeLanguage(lang)
+//     TemplateHeader.init('.sys-info-wrapper', data)
+//     document.title = documentTitle(sysBrand)('home')
+// }
 
-setBaseUrl()
+// setBaseUrl()
 
-$(function () {
-    const config = localStorage.getItem('system_config') || {}
-    Store.dispatch({
-        type: 'save',
-        payload: {
-            ...config
-        }
-    })
-    const { sysBrand, lang, versionYear, BASE_URL } = Store.getState()
+// $(function () {
+//     const config = localStorage.getItem('system_config') || {}
+//     Store.dispatch({
+//         type: 'save',
+//         payload: {
+//             ...config
+//         }
+//     })
+//     const { sysBrand, lang, versionYear, BASE_URL } = Store.getState()
 
 
 
-    pageRender({ sysBrand, lang, versionYear, BASE_URL, user, cloudModelList })
+//     pageRender({ sysBrand, lang, versionYear, BASE_URL, user, cloudModelList })
     
     
-    AjaxComplete()
-})
+//     AjaxComplete()
+// })

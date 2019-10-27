@@ -1,0 +1,11 @@
+<div id="{{contentId}}_wrapper" style="height:{{height}}px">
+    {{include './header.art' header}}
+    <div class="content-wrapper" id={{contentId}}>
+        <div class="no-data-wrapper">
+            <div class="no-data hidden">
+                <span class="mo-icons-bg warm-icon"></span>
+                <span class="warm-text">{{contentWarning}}</span>
+            </div>
+        </div>
+    </div>
+</div>

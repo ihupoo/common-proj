@@ -17,8 +17,8 @@ import { DigestAuth } from '@/utils/digestAuth';
 import { fetchSystemConfig } from '@/api/service';
 import { fetchLoginInfo } from './service';
 import { Login } from './js/login';
-import TemplateHeader from './tpl/header.art';
-import TemplateFooter from './tpl/footer.art';
+import TemplateHeader from './tpl/header';
+import TemplateFooter from './tpl/footer';
 
 
 function isIE() {
@@ -31,8 +31,8 @@ function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019' } = {}) {
 
     i18next.changeLanguage(lang)
     $('#login_form').localize();
-    $('#login_header .sys_logo').empty().append($(TemplateHeader({ sysBrand })).localize())
-    $('#footer').empty().append($(TemplateFooter({ sysBrand, versionYear })).localize())
+    TemplateHeader.render('#login_header .sys_logo', { sysBrand })
+    TemplateFooter.render('#footer',{ sysBrand, versionYear })
     document.title = documentTitle(sysBrand)('login')
 }
 
