@@ -2,7 +2,7 @@ import Store from '@/store/index';
 import TemplateIndex from './index.art';
 import AboutDialog from '../about';
 
-const eventBind = () => {
+function eventBind() {
     $(".li").on("mouseover", function () {
         $(".li-a", $(this)).toggleClass("hover");
         $(".check-hook", $(this)).toggleClass("hover");

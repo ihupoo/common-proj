@@ -1,4 +1,4 @@
-<div class="item-resource-info-content-wrapper {{if data.length/3>2}}{{else}} {{if data.length/3>1}}twoRow {{else}} oneRow {{if data.length%3==1}} oneColumn {{else}}{{if data.length%3==2}} twoColumn {{/if}}{{/if}}{{/if}}{{/if}}">
+<div class="item-resource-info-content-wrapper {{if data.length/3>2}}{{else}} {{if data.length/3>1}}twoRow {{else}} oneRow {{if data.length%3==1}} oneColumn {{else if data.length%3==2}} twoColumn {{/if}}{{/if}}{{/if}}{{/if}}">
     {{each data as item_resource i}}
     {{if i%3 == 0 }}<div class="row ">{{/if}}
         <div class="item-resource-info-content {{if i%3!=0}}magrin-left-112{{/if}}">

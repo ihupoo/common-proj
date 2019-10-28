@@ -123,6 +123,50 @@ const isEqual = (val, val2, deep = false) => {
     return false
 }
 
+const Times = {
+    tenSeconds:10000,
+	oneHour:60*60*1000,
+	oneDay:24*60*60*1000,
+	oneWeek:7*24*60*60*1000,
+	/*整点时间格式为 YY/MM/DD HH:00:00*/
+	formatTimeHour:function(time){
+    	let Year = time.getFullYear();
+    	let Month = time.getMonth()+1;
+    	Month = Month<10?'0'+Month:Month;
+    	let Date = time.getDate();
+    	Date = Date<10?'0'+Date:Date;
+    	let Hour = time.getHours()
+    	Hour = Hour<10?'0'+Hour:Hour;
+    	let timeStr = Year+"/"+Month+"/"+Date+" "+Hour+":00:00";
+    	return timeStr;
+    },
+    /*时间格式为:YY/MM/DD HH:MM:SS*///网管的时间格式统一是此格式
+    formatTime:function(time){
+    	let Year = time.getFullYear();
+    	let Month = time.getMonth()+1;
+    	Month = Month<10?'0'+Month:Month;
+    	let Date = time.getDate();
+    	Date = Date<10?'0'+Date:Date;
+    	let Hour = time.getHours()
+    	Hour = Hour<10?'0'+Hour:Hour;
+    	let Minutes = time.getMinutes();
+    	Minutes = Minutes<10?'0'+Minutes:Minutes;
+    	let Seconds = time.getSeconds();
+    	Seconds = Seconds<10?'0'+Seconds:Seconds;
+    	let timeStr = Year+"/"+Month+"/"+Date+" "+Hour+":"+Minutes+":"+Seconds
+    	return timeStr;
+    },
+    /*传递给会管时间获取会议，时间格式：YY-MM-DD HH:MM:SS*/
+    getCurrentTime: function (time) {
+        if (!time) {
+            time = new Date();
+        }
+		let currentTime = time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds();
+		return currentTime;
+    }
+}
+
+
 //todo（live直播列表中使用）
 const SimpleSearch = (selector, w) => {
     let width = w || 130;
@@ -155,5 +199,6 @@ const SimpleSearch = (selector, w) => {
 export {
     Validation,
     Throttle,
-    isEqual
+    isEqual,
+    Times
 }

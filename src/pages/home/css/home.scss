@@ -1246,35 +1246,33 @@ main{
     width: 562px;
     margin-top: -34px;
     z-index: -100;
+    height: 100%;
 }
 #subscribe_alarm .no-data-wrapper{
-    height: 385px;
+    // height: 385px;
 }
 #platform_resource .no-data-wrapper{
-	height:128px;
-	margin-top:-128px;
+	// height:128px;
+	// margin-top:-128px;
 }
 #meeting_info .no-data-wrapper,#meeting_category_info .no-data-wrapper,
 #live_room .no-data-wrapper,#living .no-data-wrapper,
 #call_meeting_info .no-data-wrapper,#confirm_meeting_info .no-data-wrapper,
 #book_meeting_info .no-data-wrapper,#past_meeting_info .no-data-wrapper{
-    height: 428px;
+    // height: 428px;
 }
 #subscribe_alarm .no-data{
-    width: 130px;
+    // width: 130px;
 }
 #platform_resource .no-data{
-	width:116px;
+	// width:116px;
 }
 .no-data{
     position: absolute;
-    height: 22px;
     line-height: 22px;
-    margin:auto;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
+    top: 50%;
+    width: 100%;
+    text-align: center;
 }
 .warm-text{
     color: #b6b6b6;
@@ -1282,7 +1280,7 @@ main{
 .warm-icon,.warm-text{
     display: inline-block;
     height: 22px;
-    float: left;
+    vertical-align: middle;
 }
 .mo-icons-bg.warm-icon{
     width: 22px;

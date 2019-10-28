@@ -1,6 +1,8 @@
 import Store from '@/store';
 import TemplateIndex from './index.art';
 import TemplateEightConference from './eightConference';
+import TemplateMediaResource from './mediaResource';
+import { percentCount } from '@/pages/home/js/draw';
 
 const RESOURCE_DATA = [
     {name: "虚拟会议室资源", percent: 0, showInfo: false},
@@ -89,19 +91,13 @@ const RESOURCE_MODULE = {
 let eightData = [],
     mediaData = RESOURCE_MODULE.mediaData,
     fetchState = {
+        cache: null,
         ajaxId: null,
         poll : true
     };
 
-const percentCount = (used, total) => {
-    let percent = total == 0 ? 0 : used/total;
-    percent = Math.round(percent * 100);
-    if(percent === 0 && used > 0) return 1;
-    if(percent === 100 && used < total) return 99;
-    return percent;
-}
 
-const eventBind = (user, resourceData, dom) => {
+function eventBind(user, resourceData, dom){
     $(".mo-icons-bg.resource_info").on("click",function () {//点击资源负载详情按钮，出现八方会议信息
         if($(this).hasClass("click")){
             return ;
@@ -112,10 +108,10 @@ const eventBind = (user, resourceData, dom) => {
 
         //与后端交互，查询当前资源负载的八方会议使用详情
         if($(this).prev().text() === '虚拟会议室资源'){
-            TemplateEightConference.render($(this).parent().find('.item-resource-info-wrapper'), { eightData })
+            TemplateEightConference.render($(this).parent().find('.item-resource-info-wrapper'), { data: eightData })
         }
         if($(this).prev().text() === '媒体资源'){
-            controller.getMediaResourceInfo($(this));
+            TemplateMediaResource.render($(this).parent().find('.item-resource-info-wrapper'), { data: mediaData })
         }
         fetchState.poll = false;
         fetchState.ajaxId.abort();
@@ -129,7 +125,7 @@ const eventBind = (user, resourceData, dom) => {
     })
 }
 
-const fetchLoad = (user, resourceData, dom) => {
+function fetchLoad(user, resourceData, dom) {
     const { BASE_URL } = Store.getState()
     const { 
         isServiceDomainAdmin,

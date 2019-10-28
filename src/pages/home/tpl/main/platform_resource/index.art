@@ -32,3 +32,26 @@
         {{/each}}
     </div>
 </div>
+<div class="graph-wrapper">
+    <div class="graph-container">
+        <div id="platform_resource-graph" class="graph-content">
+
+        </div>
+        <div class="platform_resource_graph_value"></div>
+        <div class="time-adjust-container">
+            <div class="time-minus-plus">
+                <span class="mo-icons-bg minus" onclick="minusTime('platform_resource')"></span>
+                <span class="time-title">时间</span>
+                <span class="mo-icons-bg plus" onclick="plusTime('platform_resource')"></span>
+            </div>
+        </div>
+        <div class="time-move-container">
+            <div class="time-left-move">
+                <div class="mo-icons-bg leftMove" onclick="leftMoveTime('platform_resource')"></div>
+            </div>
+            <div class="time-right-move">
+                <div class="mo-icons-bg rightMove hidden" onclick="rightMoveTime('platform_resource')"></div>
+            </div>
+        </div>
+    </div>
+</div>

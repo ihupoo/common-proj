@@ -1,5 +1,6 @@
 import Store from '@/store';
 import TemplateIndex from './index.art';
+import TemplateResourceLoad from './resource_load';
 
 //一般用户界面的主体模板数据
 const USER_MODULE = ({ createMeetingUrl }) => ({
@@ -65,6 +66,7 @@ const ADMIN_MODULE = ({
             { more:"显示自定义服务器" },
             { more:"更多", url:"/nms/home/" }
         ],
+        contentWarning: '暂无服务器信息'
     },
     meeting_count: {
         contentId:"meeting_count",
@@ -126,7 +128,7 @@ function parseAdminModule(list, adminModule){
     })
 }
 
-const parse = ({ 
+function parse({ 
     isServiceDomainAdmin, 
     isUserDomainAdmin, 
     isUsualUser,
@@ -140,7 +142,7 @@ const parse = ({
     jmsType,
     enableNM,
     enableMeeting
-}, menu ) => {
+}, menu ){
     const { systemMode , domainType } = Store.getState()
     if('mooooooo-oooo-oooo-oooo-bmcdebugger' === moid || 'mooooooo-oooo-oooo-oooo-bmcdeveloper' === moid){
         return {
@@ -248,7 +250,22 @@ const parse = ({
 
 }
 
+const renderWrapper = {
+    live_room: () => {},
+    living: () => {},
 
+    resource_load: (user) => TemplateResourceLoad.render('#resource_load',{ user }),
+    subscribe_alarm: () => {},
+    platform_resource: () => {},
+    meeting_count: () => {},
+    book_meeting_count: () => {},
+    meeting_info: () => {},
+    meeting_category_info: () => {},
+
+    call_meeting_info: () => {},
+    book_meeting_info: () => {},
+    past_meeting_info: () => {},
+}
 
 
 export default {
@@ -256,7 +273,8 @@ export default {
         const { moduleList , list } = parse( user, menu ) 
         $(dom).empty().append($(TemplateIndex({ moduleList })).localize())
         if(list.length > 0){
-
+            //todo 渲染每个wrap 内容
+            list.forEach(x => renderWrapper[x]())
         }
     }
 }
