@@ -499,67 +499,9 @@ let echartOption = {
 }
 
 let drawGraph = {
-
     platformResourceChart:'',
     meetingTerminalCountChart:'',
     bookMeetingChart:'',
-    initOption:function(){
-        //var animation = IE.isIELover8()?false:true;
-    	var animation = false;
-        graphOption.platformResourceOption.animationAttr = animation;//平台资源Option初始化
-
-        graphOption.meetingTerminalCountOption.animationAttr = animation;//会议终端统计Option初始化
-
-        graphOption.bookMeetingOption.animationAttr = animation;//预约会议Option初始化
-        if(graphOption.resourceLoadOption.animationAttr){
-            graphOption.resourceLoadOption.animationAttr = animation;//预约会议Option初始化
-        }
-
-
-
-    },
-    // 平台cpu资源和平台内存资源的画图
-    drawPlatformResourceGraph:function (data) {
-        this.initOption();
-        var option = graphOption.platformResourceOption;
-        var platformResourceTerminalName = $(".title",$(".active",".platform_resource")).text();
-        var name= panelData.platform_resource.head_titles;
-        var currntTab={};
-        if(platformResourceTerminalName==name[0]){//平台cpu资源
-            currntTab=controller.resourceTemp.platCup;
-        }
-        if(platformResourceTerminalName==name[1]){//平台内存资源
-            currntTab=controller.resourceTemp.platMemory;
-        }
-        if(currntTab.startIndex != null){
-            var startIndex = data.time.lastIndexOf(currntTab.startValue);
-            var endIndex = data.time.lastIndexOf(currntTab.endValue);
-            if(startIndex == -1){
-                option.startIndex = data.time.length-1-option.num+1;
-            }else {
-                option.startIndex = startIndex;
-            }
-            if(endIndex == -1){
-                option.endIndex = data.time.length-1;
-            }else {
-                option.endIndex = endIndex
-            }
-        }else{
-            option.startIndex = data.time.length-1-option.num+1;
-            option.endIndex = data.time.length-1;
-        }
-        option.start = option.startIndex/(data.time.length-1)*100;
-        option.end = option.endIndex/(data.time.length-1)*100;
-
-        option.title = data.name;
-        option.xData = data.time;
-        option.yData = data.values;
-        this.platformResourceChart = echarts.init(document.getElementById("platform_resource-graph"),"");
-        echartOption.getStakedAreaLineOption(option);
-        var platformResourceOption = echartOption.lineAreaOption
-        this.platformResourceChart.clear();
-        this.platformResourceChart.setOption(platformResourceOption,true);
-    },
     drawMeetingTerminalGraph:function(data){
         var option = graphOption.meetingTerminalCountOption;
         var meetingTerminalName = $(".title",$(".active",".meeting_count")).text();

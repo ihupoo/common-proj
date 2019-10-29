@@ -1,0 +1,5 @@
+<div class="wheel-btn">
+    {{each data d i}}
+        <span currentMoidListIndex="{{i}}" class="mo-icons-bg wheel-btn-{{i}} {{if i==activeIndex}}active{{/if}}"></span>
+    {{/each}}
+</div>
