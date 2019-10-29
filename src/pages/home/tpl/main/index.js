@@ -1,4 +1,5 @@
 import Store from '@/store';
+import { Trans } from '@/utils/utils';
 import TemplateIndex from './index.art';
 import TemplateResourceLoad from './resource_load';
 
@@ -49,7 +50,6 @@ const ADMIN_MODULE = ({
             { more:"更多", url:`/nms/home/?path=platformdevice&domainMoid=${_moid}` }
         ],
         height: 161,
-        contentWarning: ''
     },
     subscribe_alarm: {
         contentId:"subscribe_alarm",
@@ -66,7 +66,6 @@ const ADMIN_MODULE = ({
             { more:"显示自定义服务器" },
             { more:"更多", url:"/nms/home/" }
         ],
-        contentWarning: '暂无服务器信息'
     },
     meeting_count: {
         contentId:"meeting_count",
@@ -248,6 +247,36 @@ function parse({
         
     }
 
+}
+
+function fetchSsoToken(){
+    return new Promise(function(resolve, reject){
+        const { BASE_URL } = Store.getState()
+
+        $.get(BASE_URL + "/getSsoToken",null,function(t){
+            if(t.success){
+                resolve(t.data)
+            }else{
+                resolve('')
+            }
+        },'json').error(function(){
+            resolve('')
+        });
+    })
+    
+}
+
+function eventBind(){
+    $(".live_room .more,.living .more").on("click",function(e){
+        e.preventDefault();
+        var me = $(this);
+        if(me.attr("href").indexOf("?") == -1){
+            fetchSsoToken().then(token => {
+                location.href = me.attr("href") + "?" + Trans.base64encode(Trans.utf16to8("sso_token="+token));
+            })
+        }
+    })
+    
 }
 
 const renderWrapper = {

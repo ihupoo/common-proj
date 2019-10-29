@@ -9,6 +9,11 @@ import '@/lib/artDialog/4.1.7/skins/simple.css';
 import '@/lib/ezmark/ezmark.scss';
 import '@/lib/portal/mo-portal.css';
 
+import '@/lib/easyui/1.8.5/themes/icon.css';
+import '@/lib/easyui/1.8.5/themes/default/easyui.css';
+import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
+import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
+
 import '@/styles/common.scss';
 import '@/styles/commonCSS.scss';
 import '@/styles/reset-artDialog.scss';
@@ -19,11 +24,6 @@ import '@/styles/set.scss';
 
 import './css/theme.scss';
 import './css/plat.scss';
-
-import '@/lib/easyui/1.8.5/themes/icon.css';
-import '@/lib/easyui/1.8.5/themes/default/easyui.css';
-import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
-import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
 
 import '@/lib/portal/mo-portal';
 import ModifyPortrait from '@/utils/modifyPortrait';
@@ -67,13 +67,27 @@ $(function () {
                     ...plat.data
                 }
             })
-            pageRender({ sysBrand, lang, versionYear, user, BASE_URL })
+            pageRender({
+                sysBrand,
+                lang,
+                versionYear,
+                user,
+                BASE_URL
+            })
         } else {
             pageRender()
         }
 
         if (plat && plat.success && plat.data) {
             //处理页面中数据
+            $('#sex_m').on('click', function () {
+                $(this).parent().addClass('ez-selected').siblings('div').removeClass('ez-selected');
+                $(this).attr('checked', 'checked').parent().siblings('div').children('input').attr('checked', false);
+            })
+            $('#sex_w').on('click', function () {
+                $(this).parent().addClass('ez-selected').siblings('div').removeClass('ez-selected');
+                $(this).attr('checked', 'checked').parent().siblings('div').children('input').attr('checked', false);
+            })
             let data = plat.data;
             let passwordStrength = user.securityPolicy.passwordStrength;
             if (passwordStrength == 2) {
@@ -96,8 +110,12 @@ $(function () {
             $('#e164').text(user.e164);
             $('#birthday').datebox(user.birthday);
             $('#fax').val(user.fax);
-            $('#flagName').text(user.depts);   //todo
-            $('#flagPosition').text(user.depts);    //todo
+            $('#flagName').text(user.depts); //todo
+            $('#flagPosition').text(user.depts); //todo
+            $('#sexId  div').on('click', function () {
+                $(this).addClass('ez-selected');
+            })
+            user.sex == '1' ? $('#sex_m').parent().addClass('ez-selected') : $('#sex_w').parent().addClass('ez-selected');
             //调用
             PlatSetFrame.loadPlatSet();
             $(window).resize(function () {

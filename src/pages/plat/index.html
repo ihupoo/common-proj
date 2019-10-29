@@ -70,9 +70,7 @@
                                                     <td class="input">
                                                         <div class="inputDiv" id="name">
                                                             <input id="username" type="hidden" name="username"
-                                                                class="e-input"
-                                                                value=""
-                                                                maxlength="21" />
+                                                                class="e-input" value="" maxlength="21" />
                                                             <span class="color-6"></span>
                                                         </div>
                                                     </td>
@@ -188,10 +186,16 @@
                                                     <td class="title">性别</td>
                                                     <td class="input">
                                                         <div class="checkDiv">
-                                                            <input type="radio" id="sex_m" name="sex" value="1" checked />
+                                                            <div class="ez-radio">
+                                                                <input type="radio" id="sex_m" name="sex" value="1"
+                                                                    class="ez-hide" checked />
+                                                            </div>
                                                             <label for="" style="margin-left: 10px;">男</label>
-                                                            <div class="space"></div>
-                                                            <input type="radio" id="sex_w" name="sex" value="0"/>
+                                                            <span class="space"></span>
+                                                            <div class="ez-radio">
+                                                                <input type="radio" id="sex_w" name="sex" value="0"
+                                                                    class="ez-hide" />
+                                                            </div>
                                                             <label for="" style="margin-left: 10px;">女</label>
                                                         </div>
                                                     </td>
@@ -228,8 +232,8 @@
                                                     <td class="title">传真</td>
                                                     <td class="input">
                                                         <div class="inputDiv">
-                                                            <input id="fax" name="fax" class="e-input"
-                                                                value="" maxlength="32" />
+                                                            <input id="fax" name="fax" class="e-input" value=""
+                                                                maxlength="32" />
                                                         </div>
                                                     </td>
                                                     <td class="operate">
@@ -246,8 +250,8 @@
                                                     <td class="title">办公位置</td>
                                                     <td class="input">
                                                         <div class="inputDiv">
-                                                            <input id="seat" name="seat" class="e-input"
-                                                                value="" maxlength="60" />
+                                                            <input id="seat" name="seat" class="e-input" value=""
+                                                                maxlength="60" />
                                                         </div>
                                                     </td>
                                                     <td class="operate">

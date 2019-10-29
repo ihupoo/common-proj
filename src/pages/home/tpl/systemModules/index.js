@@ -118,7 +118,7 @@ function parse(user, menu){
     return moduleList.filter(item => DOMAIN[domain].includes(item.class_name))
 }
 
-const eventBind = () => {
+function eventBind(){
     $(".module",".module-entry-wrapper").on("click",function(e){ //点击部分连接时，需要先获取token
         var me = $(this);
         if(!me.hasClass("disable") && (me.hasClass("umc") || me.hasClass("kis") || me.hasClass("vrs") || me.hasClass("live"))){

@@ -50,7 +50,7 @@ class Store {
             account: 'haha',
             mobile: '15236095272',
             email: '2551044074@qq.com',
-            sex: '',
+            sex: '1',
             seat: '办公地址',
             extNum: '',
             e164: '77777777',

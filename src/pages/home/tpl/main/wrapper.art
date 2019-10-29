@@ -5,7 +5,7 @@
     <div class="no-data-wrapper hidden">
         <div class="no-data">
             <span class="mo-icons-bg warm-icon"></span>
-            <span class="warm-text">{{contentWarning}}</span>
+            <span class="warm-text"></span>
         </div>
     </div>
 </div>

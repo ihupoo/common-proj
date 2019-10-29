@@ -6,7 +6,7 @@ import { Size, Common } from '@/utils/common'
 import '@/lib/portal/mo-portal';
 import Store from '@/store/index';
 
-let { username, securityPolicy } = Store.getState('user');
+let { username, securityPolicy, editName } = Store.getState('user');
 
 const PlatSetFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
