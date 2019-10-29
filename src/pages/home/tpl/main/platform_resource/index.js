@@ -5,7 +5,7 @@ import TemplateChart from './chart.art';
 import TemplateFooter from './footer.art';
 import TemplateWheelBtn from './wheelBtn.art';
 import echarts from 'echarts'
-import { echartOption, percentCount } from '@/pages/home/js/draw';
+import { echartOption } from '@/pages/home/js/draw';
 import { fetchPersonal } from './personalServer';
 
 
@@ -281,7 +281,7 @@ function eventBindServer(dom){
 }
 
 function eventBindChart(){
-    
+
 }
 
 /** 
