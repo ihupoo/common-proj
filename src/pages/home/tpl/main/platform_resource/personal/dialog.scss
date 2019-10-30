@@ -1,14 +1,5 @@
 /***自定义服务器弹出框样式***/
 
-.treeWrapper .tree-title{
-    display: inline-block;
-    width:118px;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    vertical-align: top;
-}
-
 .tipMsg {
     height: 25px;
     line-height: 25px;
@@ -63,7 +54,7 @@
 }
 
 .mo-icon30 {
-    background: url("../../../static/images/home/home_img.png?t=6.0.1360888260") no-repeat;
+    background: url('~@/pages/home/home_img.png') no-repeat;
     width: 30px;
     height: 30px;
     text-indent: 999px;
@@ -202,7 +193,7 @@
 }
 
 .w-close {
-    background: url("../../images/layer-close.png?t=5.0.3890385384") no-repeat scroll 0 transparent;
+    background: url('~images/layer-close.png') no-repeat scroll 0 transparent;
     display: inline-block;
     height: 13px;
     position: absolute;
@@ -228,7 +219,7 @@
 }
 
 .dialog-content .item-msg .msg {
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: bold;
     height: 32px;
     line-height: 32px;
@@ -244,7 +235,7 @@
 
 .mo-simple-search-icon {
     position: absolute;
-    background: url("../../images/mo-search.png?t=6.0.2946133803") no-repeat;
+    background: url('~images/mo-search.png') no-repeat;
     width: 20px;
     height: 20px;
     bottom: 0px;
@@ -271,8 +262,8 @@
 }
 
 .mo-select-user-item {
-    background-color: #FFFFFF;
-    color: #5F5F5F;
+    background-color: #ffffff;
+    color: #5f5f5f;
     line-height: 25px;
     width: 180px;
     display: inline-block;
@@ -285,14 +276,14 @@
 
 .mo-select-user-item:hover,
 .mo-select-user-item.hover {
-    background: #FFFFFF;
-    border-color: #2E8CC1;
-    color: #2E8CC1;
+    background: #ffffff;
+    border-color: #2e8cc1;
+    color: #2e8cc1;
 }
 
 .mo-select-user-item.active {
-    background: url("../../images/btn-bg-normal.png?t=5.0.2613065861") no-repeat 0 0 #6BBBEC;
-    border-color: #2E8CC1;
+    background: url('~images/btn-bg-normal.png') no-repeat 0 0 #6bbbec;
+    border-color: #2e8cc1;
     color: #fff;
 }
 
@@ -333,7 +324,7 @@ ul#tree ul {
 }
 
 .mo-select-item {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     color: #4e4e4e;
     line-height: 25px;
     width: 235px;
@@ -346,8 +337,8 @@ ul#tree ul {
 }
 
 .mo-select-item.active {
-    background: url("../../images/btn-bg-normal.png?t=5.0.2613065861") no-repeat 0 0 #6BBBEC;
-    border-color: #2E8CC1;
+    background: url('~images/btn-bg-normal.png') no-repeat 0 0 #6bbbec;
+    border-color: #2e8cc1;
     color: #fff;
 }
 
@@ -358,4 +349,13 @@ ul#tree ul {
     position: absolute;
     text-align: center;
     width: 100%;
+}
+
+.treeWrapper .tree-title{
+    display: inline-block;
+    width:118px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
 }

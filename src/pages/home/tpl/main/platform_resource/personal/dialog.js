@@ -1,4 +1,17 @@
+import Store from '@/store';
 import { Mask } from '@/components/loading';
+import TemplateDialog from './dialog.art';
+import { fetchSavePersonalList } from './server';
+import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
+import '@/lib/artDialog/4.1.7/skins/simple.css';
+import '@/styles/reset-artDialog.scss';
+
+import './dialog.scss';
+
+let options = {
+    moidList: [],
+    treeUrl: ''
+}
 
 const SelectPersonalServers = {
 	selectedServerMoids:[],
@@ -21,7 +34,6 @@ const SelectPersonalServers = {
 	},
 	//todo
 	showTree:function(){
-		let options = $.dialog.data("options");
 		this.selectedServerMoids = options.moidList.split(",")
 		let that = this;
 		Mask.show();
@@ -348,6 +360,34 @@ const SelectPersonalServers = {
 	}
 }
 
-export {
-    SelectPersonalServers
+/*跳转到自定义服务器设置弹出框*/
+export function showPersonalDialog(moidList, callback) {
+    const { BASE_URL } = Store.getState()
+    options.moidList = moidList
+    options.treeUrl = BASE_URL + "/custom/physicalServerTree?type=CPU"
+
+    const content = TemplateDialog({})
+    $.dialog({
+        padding: 0,
+        title: "自定义服务器设置",
+        id: "selectServerDialog",
+        content,
+        lock: true,
+        opacity: 0.50,	// 透明度
+        cancel:false, // 隐藏关闭按钮
+        drag: false, // 不允许拖拽
+        width: 720,
+        height: 520,
+        close: function () {
+            // 如果是确定事件
+            let result = $.dialog.data('result');
+            if (result != undefined && result.action == 'ok') {
+                let servers = result.selectedIds;
+                fetchSavePersonalList(servers).then(mList => callback(mList))
+            }
+        },
+    });
+
+    SelectPersonalServers.init()
+
 }

@@ -1,6 +1,7 @@
 import Store from '@/store';
+import { MoAlert } from '@/components/popup';
 
-function processMoidList(servers) {
+export function processMoidList(servers) {
     let serverDefaultNum = 5, moidList =[];
     let mList = servers.split(",");
     if (mList.length > 0) {
@@ -15,6 +16,49 @@ function processMoidList(servers) {
         }
     }
     return moidList;
+
+}
+
+ /*保存用户自定义服务器列表*/
+export function fetchSavePersonalList(servers) {
+    return new Promise(function(resolve, reject){
+        const { BASE_URL } = Store.getState()
+
+        $.post( BASE_URL + "/custom/personalPhysicalServer", {type: 'CPU', servers: servers}, function (t) {
+            if (t.success) {
+                let moidList = processMoidList(servers);
+                resolve(moidList)
+            }
+        }, 'json').error(function () {
+
+        });
+    })
+    
+}
+
+
+/*自定义服务器配置*/
+export function fetchPersonalSettingClick() {
+
+    return new Promise(function(resolve, reject){
+        const { BASE_URL } = Store.getState()
+
+        let value = $(".isPersonalSetting").hasClass("no-checked") ? '0' : '1';
+
+        $.post(BASE_URL + "/custom/personalSetting", {type: 'showCustomCpuIndex', value }, function (t) {
+            if (t.success) {
+                resolve()
+            } else {
+                $(".isPersonalSetting").toggleClass("no-checked");
+                MoAlert('显示自定义服务器失败');
+                reject()
+            }
+        }, 'json').error(function () {
+            $(".isPersonalSetting").toggleClass("no-checked");
+            MoAlert('显示自定义服务器失败');
+            reject()
+        });
+    })
 
 }
 

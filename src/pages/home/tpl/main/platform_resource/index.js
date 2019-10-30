@@ -6,26 +6,10 @@ import TemplateFooter from './footer.art';
 import TemplateWheelBtn from './wheelBtn.art';
 import echarts from 'echarts'
 import { echartOption } from '@/pages/home/js/draw';
-import { fetchPersonal } from './personalServer';
+import { fetchPersonal, fetchPersonalSettingClick } from './personal/server';
+import { showPersonalDialog } from './personal/dialog';
 
-
-let fetchState = {
-    cache: null,
-    ajaxServerId:  {
-        cpu: null,
-        memory: null
-    },
-    ajaxInfoId:  {
-        cpu: null,
-        memory: null
-    },
-    poll : {
-        cpu: true,
-        memory: true
-    }
-}
-
-let echartDom = null;
+let myChart = null;
 
 let echartsOpt = {
     title:'服务器1',
@@ -42,6 +26,23 @@ let echartsOpt = {
     end:0,
     startIndex:0,
     endIndex:0
+}
+
+
+let fetchState = {
+    cache: null,
+    ajaxServerId:  {
+        cpu: null,
+        memory: null
+    },
+    ajaxInfoId:  {
+        cpu: null,
+        memory: null
+    },
+    poll : {
+        cpu: true,
+        memory: true
+    }
 }
 
 let resourceTemp = {//记录当前用户观看平台域资源详情的开始和结束时间位置
@@ -79,16 +80,25 @@ let readyData = {
     }
 }
 
+function getTabName(){
+    let activeName = $(".platform_resource .active .title").text();
+    let tabName = '', otherName = '';
+    if(activeName == '平台CPU资源'){//平台cpu资源
+        tabName = 'cpu';
+        otherName = 'memory';
+    }
+    if(activeName == '平台内存资源'){//平台内存资源
+        tabName = 'memory';
+        otherName = 'cpu';
+    }
+    return { tabName, otherName }
+}
+
 
 function echartRender(data){
-    let platformResourceTerminalName = $(".platform_resource .active .title").text();
-    let cur = {};
-    if(platformResourceTerminalName == '平台CPU资源'){//平台cpu资源
-        cur = resourceTemp.cpu;
-    }
-    if(platformResourceTerminalName == '平台内存资源'){//平台内存资源
-        cur = resourceTemp.memory;
-    }
+    let { tabName } = getTabName()
+    let cur = resourceTemp[tabName]
+
     if(cur.startIndex != null){
         let startIndex = data.time.lastIndexOf(cur.startValue);
         let endIndex = data.time.lastIndexOf(cur.endValue);
@@ -113,13 +123,11 @@ function echartRender(data){
     echartsOpt.xData = data.time;
     echartsOpt.yData = data.values;
 
-    let platformResourceChart = echarts.init(document.getElementById("platform_resource-graph"),"");
+    myChart = echarts.init(document.getElementById("platform_resource-graph"),"");
     
-    let platformResourceOption = echartOption.getStakedAreaLineOption(echartsOpt);
-    platformResourceChart.clear();
-    platformResourceChart.setOption(platformResourceOption, true);
-
-    return platformResourceChart
+    let opts = echartOption.getStakedAreaLineOption(echartsOpt);
+    myChart.clear();
+    myChart.setOption(opts, true);
 }
 
 //服务器详情显示空数据
@@ -130,9 +138,9 @@ function getNoDataEchartsOpt() {
         'values': [],
     };
     let date = new Date();
-    let time = date.getTime();
+    let curTime = date.getTime();
     for (let i = 0; i < 15; i = i + 1) {
-        let time = time - Times.tenSeconds;
+        let time = curTime - Times.tenSeconds;
         let newDate = new Date(time);
         let strTime = (newDate.getHours() < 10 ? "0" + newDate.getHours() : newDate.getHours()) + ":" + (newDate.getMinutes() < 10 ? "0" + newDate.getMinutes() : newDate.getMinutes()) + ":" + (newDate.getSeconds() < 10 ? "0" + newDate.getSeconds() : newDate.getSeconds());
         data.time.unshift(strTime)
@@ -179,7 +187,7 @@ function renderServer(tab, dom){
             $(dom).find(".item-resource-wrapper").removeClass("active")
             $("#" + currentResourceMoid).parent().parent().addClass("active")
 
-            $(dom).find(".no-data").addClass("hidden");
+            $(dom).siblings('.no-data-wrapper').addClass("hidden");
 
             if (personal) {//设置的是【显示自定义服务器】，当数量超过五个的时候需要轮显
                 if (readyData[tab].personalMoidList.length > 1) {
@@ -202,7 +210,7 @@ function renderServer(tab, dom){
 
 function renderServerInfo(tab, dom){
     /**being:显示服务器机框、机房、ip等详情**/
-    $activeDom = $(dom).find('.item-resource-wrapper.active .foot-title')
+    let $activeDom = $(dom).find('.item-resource-wrapper.active .foot-title')
     let resourceDetail = {
         name: $activeDom.find('.foot-title-name').text(),
         ip: $activeDom.find('.ip').text(),
@@ -215,12 +223,12 @@ function renderServerInfo(tab, dom){
 
     /**end*/
 
-    $activeWrapper = $(dom).find('.resource-wrapper .item-resource-wrapper.active')
+    let $activeWrapper = $(dom).find('.resource-wrapper .item-resource-wrapper.active')
     let value = $activeWrapper.find(".value").text() || 0;
     $(".platform_resource_graph_value").text(value + "%")
     let currentResourceMoid = $activeWrapper.find('.resourceMoid').text()
     if (readyData[tab].value != null && readyData[tab].value[currentResourceMoid] != undefined) {
-        echartDom = echartRender(readyData[tab].value[currentResourceMoid]);
+        echartRender(readyData[tab].value[currentResourceMoid]);
     }
 }
 
@@ -232,17 +240,9 @@ function eventBindServer(dom){
 
         $(".item-resource-wrapper",$(this).parent().parent()).removeClass("active");
         $(this).addClass("active")
+        
+        let { tabName, otherName } = getTabName()
 
-        let platformResourceTerminalName = $(".platform_resource .active .title").text();
-        let tabName = '', otherName = '';
-        if(platformResourceTerminalName == '平台CPU资源'){//平台cpu资源
-            tabName = 'cpu';
-            otherName = 'memory';
-        }
-        if(platformResourceTerminalName == '平台内存资源'){//平台内存资源
-            tabName = 'memory';
-            otherName = 'cpu';
-        }
         //不记忆上次操作的值
         resourceTemp[tabName]={
             startIndex:null,
@@ -267,29 +267,162 @@ function eventBindServer(dom){
         readyData['cpu'].currentMoidListIndex = currentMoidListIndex;
         readyData['memory'].currentMoidListIndex = currentMoidListIndex;
 
-        let platformResourceTerminalName = $(".platform_resource .active .title").text();
-        let tabName = '';
-        if(platformResourceTerminalName == '平台CPU资源'){//平台cpu资源
-            tabName = 'cpu';
-        }
-        if(platformResourceTerminalName == '平台内存资源'){//平台内存资源
-            tabName = 'memory';
-        }
         //启动自动刷新
-        output.startfetch(tabName)
+        output.startfetch()
     });
 }
 
-function eventBindChart(){
+function eventBindChart(dom){
+    let $chartDom = $(dom).find('.graph-wrapper')
+    $chartDom.find('.minus').on('click',function(e){
+        let data = echartsOpt.xData;
+        let lineAreaOption = myChart.getOption()
 
+        let length = data.length;
+        if (echartsOpt.startIndex > 0 || echartsOpt.endIndex < length - 1) {
+            let delta = 1 / length * 100;
+            if (echartsOpt.startIndex > 0) {
+                echartsOpt.startIndex -= 1;
+                lineAreaOption.dataZoom[0].start -= delta;
+            }
+            if (echartsOpt.endIndex < length - 1) {
+                echartsOpt.endIndex += 1;
+                lineAreaOption.dataZoom[0].end += delta;
+            }
+            lastStatusResourceTemp(echartsOpt,data);
+            myChart.setOption(lineAreaOption)
+        }
+        echartBtnVisiable($chartDom, echartsOpt, length - 1);
+    })
+    $chartDom.find('.plus').on('click',function(e){
+        let data = echartsOpt.xData;
+        let lineAreaOption =  myChart.getOption();
+
+        let length = data.length;
+        if( echartsOpt.endIndex > 0
+            && echartsOpt.endIndex > echartsOpt.startIndex
+            && echartsOpt.endIndex - echartsOpt.startIndex > 2
+            ){
+            let delta = 1 / length * 100;
+            echartsOpt.startIndex += 1;
+            lineAreaOption.dataZoom[0].start += delta;
+            echartsOpt.endIndex -= 1;
+            lineAreaOption.dataZoom[0].end -= delta;
+
+            lastStatusResourceTemp(echartsOpt,data);
+            myChart.setOption(lineAreaOption)
+        }
+        echartBtnVisiable($chartDom, echartsOpt, length - 1);
+    })
+
+    $chartDom.find('.leftMove').on('click',function(e){
+        let data = echartsOpt.xData;
+        let lineAreaOption =  myChart.getOption();
+        
+        let length = data.length;
+        if(echartsOpt.startIndex > 0 ){
+            echartsOpt.startIndex = echartsOpt.startIndex - 1;
+            echartsOpt.endIndex = echartsOpt.endIndex - 1;
+            lineAreaOption.dataZoom[0].start = echartsOpt.startIndex / (length - 1) * 100;
+            lineAreaOption.dataZoom[0].end = echartsOpt.endIndex / (length - 1) * 100;
+            lastStatusResourceTemp(echartsOpt,data);
+            myChart.setOption(lineAreaOption)
+        }
+        echartBtnVisiable($chartDom, echartsOpt, length - 1);
+    })
+
+    $chartDom.find('.rightMove').on('click',function(e){
+        let data = echartsOpt.xData;
+        let lineAreaOption =  myChart.getOption();
+        
+        let length = data.length;
+
+        if(echartsOpt.endIndex < length - 1){
+            echartsOpt.startIndex = echartsOpt.startIndex + 1;
+            echartsOpt.endIndex = echartsOpt.endIndex + 1;
+            lineAreaOption.dataZoom[0].start = echartsOpt.startIndex / (length-1) * 100;
+            lineAreaOption.dataZoom[0].end = echartsOpt.endIndex / (length-1) * 100;
+            lastStatusResourceTemp(echartsOpt,data);
+            myChart.setOption(lineAreaOption)
+        }
+        echartBtnVisiable($chartDom, echartsOpt, length - 1);
+    })
+}
+
+function eventBindTitle(dom){
+    let $containerDom = $(".platform_resource");
+    $containerDom.find(".isPersonalSetting").on("click",function () {//是否自定义设置服务器
+        $(this).toggleClass("no-checked");
+        fetchPersonalSettingClick().then(res => {
+            output.stopfetch()
+
+            let { tabName } = getTabName()
+            renderServer(tabName, dom)
+            renderServerInfo(tabName, dom)
+
+            output.startfetch()
+        })
+    })
+    $containerDom.find(".personalSetting").on("click",function(){//设置自定义服务器---弹出自定义设置服务器对话框
+        let { tabName } = getTabName()
+        output.stopfetch()
+        
+        let moidList = readyData[tabName].personalMoidList.join(",")
+        showPersonalDialog(moidList, function(_moidList){
+
+            readyData['cpu'].currentMoidListIndex = 0;
+            readyData['cpu'].personalMoidList = _moidList;
+            readyData['memory'].currentMoidListIndex = 0;
+            readyData['memory'].personalMoidList = _moidList;
+
+            output.startfetch()
+        })
+    })
+    $containerDom.find('.tab .header-title').on('click',function(){
+        if($(this).hasClass('active')) return;
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+
+        let { tabName } = getTabName()
+        $containerDom.find('.leftMove').removeClass("hidden");
+        $containerDom.find('.rightMove').addClass("hidden");
+        $containerDom.find(".item-resource-wrapper").removeClass("active");
+        readyData[tabName].currentMoidListIndex = 0;
+
+        renderServer(tabName, dom)
+        renderServerInfo(tabName, dom)
+    })
+}
+
+//平台CPU资源  平台内存资源 的保留操作后的结果
+function lastStatusResourceTemp(opt, data){
+    let { tabName } = getTabName()
+    resourceTemp[tabName] = {
+        startIndex:  opt.startIndex,
+        endIndex: opt.endIndex,
+        startValue: data[opt.startIndex],
+        endValue: data[opt.endIndex]
+    }
+}
+
+function echartBtnVisiable(chartDom, { startIndex, endIndex }, value){
+    if(startIndex == 0){
+        $(chartDom).find(".leftMove").addClass("hidden");
+    }else{
+        $(chartDom).find(".leftMove").removeClass("hidden");
+    }
+    if(endIndex == value){
+        $(chartDom).find(".rightMove").addClass("hidden");
+    }else{
+        $(chartDom).find(".rightMove").removeClass("hidden");
+    }
 }
 
 /** 
  *  请求
   */
-function fetchServer({ tab, moid, dom }, render = true){
+function fetchServer({ tab, moid, dom }){
     const { BASE_URL } = Store.getState()
-
     if(tab === 'cpu'){
         url = BASE_URL + "/nms/getCpuPhysical";
     }else{
@@ -309,6 +442,9 @@ function fetchServer({ tab, moid, dom }, render = true){
         num: 5,
         moidList
     }, function (t) {
+        let { tabName } = getTabName()
+        let canRender = tabName === tab;
+
         if (t.success) {
             let physicals = t.data.physicals;
 
@@ -334,7 +470,7 @@ function fetchServer({ tab, moid, dom }, render = true){
                 readyData[tab].personalServerList = [];
             }
             let currentResourceMoid = "";
-            if(render){//服务器列表渲染
+            if(canRender){//服务器列表渲染
                 renderServer(tab, dom);
 
                 if(moidList != ""){
@@ -346,26 +482,26 @@ function fetchServer({ tab, moid, dom }, render = true){
                 currentResourceMoid = tmpData.length > 0 ? tmpData[0].moid : "";
             }
 
-            fetchState.ajaxInfoId[tab] = fetchServerInfo({ tab, moid, dom }, currentResourceMoid, render)
+            fetchState.ajaxInfoId[tab] = fetchServerInfo({ tab, moid, dom }, currentResourceMoid)
         }else{
             readyData[tab].personalServerList = [];
             readyData[tab].serverList = [];
-            if(render){
+            if(canRender){
                 renderServer(tab, dom);
             }
 
             if(fetchState.poll[tab]){
-                fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom }, render)
+                fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
             }
         }
     }, 'json').error(function () {
         if(fetchState.poll[tab]){
-            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom }, render)
+            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
         }
     });
 }
 
-function fetchServerInfo({ tab, moid, dom }, currentResourceMoid, render){
+function fetchServerInfo({ tab, moid, dom }, currentResourceMoid){
     const { BASE_URL } = Store.getState()
 
     let url = ''
@@ -383,6 +519,9 @@ function fetchServerInfo({ tab, moid, dom }, currentResourceMoid, render){
         start_time,
         end_time
     }, function (t) {
+        let { tabName } = getTabName()
+        let canRender = tabName === tab;
+
         if (t.success) {
             let data = t.data.physical;
             let timeLength = data.time.length;
@@ -400,29 +539,31 @@ function fetchServerInfo({ tab, moid, dom }, currentResourceMoid, render){
         }else{
             readyData[tab].value[serverMoid] = getNoDataEchartsOpt();
         }
-        if(render){
+        if(canRender){
             renderServerInfo(tab, dom);
         }
         if(fetchState.poll[tab]){
-            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom }, render)
+            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
         }
     }, 'json').error(function () {
         if(fetchState.poll[tab]){
-            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom }, render)
+            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
         }
     });
 }
 
 
 const output = {
-    async render(dom, { user,  }){
+    async render(dom, { user }){
         $(dom).empty()
             .append($(TemplateHeader({ resourceData: [] })).localize())
             .append($(TemplateChart({})).localize())
             .append($(TemplateFooter({})).localize())
+        eventBindTitle(dom)
         //初始显示无数据
         renderNoDataServer(dom)
-        echartDom = echartRender(getNoDataEchartsOpt());
+        echartRender(getNoDataEchartsOpt());
+        eventBindChart(dom)
         
         const moidList = await fetchPersonal()
         
@@ -434,16 +575,16 @@ const output = {
         const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
         
         fetchState.cache = { moid, dom }
-        fetchState.ajaxServerId.cpu = fetchServer({ tab: 'cpu', moid, dom }, true)
-        fetchState.ajaxServerId.memory = fetchServer({ tab: 'memory', moid, dom }, false)
+        fetchState.ajaxServerId.cpu = fetchServer({ tab: 'cpu', moid, dom })
+        fetchState.ajaxServerId.memory = fetchServer({ tab: 'memory', moid, dom })
       
     },
-    startfetch(tab){
+    startfetch(){
         const { moid, dom } = fetchState.cache;
         fetchState.poll.cpu = true;
-        fetchState.ajaxServerId.cpu = fetchServer({ tab: 'cpu', moid, dom }, tab === 'cpu')
+        fetchState.ajaxServerId.cpu = fetchServer({ tab: 'cpu', moid, dom })
         fetchState.poll.memory = true;
-        fetchState.ajaxServerId.memory = fetchServer({ tab: 'memory', moid, dom }, tab === 'memory')
+        fetchState.ajaxServerId.memory = fetchServer({ tab: 'memory', moid, dom })
     },
     stopfetch(){
         fetchState.poll.cpu = false;

@@ -2,6 +2,7 @@ import Store from '@/store';
 import { Trans } from '@/utils/utils';
 import TemplateIndex from './index.art';
 import TemplateResourceLoad from './resource_load';
+import TemplatePlatformResource from './platform_resource';
 
 //一般用户界面的主体模板数据
 const USER_MODULE = ({ createMeetingUrl }) => ({
@@ -285,7 +286,7 @@ const renderWrapper = {
 
     resource_load: (user) => TemplateResourceLoad.render('#resource_load',{ user }),
     subscribe_alarm: () => {},
-    platform_resource: () => {},
+    platform_resource: (user) => TemplatePlatformResource.render('#platform_resource',{ user }),
     meeting_count: () => {},
     book_meeting_count: () => {},
     meeting_info: () => {},
@@ -303,7 +304,7 @@ export default {
         $(dom).empty().append($(TemplateIndex({ moduleList })).localize())
         if(list.length > 0){
             //todo 渲染每个wrap 内容
-            list.forEach(x => renderWrapper[x]())
+            list.forEach(x => renderWrapper[x](user))
         }
     }
 }

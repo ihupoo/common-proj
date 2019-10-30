@@ -1,20 +1,4 @@
 let graphOption = {
-    platformResourceOption:{
-        title:'服务器1',
-        xName:'时间',
-        xData:'',
-        yName:'%',
-        seriesName:'占用比',
-        yData:'',
-        color:['#5eb9ef'],
-        areaColor:'rgba(94, 185, 239, 0.2)',
-        animationAttr:false,
-        num:15,
-        start:0,
-        end:0,
-        startIndex:0,
-        endIndex:0
-    },
     meetingTerminalCountOption:{
         xName:'时间',
         xData:'',
@@ -41,7 +25,6 @@ let graphOption = {
     },
 }
 let echartOption = {
-    lineOption:'',
     barOption:'',
     lineMarkLineNum:5,
     lineMaxValue:100,
@@ -204,7 +187,7 @@ let echartOption = {
     },
 
     getDotLineOption:function(opt){
-        this.lineOption = {
+        return {
             color:opt.color,
             tooltip: {
                 show:false
