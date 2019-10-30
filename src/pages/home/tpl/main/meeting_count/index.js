@@ -1,5 +1,6 @@
 import Store from '@/store';
 import { Times } from '@/utils/utils';
+import { getMinMaxValue, getAverageValue, echartBtnVisiable, fetchLoop } from '../utils';
 import TemplateChart from './chart.art';
 import TemplateFooter from './footer.art';
 import { echartOption } from '@/pages/home/js/draw';
@@ -29,17 +30,9 @@ let echartsOpt = {
 
 
 let fetchState = {
-    cache: null,
-    ajaxId:  {
-        concurrentCount: null,
-        concurrentTerminalCount: null,
-        terminalCount: null,
-    },
-    poll : {
-        concurrentCount: true,
-        concurrentTerminalCount: true,
-        terminalCount: true,
-    }
+    concurrentCount: new fetchLoop(),
+    concurrentTerminalCount:  new fetchLoop(),
+    terminalCount:  new fetchLoop(),
 }
 
 let decriptionsOfMeeting = {
@@ -243,30 +236,6 @@ function echartRender(data){
     myChart.clear();
     myChart.setOption(opts, true);
 
-}
-
-function getMinMaxValue(data){
-    let returnData = {
-        minData:0,
-        maxData:0
-    }
-    if(data.length>0){
-        data.sort(function(a,b){return a-b;});
-        returnData.minData = data[0];
-        returnData.maxData = data[data.length-1];
-    }
-    return returnData;
-    
-}
-
-function getAverageValue(data){
-    let averageData = 0;
-    if(data.length>0){
-        averageData = Math.round(data.reduce(function (x, y) {
-            return x + y;
-        })/data.length);
-    }
-    return averageData;
 }
 
 function setConcurrentMeetingDes(detailOfMeetingTerminal, yData, startIndex, endIndex){//并发会议统计的 描述信息计算  最大值  最小值 平均值
@@ -646,19 +615,6 @@ function lastStatusTerminalTemp(tabName, opt, data){
     }
 }
 
-function echartBtnVisiable(chartDom, { startIndex, endIndex }, value){
-    if(startIndex == 0){
-        $(chartDom).find(".leftMove").addClass("hidden");
-    }else{
-        $(chartDom).find(".leftMove").removeClass("hidden");
-    }
-    if(endIndex == value){
-        $(chartDom).find(".rightMove").addClass("hidden");
-    }else{
-        $(chartDom).find(".rightMove").removeClass("hidden");
-    }
-}
-
 function fetchConcurrentCount({ moid, dom }){
     const { BASE_URL } = Store.getState()
 
@@ -678,7 +634,7 @@ function fetchConcurrentCount({ moid, dom }){
                 'time':[],
                 'values':[[],[]]
             };
-            statistic = t.data.statistic;
+            let statistic = t.data.statistic;
 
             data.time = statistic.multi.time;
             data.values[0] = statistic.multi.values;
@@ -706,15 +662,12 @@ function fetchConcurrentCount({ moid, dom }){
         if(canRender){
             renderData(dom)
         }
-        if(fetchState.poll['concurrentCount']){
-            fetchState.ajaxId['concurrentCount'] = fetchConcurrentCount({ moid })
-        }
 
     },'json').error(function(){
-        if(fetchState.poll['concurrentCount']){
-            fetchState.ajaxId['concurrentCount'] = fetchConcurrentCount({ moid })
-        }
-    });
+
+    }).complete(function(){
+        fetchState['concurrentCount'].loop()
+    })
 }
 
 function fetchConcurrentTerminalCount({ moid, dom }){
@@ -736,7 +689,7 @@ function fetchConcurrentTerminalCount({ moid, dom }){
                 'time':[],
                 'values':[[],[]]
             };
-            statistic = t.data.statistic;
+            let statistic = t.data.statistic;
 
             data.time = statistic.multi.time;
             data.values[0] = statistic.multi.values;
@@ -764,15 +717,12 @@ function fetchConcurrentTerminalCount({ moid, dom }){
         if(canRender){
             renderData(dom)
         }
-        if(fetchState.poll['concurrentTerminalCount']){
-            fetchState.ajaxId['concurrentTerminalCount'] = fetchConcurrentTerminalCount({ moid })
-        }
-
+        
     },'json').error(function(){
-        if(fetchState.poll['concurrentTerminalCount']){
-            fetchState.ajaxId['concurrentTerminalCount'] = fetchConcurrentTerminalCount({ moid })
-        }
-    });
+       
+    }).complete(function(){
+        fetchState['concurrentTerminalCount'].loop()
+    })
 }
 
 function fetchTerminalCount({ moid, dom }){
@@ -794,7 +744,7 @@ function fetchTerminalCount({ moid, dom }){
                 'time':[],
                 'values':[[],[]]
             };
-            statistic = t.data.statistic;
+            let statistic = t.data.statistic;
 
             data.time = statistic.sip.time;
             data.values[0] = statistic.sip.values;
@@ -827,14 +777,12 @@ function fetchTerminalCount({ moid, dom }){
         if(canRender){
             renderData(dom)
         }
-        if(fetchState.poll['terminalCount']){
-            fetchState.ajaxId['terminalCount'] = fetchTerminalCount({ moid })
-        }
+        
     },'json').error(function(){
-        if(fetchState.poll['terminalCount']){
-            fetchState.ajaxId['terminalCount'] = fetchTerminalCount({ moid })
-        }
-    });
+        
+    }).complete(function(){
+        fetchState['terminalCount'].loop()
+    })
 }
 
 
@@ -851,24 +799,20 @@ const output = {
         
         eventBindTitle(dom, moid)
 
-        fetchState.cache = { moid, dom }
-        fetchState.ajaxId.concurrentCount = fetchConcurrentCount({ moid })
-        fetchState.ajaxId.concurrentTerminalCount = fetchConcurrentTerminalCount({ moid })
-        fetchState.ajaxId.terminalCount = fetchTerminalCount({ moid })
+        fetchState['concurrentCount'].cache({ moid, dom }).start(({ moid, dom }) => fetchConcurrentCount({ moid, dom }))
+        fetchState['concurrentTerminalCount'].cache({ moid, dom }).start(({ moid, dom }) => fetchConcurrentTerminalCount({ moid, dom }))
+        fetchState['terminalCount'].cache({ moid, dom }).start(({ moid, dom }) => fetchTerminalCount({ moid, dom }))
       
     },
     startfetch(tab){
-        const { moid, dom } = fetchState.cache;
-        fetchState.poll.concurrentCount = true;
-        fetchState.ajaxId.concurrentCount = fetchConcurrentCount({ moid })
-        fetchState.ajaxId.concurrentTerminalCount = fetchConcurrentTerminalCount({ moid })
-        fetchState.ajaxId.terminalCount = fetchTerminalCount({ moid })
+        fetchState['concurrentCount'].reStart();
+        fetchState['concurrentTerminalCount'].reStart();
+        fetchState['terminalCount'].reStart();
     },
     stopfetch(){
-        fetchState.poll.concurrentCount = false;
-        fetchState.ajaxId.concurrentCount.abort()
-        fetchState.ajaxId.concurrentTerminalCount.abort()
-        fetchState.ajaxId.terminalCount.abort()
+        fetchState['concurrentCount'].stop();
+        fetchState['concurrentTerminalCount'].stop();
+        fetchState['terminalCount'].stop();
     }
 }
 

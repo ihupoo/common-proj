@@ -1,5 +1,6 @@
 import Store from '@/store';
 import { Times } from '@/utils/utils';
+import { echartBtnVisiable, fetchLoop } from '../utils';
 import TemplateHeader from './header.art';
 import TemplateChart from './chart.art';
 import TemplateFooter from './footer.art';
@@ -28,20 +29,14 @@ let echartsOpt = {
     endIndex:0
 }
 
-
 let fetchState = {
-    cache: null,
-    ajaxServerId:  {
-        cpu: null,
-        memory: null
+    server:{
+        cpu : new fetchLoop(),
+        memory : new fetchLoop(),
     },
-    ajaxInfoId:  {
-        cpu: null,
-        memory: null
-    },
-    poll : {
-        cpu: true,
-        memory: true
+    info: {
+        cpu : new fetchLoop(),
+        memory : new fetchLoop()
     }
 }
 
@@ -252,11 +247,17 @@ function eventBindServer(dom){
         }
         //启动自动刷新
         //与后端交互，查询平台资源信息，并绘制线图
-        const { moid } = fetchState.cache;
-        fetchState.poll[tabName] = true;
-        fetchState.ajaxInfoId[tabName] = fetchServerInfo({ tab: tabName, moid, dom },$(".resourceMoid",$(this)).text(), true);
-        fetchState.poll[otherName] = true;
-        fetchState.ajaxInfoId[otherName] = fetchServerInfo({ tab: otherName, moid, dom },$(".resourceMoid",$(this)).text(), false);
+        fetchState.info.cpu.reStart(({ moid }) => {
+            fetchState.server.cpu.poll = true;
+            fetchState.info.cpu.poll = true;
+            fetchState.info.cpu.ajaxId = fetchServerInfo({ tab: 'cpu', moid, dom }, $(".resourceMoid",$(this)).text())
+        })
+        fetchState.info.memory.reStart(({ moid }) => {
+            fetchState.server.memory.poll = true;
+            fetchState.info.memory.poll = true;
+            fetchState.info.memory.ajaxId = fetchServerInfo({ tab: 'memory', moid, dom }, $(".resourceMoid",$(this)).text())
+        })
+
     });
     $(".wheel-btn span").off().on("click",function(){
         //暂停自动刷新
@@ -405,19 +406,6 @@ function lastStatusResourceTemp(opt, data){
     }
 }
 
-function echartBtnVisiable(chartDom, { startIndex, endIndex }, value){
-    if(startIndex == 0){
-        $(chartDom).find(".leftMove").addClass("hidden");
-    }else{
-        $(chartDom).find(".leftMove").removeClass("hidden");
-    }
-    if(endIndex == value){
-        $(chartDom).find(".rightMove").addClass("hidden");
-    }else{
-        $(chartDom).find(".rightMove").removeClass("hidden");
-    }
-}
-
 /** 
  *  请求
   */
@@ -482,22 +470,19 @@ function fetchServer({ tab, moid, dom }){
                 currentResourceMoid = tmpData.length > 0 ? tmpData[0].moid : "";
             }
 
-            fetchState.ajaxInfoId[tab] = fetchServerInfo({ tab, moid, dom }, currentResourceMoid)
+            fetchState.info[tab].cache({ tab, moid, dom , currentResourceMoid})
+                            .start(({ tab, moid, dom , currentResourceMoid}) => fetchServerInfo({ tab, moid, dom }, currentResourceMoid))
+
         }else{
             readyData[tab].personalServerList = [];
             readyData[tab].serverList = [];
             if(canRender){
                 renderServer(tab, dom);
             }
-
-            if(fetchState.poll[tab]){
-                fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
-            }
+            fetchState.server[tab].loop()
         }
     }, 'json').error(function () {
-        if(fetchState.poll[tab]){
-            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
-        }
+        fetchState.server[tab].loop()
     });
 }
 
@@ -542,14 +527,11 @@ function fetchServerInfo({ tab, moid, dom }, currentResourceMoid){
         if(canRender){
             renderServerInfo(tab, dom);
         }
-        if(fetchState.poll[tab]){
-            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
-        }
     }, 'json').error(function () {
-        if(fetchState.poll[tab]){
-            fetchState.ajaxServerId[tab] = fetchServer({ tab, moid, dom })
-        }
-    });
+        
+    }).complete(function(){
+        fetchState.server[tab].loop()
+    })
 }
 
 
@@ -574,25 +556,19 @@ const output = {
 
         const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
         
-        fetchState.cache = { moid, dom }
-        fetchState.ajaxServerId.cpu = fetchServer({ tab: 'cpu', moid, dom })
-        fetchState.ajaxServerId.memory = fetchServer({ tab: 'memory', moid, dom })
+        fetchState.server.cpu.cache({ moid, dom }).start(({ moid, dom }) => fetchServer({ tab: 'cpu', moid, dom }))
+        fetchState.server.memory.cache({ moid, dom }).start(({ moid, dom }) => fetchServer({ tab: 'memory', moid, dom }))
       
     },
     startfetch(){
-        const { moid, dom } = fetchState.cache;
-        fetchState.poll.cpu = true;
-        fetchState.ajaxServerId.cpu = fetchServer({ tab: 'cpu', moid, dom })
-        fetchState.poll.memory = true;
-        fetchState.ajaxServerId.memory = fetchServer({ tab: 'memory', moid, dom })
+        fetchState.server.cpu.reStart()
+        fetchState.server.memory.reStart()
     },
     stopfetch(){
-        fetchState.poll.cpu = false;
-        fetchState.ajaxServerId.cpu.abort()
-        fetchState.ajaxInfoId.cpu.abort()
-        fetchState.poll.memory = false;
-        fetchState.ajaxServerId.memory.abort()
-        fetchState.ajaxInfoId.memory.abort()
+        fetchState.server.cpu.stop()
+        fetchState.server.memory.stop()
+        fetchState.info.cpu.stop()
+        fetchState.info.memory.stop()
     }
 }
 

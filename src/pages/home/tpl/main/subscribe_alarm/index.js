@@ -1,15 +1,11 @@
 import Store from '@/store';
+import { fetchLoop } from '../utils';
 import TemplateIndex from './index.art';
 import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
 import '@/lib/artDialog/4.1.7/skins/simple.css';
 import '@/styles/reset-artDialog.scss';
 
-
-let fetchState = {
-        cache: null,
-        ajaxId: null,
-        poll : true
-    };
+const fetchState = new fetchLoop()
 
 function datagridInit(){
     $("#warm-grid").datagrid({
@@ -35,7 +31,7 @@ function datagridInit(){
     });
 }
 
-function showSubcribe(data, dom){
+function renderGrid(data, dom){
     if(data.length != 0){
         $(dom).siblings('.no-data-wrapper').addClass("hidden");
         $("#warm-grid").datagrid('loadData', data);
@@ -55,41 +51,35 @@ function fetchLoad(moid, dom){//获取告警信息
     },function(t){//level:critical,important,normal 三种告警类型
         if(t.success){
             let data = t.data.unrepaired_warnings;
-            showSubcribe(data, dom);
+            renderGrid(data, dom);
         }else{
-            showSubcribe([], dom);
-        }
-        if(fetchState.poll){
-            fetchState.ajaxId = fetchLoad(user, resourceData, dom)
+            renderGrid([], dom);
         }
     },'json').error(function(){
-        showSubcribe([], dom);
-        if(fetchState.poll){
-            fetchState.ajaxId = fetchLoad(user, resourceData, dom)
-        }
-    }); 
+        renderGrid([], dom);
+        
+    }).complete(function() {
+        fetchState.loop()
+    });
 
 }
 
 export default {
     render(dom, { user }){
-        //没有网管权限不显示媒体资源
+        
         $(dom).empty().append($(TemplateIndex({})).localize())
         $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无订阅告警信息');
         datagridInit()
         
         const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
 
-        fetchState.cache = { moid, dom }
-        fetchState.ajaxId = fetchLoad(moid, dom)
+        fetchState.cache({ moid, dom }).start(({ moid, dom }) => fetchLoad(moid, dom))
+        
     },
     startfetch(){
-        const { moid, dom } = fetchState.cache;
-        fetchState.poll = true;
-        fetchState.ajaxId = fetchLoad(moid, dom)
+        fetchState.reStart()
     },
     stopfetch(){
-        fetchState.poll = false;
-        fetchState.ajaxId.abort()
+        fetchState.stop()
     }
 }

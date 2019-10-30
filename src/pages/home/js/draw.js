@@ -353,7 +353,7 @@ let echartOption = {
         };
     },
     getBarOption:function(opt) {//预约会议并发统计的绘图
-        this.barOption = {
+        return {
             color: ['#5eb9ef'],
             tooltip : {
                 show:true,
@@ -367,7 +367,7 @@ let echartOption = {
                 top:38,
                 x2:68,
                 width:447,
-                height:255
+                height:200
             },
             animation:opt.animationAttr,
             xAxis : [

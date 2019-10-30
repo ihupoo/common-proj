@@ -1,4 +1,5 @@
 import Store from '@/store';
+import { fetchLoop } from '../utils';
 import TemplateIndex from './index.art';
 import TemplateEightConference from './eightConference';
 import TemplateMediaResource from './mediaResource';
@@ -90,11 +91,7 @@ const RESOURCE_MODULE = {
 
 let eightData = [],
     mediaData = RESOURCE_MODULE.mediaData,
-    fetchState = {
-        cache: null,
-        ajaxId: null,
-        poll : true
-    };
+    fetchState = new fetchLoop();
 
 
 function eventBind(user, resourceData, dom){
@@ -113,15 +110,13 @@ function eventBind(user, resourceData, dom){
         if($(this).prev().text() === '媒体资源'){
             TemplateMediaResource.render($(this).parent().find('.item-resource-info-wrapper'), { data: mediaData })
         }
-        fetchState.poll = false;
-        fetchState.ajaxId.abort();
+        fetchState.stop();
     })
 
     $(".mo-icons-bg.closed").on("click",function(){//八方会议右上方关闭按钮事件
         $(this).parent().parent().parent().find('.mo-icons-bg.resource_info.click').removeClass("click")
         $(this).parent().parent().find('.item-resource-info-content-wrapper').remove();
-        fetchState.poll = true;
-        fetchState.ajaxId = fetchLoad(user, resourceData, dom)
+        fetchState.reStart();
     })
 }
 
@@ -250,16 +245,13 @@ function fetchLoad(user, resourceData, dom) {
 
             $(dom).empty().append($(TemplateIndex({ resourceData: data })).localize())
             eventBind(user, resourceData, dom)
-            if(fetchState.poll){
-                fetchState.ajaxId = fetchLoad(user, resourceData, dom)
-            }
         },'json').error(function(){
             $(dom).empty().append($(TemplateIndex({ resourceData: data })).localize())
             eventBind(user, resourceData, dom)
-            if(fetchState.poll){
-                fetchState.ajaxId = fetchLoad(user, resourceData, dom)
-            }
-        });
+           
+        }).complete(function(){
+            fetchState.loop()
+        })
 }
 
 export default {
@@ -267,17 +259,14 @@ export default {
         //没有网管权限不显示媒体资源
         const resourceData = RESOURCE_DATA.filter(x => user.enableNM || (x.name !== '媒体资源'))
         $(dom).empty().append($(TemplateIndex({ resourceData })).localize())
-      
-        fetchState.cache = { user, resourceData, dom }
-        fetchState.ajaxId = fetchLoad(user, resourceData, dom)
+
+        fetchState.cache({ user, resourceData, dom }).start(({ user, resourceData, dom }) => fetchLoad(user, resourceData, dom))
+       
     },
     startfetch(){
-        const { user, resourceData, dom } = fetchState.cache;
-        fetchState.poll = true;
-        fetchState.ajaxId = fetchLoad(user, resourceData, dom)
+        fetchState.reStart()
     },
     stopfetch(){
-        fetchState.poll = false;
-        fetchState.ajaxId.abort()
+        fetchState.stop()
     }
 }

@@ -1,0 +1,5 @@
+<div id="meeting_info_grid">
+    <div id="call_meeting_container"><div id="call_meeting_grid"></div></div>
+    <div id="book_meeting_container"><div id="book_meeting_grid"></div></div>
+    <div id="past_meeting_container"><div id="past_meeting_grid"></div></div>
+</div>
