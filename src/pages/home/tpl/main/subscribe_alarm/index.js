@@ -79,7 +79,7 @@ export default {
         
     },
     startfetch(){
-        fetchState.reStart()
+        fetchState.start()
     },
     stopfetch(){
         fetchState.stop()

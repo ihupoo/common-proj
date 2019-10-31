@@ -167,7 +167,11 @@ const ADMIN_MODULE = ({
         head_titles:["传统会议","端口会议","点对点会议"],
         head_more: (() => {
             let moreList = [
-                {more:"更多",url:`/nms/home/?path=realtime_meeting&type=tran&domainMoid=${_moid}`}
+                { more:"更多",url:{
+                    transMeeting: `/nms/home/?path=realtime_meeting&type=tran&domainMoid=${_moid}`,
+                    portMeeting: `/nms/home/?path=realtime_meeting&type=port&domainMoid=${_moid}`,
+                    p2pMeeting: `/nms/home/?path=realtime_meeting&type=p2p&domainMoid=${_moid}`,
+                }}
             ]
             //没有网管权限不显示更多
             if (!enableNM) {

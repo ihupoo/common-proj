@@ -805,9 +805,9 @@ const output = {
       
     },
     startfetch(tab){
-        fetchState['concurrentCount'].reStart();
-        fetchState['concurrentTerminalCount'].reStart();
-        fetchState['terminalCount'].reStart();
+        fetchState['concurrentCount'].start();
+        fetchState['concurrentTerminalCount'].start();
+        fetchState['terminalCount'].start();
     },
     stopfetch(){
         fetchState['concurrentCount'].stop();

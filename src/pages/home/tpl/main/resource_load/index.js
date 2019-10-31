@@ -116,7 +116,7 @@ function eventBind(user, resourceData, dom){
     $(".mo-icons-bg.closed").on("click",function(){//八方会议右上方关闭按钮事件
         $(this).parent().parent().parent().find('.mo-icons-bg.resource_info.click').removeClass("click")
         $(this).parent().parent().find('.item-resource-info-content-wrapper').remove();
-        fetchState.reStart();
+        fetchState.start();
     })
 }
 
@@ -264,7 +264,7 @@ export default {
        
     },
     startfetch(){
-        fetchState.reStart()
+        fetchState.start()
     },
     stopfetch(){
         fetchState.stop()

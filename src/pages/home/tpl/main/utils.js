@@ -43,35 +43,30 @@ export class fetchLoop{
     cacheData = null    //数据缓存
     startTime = null    //记录开始时间
     timeoutId = null    //settimeout 标记
-    fetchFn =  () => {}
+    fetchFn = null      //func，函数必须return jq的 ajax
     
     cache(data){
         this.cacheData = data
         return this;
     }
     start(fn){
+        this.poll = true;
         this.startTime = new Date().getTime()
+        if(this.fetchFn){
+            this.stop();
+        }
         if(fn){
             this.fetchFn = fn;
-            this.ajaxId = fn(this.cacheData)
         }
-    }
-    reStart(fn){
-        this.poll = true;
-        if(fn){
-            fn(this.cacheData)
-        }else{
+        if(this.fetchFn){
             this.ajaxId = this.fetchFn(this.cacheData)
         }
     }
-    stop(fn){
+    stop(){
         this.poll = false;
         clearTimeout(this.timeoutId)
-        if(fn){
-            fn(this.cacheData)
-        }else{
-            this.ajaxId.abort()
-        }
+        this.timeoutId = null
+        this.ajaxId.abort()
     }
     loop(fn){
         if(this.poll){
@@ -80,11 +75,11 @@ export class fetchLoop{
                 clearTimeout(this.timeoutId)
                 this.timeoutId = setTimeout(() => {
                     if(this.poll){
-                       this.reStart(fn)
+                       this.start(fn)
                     }
                 }, this.pollTime - time)
             }else{
-                this.reStart(fn)
+                this.start(fn)
             }
         }
     }

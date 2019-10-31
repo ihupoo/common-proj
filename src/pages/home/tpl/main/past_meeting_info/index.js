@@ -111,7 +111,7 @@ function datagridInit({ moid, user }){
         onSelectPage: function(pageNumber, pageSize){
             fetchState.stop()
             pages.currentPage = pageNumber
-            fetchState.reStart()
+            fetchState.start()
         }
     });
 }
@@ -188,7 +188,7 @@ export default {
         
     },
     startfetch(){
-        fetchState.reStart()
+        fetchState.start()
     },
     stopfetch(){
         fetchState.stop()

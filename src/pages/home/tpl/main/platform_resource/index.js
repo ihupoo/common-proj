@@ -75,6 +75,11 @@ let readyData = {
     }
 }
 
+let currentResourceMoid = {
+    cpu : '',
+    memory : '',
+}
+
 function getTabName(){
     let activeName = $(".platform_resource .active .title").text();
     let tabName = '', otherName = '';
@@ -176,11 +181,11 @@ function renderServer(tab, dom){
 
             /**end:intTemplate*/
 
-            let currentResourceMoid = readyData[tab].serverList[0]//需要显示的服务器列表
-            currentResourceMoid = $(dom).find('.resource-wrapper .item-resource-wrapper.active .resourceMoid').text() || currentResourceMoid;
+            //需要显示的服务器列表
+            currentResourceMoid[tab] = $(dom).find('.resource-wrapper .item-resource-wrapper.active .resourceMoid').text() || readyData[tab].serverList[0];
 
             $(dom).find(".item-resource-wrapper").removeClass("active")
-            $("#" + currentResourceMoid).parent().parent().addClass("active")
+            $("#" + currentResourceMoid[tab]).parent().parent().addClass("active")
 
             $(dom).siblings('.no-data-wrapper').addClass("hidden");
 
@@ -221,9 +226,9 @@ function renderServerInfo(tab, dom){
     let $activeWrapper = $(dom).find('.resource-wrapper .item-resource-wrapper.active')
     let value = $activeWrapper.find(".value").text() || 0;
     $(".platform_resource_graph_value").text(value + "%")
-    let currentResourceMoid = $activeWrapper.find('.resourceMoid').text()
-    if (readyData[tab].value != null && readyData[tab].value[currentResourceMoid] != undefined) {
-        echartRender(readyData[tab].value[currentResourceMoid]);
+    currentResourceMoid[tab] = $activeWrapper.find('.resourceMoid').text()
+    if (readyData[tab].value != null && readyData[tab].value[currentResourceMoid[tab]] != undefined) {
+        echartRender(readyData[tab].value[currentResourceMoid[tab]]);
     }
 }
 
@@ -247,16 +252,12 @@ function eventBindServer(dom){
         }
         //启动自动刷新
         //与后端交互，查询平台资源信息，并绘制线图
-        fetchState.info.cpu.reStart(({ moid }) => {
-            fetchState.server.cpu.poll = true;
-            fetchState.info.cpu.poll = true;
-            fetchState.info.cpu.ajaxId = fetchServerInfo({ tab: 'cpu', moid, dom }, $(".resourceMoid",$(this)).text())
-        })
-        fetchState.info.memory.reStart(({ moid }) => {
-            fetchState.server.memory.poll = true;
-            fetchState.info.memory.poll = true;
-            fetchState.info.memory.ajaxId = fetchServerInfo({ tab: 'memory', moid, dom }, $(".resourceMoid",$(this)).text())
-        })
+        currentResourceMoid[tab] = $(".resourceMoid",$(this)).text()
+
+        fetchState.server.cpu.poll = true;
+        fetchState.server.memory.poll = true;
+        fetchState.info.cpu.start()
+        fetchState.info.memory.start()
 
     });
     $(".wheel-btn span").off().on("click",function(){
@@ -457,7 +458,6 @@ function fetchServer({ tab, moid, dom }){
             }else if(isPersonal && moidList == ""){
                 readyData[tab].personalServerList = [];
             }
-            let currentResourceMoid = "";
             if(canRender){//服务器列表渲染
                 renderServer(tab, dom);
 
@@ -465,13 +465,13 @@ function fetchServer({ tab, moid, dom }){
                     let next = readyData[tab].currentMoidListIndex + 1;
                     readyData[tab].currentMoidListIndex = next % readyData[tab].personalMoidList.length;
                 }
-                currentResourceMoid = $(dom).find('.resource-wrapper .item-resource-wrapper.active .resourceMoid').text()
+                currentResourceMoid[tab] = $(dom).find('.resource-wrapper .item-resource-wrapper.active .resourceMoid').text()
             }else{
-                currentResourceMoid = tmpData.length > 0 ? tmpData[0].moid : "";
+                currentResourceMoid[tab] = tmpData.length > 0 ? tmpData[0].moid : "";
             }
 
-            fetchState.info[tab].cache({ tab, moid, dom , currentResourceMoid})
-                            .start(({ tab, moid, dom , currentResourceMoid}) => fetchServerInfo({ tab, moid, dom }, currentResourceMoid))
+            fetchState.info[tab].cache({ tab, moid, dom })
+                            .start(({ tab, moid, dom }) => fetchServerInfo({ tab, moid, dom }))
 
         }else{
             readyData[tab].personalServerList = [];
@@ -486,7 +486,7 @@ function fetchServer({ tab, moid, dom }){
     });
 }
 
-function fetchServerInfo({ tab, moid, dom }, currentResourceMoid){
+function fetchServerInfo({ tab, moid, dom }){
     const { BASE_URL } = Store.getState()
 
     let url = ''
@@ -500,7 +500,7 @@ function fetchServerInfo({ tab, moid, dom }, currentResourceMoid){
     let start_time = Times.formatTime(new Date(new Date(end_time).getTime() - 1 * 24 * 60 * 60 * 1000));
 
     return $.get(url, {
-        'moid': currentResourceMoid,
+        'moid': currentResourceMoid[tab],
         start_time,
         end_time
     }, function (t) {
@@ -561,8 +561,8 @@ const output = {
       
     },
     startfetch(){
-        fetchState.server.cpu.reStart()
-        fetchState.server.memory.reStart()
+        fetchState.server.cpu.start()
+        fetchState.server.memory.start()
     },
     stopfetch(){
         fetchState.server.cpu.stop()
