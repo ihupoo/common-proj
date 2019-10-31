@@ -6,7 +6,7 @@
         <span class="slash mo-icons-bg"></span>
         <span class="company-header-title" data-i18n="home.pagebase.{{sysBrand}}.systemName"></span>
     </a>
-    <div class="header-info">
+    <div class="info">
         {{if !user.cloudModelDisplay}}
             <div class="public-private-cloud-content">
                 <span class="cloud-name" value="{{user.virMachineroomMoid}}">{{user.cloudModelName}}</span>
@@ -27,17 +27,17 @@
                 </div>
             </div>
         {{/if}}
-        <div class="user-info" title="{{ user.name ? user.name : user.account}}">
+        <a class="info-i user-info" title="{{ user.name ? user.name : user.account}}">
             <img class="user-portrait hidden" data-onerror="{{BASE_URL}}/images/avator.png?v=1" />
             <span class="user-name">
                 {{ user.name ? user.name : user.account}}
             </span>
-        </div>
+        </a>
         <div class="setting-wrapper">
             <div class="settings">
                 <a class="email  mo-icons-bg" id="nav-notify-item"></a>
-                <a class="setting  mo-icons-bg"></div>
-                <a class="logout  mo-icons-bg"></a>
+                <a class="setting  mo-icons-bg"></a>
+                <a class="logout  mo-icons-bg" href="#"></a>
             </div>
             <div class="pulldown email-list nav-sublist-notify" id="nav-sublist-notify">
                 <div class="pullDownContent nav-notify-wrap">

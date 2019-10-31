@@ -5,30 +5,6 @@ import Store from '@/store/index';
 
 let { securityPolicy, username, systemSecurity } = Store.getState('user');
 
-const CoreSetFrame = {
-    default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
-    default_detail_paddingLeft: 0, // 默认详细表单左边偏移量
-    main_min_width: 1280,
-    main_padding_left: 128,
-    main_min_height: 650,
-    main_padding_bottom: 0,
-    main_top_height: 98,
-
-    fixLineHeight: 2,
-
-    initCoreSetPage: function () {
-        let wH = $(window).height();
-        let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
-        let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
-        $(".wrapcontent").css("min-height", viewHeight);
-        if ('password' == $(".tabs .active").attr("data-tab")) {
-            $("#detail-btn-save").addClass('disabled');
-        } else {
-            $("#detail-btn-save").removeClass('disabled');
-        }
-    }
-}
-
 const ForcePwd = {
     init: function () {
         $("#detail-btn-save").click(function () {
@@ -95,6 +71,5 @@ const ForcePwd = {
 
 
 export {
-    CoreSetFrame,
     ForcePwd
 }

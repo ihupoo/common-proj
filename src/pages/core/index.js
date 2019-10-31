@@ -28,13 +28,13 @@ import { CoreSetFrame, CoreUpdataAccount, CoreSet } from './js/core';
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';
 import { fetchCore } from './service';
-import TemplateHeader from '@/components/tpl/header/index.art';
+import TemplateHeader from '@/components/tpl/header';
 import TemplateFooter from '@/components/tpl/footer.art';
 
 function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
     $('body').addClass(`theme-${sysBrand}`);
     i18next.changeLanguage(lang)
-    $('#header-logo').empty().append($(TemplateHeader({ sysBrand, user, BASE_URL })).localize())
+    TemplateHeader.render('#header-logo', { sysBrand, user, BASE_URL })
     $('#footer .footer_content').empty().append($(TemplateFooter({ sysBrand, versionYear })).localize())
     document.title = documentTitle(sysBrand)('home')
 }

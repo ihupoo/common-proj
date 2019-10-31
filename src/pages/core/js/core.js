@@ -16,14 +16,13 @@ const CoreSetFrame = {
 	main_min_height: 650,
 	main_padding_bottom: 83,
 	main_top_height: 98,
-
 	fixLineHeight: 2,
 
 	initCoreSetPage: function () {
 		let wH = $(window).height();
 		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
 		let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
-		$(".wrapcontent").css("min-height", viewHeight);
+		$(".set-content").css("min-height", viewHeight);
 		if ('password' == $(".tabs .active").attr("data-tab")) {
 			$("#detail-btn-save").addClass('disabled');
 		} else {
@@ -118,8 +117,6 @@ const CoreSet = {
 				$("#detail-btn-save").removeClass('disabled');
 			}
 		});
-
-		Common.headerEvent();
 	},
 	save: function () {
 		let tabname = this.getTabName();

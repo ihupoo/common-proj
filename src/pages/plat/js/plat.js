@@ -117,7 +117,6 @@ const PlatSet = {
 				$("#detail-btn-save").removeClass('disabled');
 			}
 		});
-		Common.headerEvent();
 	},
 	save: function () {
 		let tabname = this.getTabName();

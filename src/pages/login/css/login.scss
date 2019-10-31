@@ -1,40 +1,32 @@
-html,body{
+html,
+body {
     height: 100%;
 }
-body{
+
+body {
     min-height: 813px;
     position: relative;
 }
 
-.bg {
-    background: #ffffff;
-    text-align: center;
-    overflow: auto;
-}
-
-#login_header {
-    position: relative;
-}
-
-#footer{
+#footer {
     position: absolute;
     bottom: 0;
     width: 100%;
 }
 
 .company_info_up {
-    font-size:14px;
-    font-family:'微软雅黑';
-    color:#4e4e4e;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    font-size: 14px;
+    font-family: '微软雅黑';
+    color: #4e4e4e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.company_info_down{
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.company_info_down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .sys_logo .icon {

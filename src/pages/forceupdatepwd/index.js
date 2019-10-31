@@ -24,18 +24,18 @@ import './css/theme.scss';
 import { Common, setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
 import { Password } from '@/utils/password';
 import { DigestAuth } from '@/utils/digestAuth';
-import { CoreSetFrame, ForcePwd } from './js/forceupdatepwd';
+import { ForcePwd } from './js/forceupdatepwd';
 import { fetchForcePwd } from './service';
 
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';
-import TemplateHeader from '@/components/tpl/header.art';
+import TemplateHeader from '@/components/tpl/header';
 import TemplateFooter from '@/components/tpl/footer.art';
 
 function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
     $('body').addClass(`theme-${sysBrand}`);
     i18next.changeLanguage(lang)
-    $('#header-logo').empty().append($(TemplateHeader({ sysBrand, user, BASE_URL })).localize())
+    TemplateHeader.render('#header-logo', { sysBrand, user, BASE_URL })
     $('#footer .footer_content').empty().append($(TemplateFooter({ sysBrand, versionYear })).localize())
     document.title = documentTitle(sysBrand)('home')
 }
@@ -82,14 +82,7 @@ $(function () {
             $("#detail-btn-cancel").click(function () {
                 location.href = Store.getState('BASE_URL') + "/login.html";
             })
-            //调用
-            CoreSetFrame.initCoreSetPage();
-            $(window).resize(function () {
-                CoreSetFrame.initCoreSetPage();
-                if ($('#oldPassword').val() == '' && $('#newPassword').val() == '' && $('#confirmPassword').val() == '') {
-                    $("#detail-btn-save").addClass('disabled');
-                }
-            });
+
             Common.setDefaultImg('.user-info');
             Common.initPortrait(user.portrait40, user.portraitDomain);
             Password.init(options);

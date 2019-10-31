@@ -27,7 +27,7 @@
                     <a href="javascript:;" >显示自定义服务器</a>
                     <a href="javascript:;" class="mo-icons-bg personalSetting "></a>
                 {{else}}
-                    <a href="{{mores.url}}" target="_blank">{{mores.more}}</a>
+                    <a href="{{ typeof mores.url === "string" ? mores.url : '#'}}" target="_blank" class='more'>{{mores.more}}</a>
                 {{/if}}
             </span>
         </li>

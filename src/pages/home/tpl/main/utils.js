@@ -37,11 +37,12 @@ export function echartBtnVisiable(chartDom, { startIndex, endIndex }, value){
 }
 
 export class fetchLoop{
-    ajaxId = null
-    poll = true
-    pollTime = 20000
-    cacheData = null
-    startTime = null
+    ajaxId = null       //ajax 标记
+    poll = true         //是否轮询
+    pollTime = 20000    //轮询时间
+    cacheData = null    //数据缓存
+    startTime = null    //记录开始时间
+    timeoutId = null    //settimeout 标记
     fetchFn =  () => {}
     
     cache(data){
@@ -65,6 +66,7 @@ export class fetchLoop{
     }
     stop(fn){
         this.poll = false;
+        clearTimeout(this.timeoutId)
         if(fn){
             fn(this.cacheData)
         }else{
@@ -75,7 +77,8 @@ export class fetchLoop{
         if(this.poll){
             let time = new Date().getTime() - this.startTime
             if(time < this.pollTime ){
-                setTimeout(() => {
+                clearTimeout(this.timeoutId)
+                this.timeoutId = setTimeout(() => {
                     if(this.poll){
                        this.reStart(fn)
                     }

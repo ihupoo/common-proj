@@ -34,9 +34,11 @@ function datagridInit(){
 function renderGrid(data, dom){
     if(data.length != 0){
         $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $("#warm-grid-container").removeClass("none-visible");
         $("#warm-grid").datagrid('loadData', data);
     }else{
         $(dom).siblings('.no-data-wrapper').removeClass("hidden");
+        $("#warm-grid-container").addClass("none-visible");
     }
 }
 
