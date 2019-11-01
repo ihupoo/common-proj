@@ -21,7 +21,7 @@ import './css/forceupdatepwd.scss';
 import './css/theme.scss';
 
 
-import { Common, setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
+import { setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
 import { Password } from '@/utils/password';
 import { DigestAuth } from '@/utils/digestAuth';
 import { ForcePwd } from './js/forceupdatepwd';
@@ -83,8 +83,7 @@ $(function () {
                 location.href = Store.getState('BASE_URL') + "/login.html";
             })
 
-            Common.setDefaultImg('.user-info');
-            Common.initPortrait(user.portrait40, user.portraitDomain);
+            TemplateHeader.setPortrait(user.portrait40, user.portraitDomain);
             Password.init(options);
             ForcePwd.init();
         }

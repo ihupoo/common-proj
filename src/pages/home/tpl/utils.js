@@ -1,3 +1,4 @@
+import Store from '@/store';
 
 export function getMinMaxValue(data){
     let returnData = {
@@ -34,6 +35,23 @@ export function echartBtnVisiable(chartDom, { startIndex, endIndex }, value){
     }else{
         $(chartDom).find(".rightMove").removeClass("hidden");
     }
+}
+
+
+export function fetchSsoToken(){
+    return new Promise(function(resolve, reject){
+        const { BASE_URL } = Store.getState()
+
+        $.get(BASE_URL + "/getSsoToken",null,function(t){
+            if(t.success){
+                resolve(t.data)
+            }else{
+                resolve('')
+            }
+        },'json').error(function(){
+            resolve('')
+        });
+    })
 }
 
 export class fetchLoop{

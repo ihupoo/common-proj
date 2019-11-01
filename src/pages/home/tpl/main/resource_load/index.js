@@ -1,9 +1,9 @@
 import Store from '@/store';
-import { fetchLoop } from '../utils';
+import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
 import TemplateEightConference from './eightConference';
 import TemplateMediaResource from './mediaResource';
-import { percentCount } from '@/pages/home/js/draw';
+import { percentCount } from '@/pages/home/tpl/draw';
 
 const RESOURCE_DATA = [
     {name: "虚拟会议室资源", percent: 0, showInfo: false},
@@ -94,8 +94,8 @@ let eightData = [],
     fetchState = new fetchLoop();
 
 
-function eventBind(user, resourceData, dom){
-    $(".mo-icons-bg.resource_info").on("click",function () {//点击资源负载详情按钮，出现八方会议信息
+function eventBind(dom){
+    $(dom).on("click", ".mo-icons-bg.resource_info",function () {//点击资源负载详情按钮，出现八方会议信息
         if($(this).hasClass("click")){
             return ;
         }
@@ -113,7 +113,7 @@ function eventBind(user, resourceData, dom){
         fetchState.stop();
     })
 
-    $(".mo-icons-bg.closed").on("click",function(){//八方会议右上方关闭按钮事件
+    $(dom).on("click",".mo-icons-bg.closed", function(){//八方会议右上方关闭按钮事件
         $(this).parent().parent().parent().find('.mo-icons-bg.resource_info.click').removeClass("click")
         $(this).parent().parent().find('.item-resource-info-content-wrapper').remove();
         fetchState.start();
@@ -244,10 +244,8 @@ function fetchLoad(user, resourceData, dom) {
             }
 
             $(dom).empty().append($(TemplateIndex({ resourceData: data })).localize())
-            eventBind(user, resourceData, dom)
         },'json').error(function(){
             $(dom).empty().append($(TemplateIndex({ resourceData: data })).localize())
-            eventBind(user, resourceData, dom)
            
         }).complete(function(){
             fetchState.loop()
@@ -259,6 +257,7 @@ export default {
         //没有网管权限不显示媒体资源
         const resourceData = RESOURCE_DATA.filter(x => user.enableNM || (x.name !== '媒体资源'))
         $(dom).empty().append($(TemplateIndex({ resourceData })).localize())
+        eventBind(dom)
 
         fetchState.cache({ user, resourceData, dom }).start(({ user, resourceData, dom }) => fetchLoad(user, resourceData, dom))
        

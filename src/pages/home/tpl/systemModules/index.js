@@ -1,5 +1,7 @@
 import Store from '@/store/index';
 import TemplateIndex from './index.art';
+import { Trans } from '@/utils/utils';
+import { fetchSsoToken } from '../utils';
 
 //顶部子系统模块的模板数据
 const modules = ({user:{
@@ -123,16 +125,17 @@ function eventBind(){
         var me = $(this);
         if(!me.hasClass("disable") && (me.hasClass("umc") || me.hasClass("kis") || me.hasClass("vrs") || me.hasClass("live"))){
             e.preventDefault();
-            controller.getSsoToken(function(token){
+
+            fetchSsoToken().then(token => {
                 if(me.hasClass("umc")){
                     location.href = me.attr("href") + "?SSO_COOKIE_KEY=" + token;
                 }else{
-                    location.href = me.attr("href") + "?" + envent.base64encode(envent.utf16to8("sso_token="+token));
+                    location.href = me.attr("href") + "?" + Trans.base64encode(Trans.utf16to8("sso_token="+token));
                 }
-            });
+            })
         }
     })
-}//todo
+}
 
 export default {
     render(dom, { user, menu }){

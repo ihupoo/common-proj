@@ -1,6 +1,6 @@
 import TemplateIndex from './index.art';
 import echarts from 'echarts'
-import { echartOption, percentCount } from '@/pages/home/js/draw';
+import { echartOption, percentCount } from '@/pages/home/tpl/draw';
 
 const echartsOpt = {
     data:[

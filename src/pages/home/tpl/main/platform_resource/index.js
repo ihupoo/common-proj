@@ -1,12 +1,12 @@
 import Store from '@/store';
 import { Times } from '@/utils/utils';
-import { echartBtnVisiable, fetchLoop } from '../utils';
+import { echartBtnVisiable, fetchLoop } from '../../utils';
 import TemplateHeader from './header.art';
 import TemplateChart from './chart.art';
 import TemplateFooter from './footer.art';
 import TemplateWheelBtn from './wheelBtn.art';
 import echarts from 'echarts'
-import { echartOption } from '@/pages/home/js/draw';
+import { echartOption } from '@/pages/home/tpl/draw';
 import { fetchPersonal, fetchPersonalSettingClick } from './personal/server';
 import { showPersonalDialog } from './personal/dialog';
 

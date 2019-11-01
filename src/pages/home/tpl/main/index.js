@@ -1,8 +1,18 @@
 import Store from '@/store';
-import { Trans } from '@/utils/utils';
+import './runtime';
 import TemplateIndex from './index.art';
-import TemplateResourceLoad from './resource_load';
+import TemplateBookMeetingCount from './book_meeting_count';
+import TemplateBookMeetingInfo from './book_meeting_info';
+import TemplateCallMeetingInfo from './call_meeting_info';
+import TemplateLiveRoom from './live_room';
+import TemplateLiving from './living';
+import TemplateMeetingCategoryInfo from './meeting_category_info';
+import TemplateMeetingCount from './meeting_count';
+import TemplateMeetingInfo from './meeting_info';
+import TemplatePastMeetingInfo from './past_meeting_info';
 import TemplatePlatformResource from './platform_resource';
+import TemplateResourceLoad from './resource_load';
+import TemplateSubscribeAlarm from './subscribe_alarm';
 
 //一般用户界面的主体模板数据
 const USER_MODULE = ({ createMeetingUrl }) => ({
@@ -237,7 +247,7 @@ const ADMIN_MODULE = ({
 function parseAdminModule(list, adminModule){
     return list.map(x => {
         if(Array.isArray(x)){
-            return x.map(y => parseAdminModule(y, adminModule))
+            return x.map(y => adminModule[y])
         }else{
             return adminModule[x]
         }
@@ -346,61 +356,56 @@ function parse({
 
 }
 
-function fetchSsoToken(){
-    return new Promise(function(resolve, reject){
-        const { BASE_URL } = Store.getState()
-
-        $.get(BASE_URL + "/getSsoToken",null,function(t){
-            if(t.success){
-                resolve(t.data)
-            }else{
-                resolve('')
-            }
-        },'json').error(function(){
-            resolve('')
-        });
-    })
-    
-}
-
-function eventBind(){
-    $(".live_room .more,.living .more").on("click",function(e){
-        e.preventDefault();
-        var me = $(this);
-        if(me.attr("href").indexOf("?") == -1){
-            fetchSsoToken().then(token => {
-                location.href = me.attr("href") + "?" + Trans.base64encode(Trans.utf16to8("sso_token="+token));
-            })
-        }
-    })
-    
-}
 
 const renderWrapper = {
-    live_room: () => {},
-    living: () => {},
+    live_room: (user, setting) => TemplateLiveRoom.render('#live_room',{ user }),
+    living: (user, setting) => TemplateLiving.render('#living',{ user }),
 
-    resource_load: (user) => TemplateResourceLoad.render('#resource_load',{ user }),
-    subscribe_alarm: () => {},
-    platform_resource: (user) => TemplatePlatformResource.render('#platform_resource',{ user }),
-    meeting_count: () => {},
-    book_meeting_count: () => {},
-    meeting_info: (user, setting) => {},
-    meeting_category_info: () => {},
+    resource_load: (user, setting) => TemplateResourceLoad.render('#resource_load',{ user }),
+    subscribe_alarm: (user, setting) => TemplateSubscribeAlarm.render('#subscribe_alarm',{ user }),
+    platform_resource: (user, setting) => TemplatePlatformResource.render('#platform_resource',{ user }),
+    meeting_count: (user, setting) => TemplateMeetingCount.render('#meeting_count',{ user }),
+    book_meeting_count: (user, setting) => TemplateBookMeetingCount.render('#book_meeting_count',{ user }),
+    meeting_info: (user, setting) => TemplateMeetingInfo.render('#meeting_info',{ user }, setting),
+    meeting_category_info: (user, setting) => TemplateMeetingCategoryInfo.render('#meeting_category_info',{ user }, setting),
 
-    call_meeting_info: () => {},
-    book_meeting_info: () => {},
-    past_meeting_info: () => {},
+    call_meeting_info: (user, setting) => TemplateCallMeetingInfo.render('#call_meeting_info',{ user }),
+    book_meeting_info: (user, setting) => TemplateBookMeetingInfo.render('#book_meeting_info',{ user }),
+    past_meeting_info: (user, setting) => TemplatePastMeetingInfo.render('#past_meeting_info',{ user }),
+}
+
+const fetchAbort = {
+    live_room: () => TemplateLiveRoom.stopfetch(),
+    living: () => TemplateLiving.stopfetch(),
+
+    resource_load: () => TemplateResourceLoad.stopfetch(),
+    subscribe_alarm: () => TemplateSubscribeAlarm.stopfetch(),
+    platform_resource: () => TemplatePlatformResource.stopfetch(),
+    meeting_count: () => TemplateMeetingCount.stopfetch(),
+    book_meeting_count: () => TemplateBookMeetingCount.stopfetch(),
+    meeting_info: () => TemplateMeetingInfo.stopfetch(),
+    meeting_category_info: () => TemplateMeetingCategoryInfo.stopfetch(),
+
+    call_meeting_info: () => TemplateCallMeetingInfo.stopfetch(),
+    book_meeting_info: () => TemplateBookMeetingInfo.stopfetch(),
+    past_meeting_info: () => TemplatePastMeetingInfo.stopfetch(),
 }
 
 
 export default {
+    list: null ,
     render(dom, { user, menu }){
         const { moduleList , list, moduleObj } = parse( user, menu ) 
         $(dom).empty().append($(TemplateIndex({ moduleList })).localize())
+        this.list = list;
         if(list.length > 0){
             //todo 渲染每个wrap 内容
             list.forEach(x => renderWrapper[x](user, moduleObj[x]))
+        }
+    },
+    fetchAbort(){
+        if(this.list && this.list.length > 0){
+            this.list.forEach(x => fetchAbort[x]())
         }
     }
 }

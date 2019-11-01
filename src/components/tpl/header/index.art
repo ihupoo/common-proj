@@ -7,7 +7,7 @@
         <span class="company-header-title" data-i18n="home.pagebase.{{sysBrand}}.systemName"></span>
     </a>
     <div class="info">
-        {{if !user.cloudModelDisplay}}
+        {{if user.cloudModelDisplay}}
             <div class="public-private-cloud-content">
                 <span class="cloud-name" value="{{user.virMachineroomMoid}}">{{user.cloudModelName}}</span>
                 <span class="mo-icons-bg arrow"></span>
@@ -28,7 +28,7 @@
             </div>
         {{/if}}
         <a class="info-i user-info" title="{{ user.name ? user.name : user.account}}">
-            <img class="user-portrait hidden" data-onerror="{{BASE_URL}}/images/avator.png?v=1" />
+            <img class="user-portrait hidden" data-onerror="{{avatorDefaultPng}}" />
             <span class="user-name">
                 {{ user.name ? user.name : user.account}}
             </span>

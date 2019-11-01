@@ -1,81 +1,97 @@
 import Store from '@/store';
-import { fetchLoop } from '../utils';
+import { Trans } from '@/utils/utils';
+import { fetchLoop, fetchSsoToken } from '../../utils';
 import TemplateIndex from './index.art';
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import '@/lib/artDialog/4.1.7/skins/simple.css';
-import '@/styles/reset-artDialog.scss';
 
 const fetchState = new fetchLoop()
 
-function datagridInit(){
-    $("#warm-grid").datagrid({
-        idField : "id",
-        columns: [[
-            { field: 'id', hidden: true },
-            { field: 'start_time', width: 121, align: 'left' },
-            {
-                field: 'device_name', width: 241, align: 'left', 
-                formatter: function (value) {
-                    return '<div class="grid_td-item" title="' + value + '">' + value + '</div>'
-                }
-            },
-            {
-                field: 'description', width: 131, align: 'right', 
-                formatter: function (value) {
-                    return '<div class="grid_td-item" title="' + value + '">' + value + '</div>'
-                }
-            }
-        ]],
-        onLoadSuccess:function () {
-        }
-    });
-}
 
-function renderGrid(data, dom){
-    if(data.length != 0){
+function renderData(data, dom){
+    if(data.liveinfo.length != 0){
         $(dom).siblings('.no-data-wrapper').addClass("hidden");
-        $("#warm-grid-container").removeClass("none-visible");
-        $("#warm-grid").datagrid('loadData', data);
+        $(".vrs-living-container").removeClass("none-visible");
+        //render
+        $(dom).empty().append($(TemplateIndex(data)).localize())
+
     }else{
         $(dom).siblings('.no-data-wrapper').removeClass("hidden");
-        $("#warm-grid-container").addClass("none-visible");
+        $(".vrs-living-container").addClass("none-visible");
     }
 }
 
 
-function fetchLoad(moid, dom){//获取告警信息
+function eventBindTitle(){
+    let $containerDom = $(".living");
+
+    $containerDom.find(".more").on("click",function(e){
+        e.preventDefault();
+        let me = $(this);
+        if(me.attr("href").indexOf("?") == -1){
+            fetchSsoToken().then(token => {
+                location.href = me.attr("href") + "?" + Trans.base64encode(Trans.utf16to8("sso_token="+token));
+            })
+        }
+    })
+    
+}
+
+
+function fetchLoad({ moid , vrsIp, domainType }, dom){//获取告警信息
     const { BASE_URL } = Store.getState()
 
-    return $.get(BASE_URL + "/nms/getWarning",{
-        moid,
-        num:10,
-        level:'critical'
-    },function(t){//level:critical,important,normal 三种告警类型
-        if(t.success){
-            let data = t.data.unrepaired_warnings;
-            renderGrid(data, dom);
-        }else{
-            renderGrid([], dom);
-        }
-    },'json').error(function(){
-        renderGrid([], dom);
-        
-    }).complete(function() {
-        fetchState.loop()
-    });
+    let livingData= {
+        "liveinfo": []
+    };
+
+    //核心域下 从网管处拿数据
+    if(domainType === 'coreDomain'){
+        return $.get(BASE_URL + "/nms/getAppointedLivingList",{
+            'moid':moid,
+            num:6
+        },function(t){
+            if(t.success){
+                livingData.liveinfo = t.data.liveinfo;
+            }
+        },'json').error(function(){
+
+        }).complete(function() {
+            renderData(livingData, dom);
+            fetchState.loop()
+        });
+    }else{//非核心域下 从录播处拿数据
+        return $.get(BASE_URL + "/vrs/getVrsResRoom",{
+            vrsIp:vrsIp,
+            prgs1page:6,
+            pageid:1
+        },function(t){
+            if(t.success){
+                livingData.liveinfo = t.data.liveinfo;
+            }
+        },'json').error(function(){
+
+        }).complete(function() {
+            renderData(livingData, dom);
+            fetchState.loop()
+        });
+    }
+   
 
 }
 
 export default {
     render(dom, { user }){
-        
-        $(dom).empty().append($(TemplateIndex({})).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无订阅告警信息');
-        datagridInit()
-        
+        const { vrsIp } = user;
+        $(dom).empty().append($(TemplateIndex({ liveinfo: [] })).localize())
+        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无即将直播的信息');
+  
+
+        eventBindTitle()
+    
         const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
 
-        fetchState.cache({ moid, dom }).start(({ moid, dom }) => fetchLoad(moid, dom))
+        const { domainType } = Store.getState()
+
+        fetchState.cache({ moid, vrsIp, domainType, dom }).start(({ moid, vrsIp, domainType , dom }) => fetchLoad({ moid, vrsIp, domainType }, dom))
         
     },
     startfetch(){

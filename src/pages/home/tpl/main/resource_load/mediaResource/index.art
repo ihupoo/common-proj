@@ -1,6 +1,6 @@
  <div class="item-resource-info-content-wrapper oneRowMedia {{if data[1].show}}twoColumnMedia{{else}}oneColumnMedia{{/if}}">
     <div class="row">
-    {{each data as item_resource i}}
+    {{each data item_resource i}}
         {{if item_resource.show}}
             <div class="item-resource-info-content magrin-left-142">
                 <div id="{{item_resource.id}}" class="pie pieMedia"></div>

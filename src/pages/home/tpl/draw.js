@@ -1,69 +1,10 @@
-var graphOption={
-    platformResourceOption:{
-        title:'服务器1',
-        xName:'时间',
-        xData:'',
-        yName:'%',
-        seriesName:'占用比',
-        yData:'',
-        color:['#5eb9ef'],
-        areaColor:'rgba(94, 185, 239, 0.2)',
-        animationAttr:false,
-        num:15,
-        start:0,
-        end:0,
-        startIndex:0,
-        endIndex:0
-    },
-    meetingTerminalCountOption:{
-        xName:'时间',
-        xData:'',
-        yName:'数量',
-        yData:'',
-        color:['#5eb9ef','#09a206','#db4c4c'],
-        toolTipSeriesName1:'',
-        toolTipSeriesName2:'',
-        toolTipSeriesName3:'',
-        animationAttr:false,
-        num:13,
-        start:0,
-        end:0,
-        startIndex:0,
-        endIndex:0,
-    },
-    bookMeetingOption:{
-        xName:'时间',
-        xData:'',
-        yName:'数量（预约会议个数）',
-        yData:'',
-        animationAttr:false,
-        num:24,
-    },
-    resourceLoadOption:{
-        radius:[22, 30],
-        data:[
-            {value:'',name:''},
-            {value:'',name:''}
-        ],
-        color:['#1e94da','#d0d0d0'],
-        animationAttr:true
-    }
-}
-var echartOption={
-    lineAreaOption:'',
-    lineOption:'',
-    barOption:'',
-    pieOption:'',
-    lineMarkLineNum:5,
-    lineMaxValue:100,
-    barMaxValue:50,
-    barMarkLineNum:5,
+let echartOption = {
     getPieOption:function(opt){
-        this.pieOption = {
+        return {
             series : [
                 {
                     type:'pie',
-                    radius : opt.radius,
+                    radius : [22, 30],
                     avoidLabelOverlap:false,
                     /*animation:opt.animationAttr,*/
                     animation:opt.animationAttr,
@@ -86,16 +27,7 @@ var echartOption={
         };
     },
     getStakedAreaLineOption:function(opt){
-        this.lineAreaOption = {
-            /*title: {
-                text: opt.title,
-                left:'center',
-                top:29,
-                textStyle:{
-                    fontSize:12,
-                    fontWeight:'500'
-                }
-            },*/
+        return {
             color:opt.color,
             tooltip : {
                 show:false
@@ -221,11 +153,9 @@ var echartOption={
                 }
             ]
         };
-        this.lineAreaOption;
     },
-
     getDotLineOption:function(opt){
-        this.lineOption = {
+        return {
             color:opt.color,
             tooltip: {
                 show:false
@@ -391,7 +321,7 @@ var echartOption={
         };
     },
     getBarOption:function(opt) {//预约会议并发统计的绘图
-        this.barOption = {
+        return {
             color: ['#5eb9ef'],
             tooltip : {
                 show:true,
@@ -405,7 +335,7 @@ var echartOption={
                 top:38,
                 x2:68,
                 width:447,
-                height:255
+                height:200
             },
             animation:opt.animationAttr,
             xAxis : [
@@ -517,198 +447,18 @@ var echartOption={
             ]
         };
     }
-
-
-
 }
-var drawGraph={
 
-    platformResourceChart:'',
-    meetingTerminalCountChart:'',
-    bookMeetingChart:'',
-    initOption:function(){
-        //var animation = IE.isIELover8()?false:true;
-    	var animation = false;
-        graphOption.platformResourceOption.animationAttr = animation;//平台资源Option初始化
-
-        graphOption.meetingTerminalCountOption.animationAttr = animation;//会议终端统计Option初始化
-
-        graphOption.bookMeetingOption.animationAttr = animation;//预约会议Option初始化
-        if(graphOption.resourceLoadOption.animationAttr){
-            graphOption.resourceLoadOption.animationAttr = animation;//预约会议Option初始化
-        }
-
-
-
-    },
-    // 平台cpu资源和平台内存资源的画图
-    drawPlatformResourceGraph:function (data) {
-        this.initOption();
-        var option = graphOption.platformResourceOption;
-        var platformResourceTerminalName = $(".title",$(".active",".platform_resource")).text();
-        var name= panelData.platform_resource.head_titles;
-        var currntTab={};
-        if(platformResourceTerminalName==name[0]){//平台cpu资源
-            currntTab=controller.resourceTemp.platCup;
-        }
-        if(platformResourceTerminalName==name[1]){//平台内存资源
-            currntTab=controller.resourceTemp.platMemory;
-        }
-        if(currntTab.startIndex != null){
-            var startIndex = data.time.lastIndexOf(currntTab.startValue);
-            var endIndex = data.time.lastIndexOf(currntTab.endValue);
-            if(startIndex == -1){
-                option.startIndex = data.time.length-1-option.num+1;
-            }else {
-                option.startIndex = startIndex;
-            }
-            if(endIndex == -1){
-                option.endIndex = data.time.length-1;
-            }else {
-                option.endIndex = endIndex
-            }
-        }else{
-            option.startIndex = data.time.length-1-option.num+1;
-            option.endIndex = data.time.length-1;
-        }
-        option.start = option.startIndex/(data.time.length-1)*100;
-        option.end = option.endIndex/(data.time.length-1)*100;
-
-        option.title = data.name;
-        option.xData = data.time;
-        option.yData = data.values;
-        this.platformResourceChart = echarts.init(document.getElementById("platform_resource-graph"),"");
-        echartOption.getStakedAreaLineOption(option);
-        var platformResourceOption = echartOption.lineAreaOption
-        this.platformResourceChart.clear();
-        this.platformResourceChart.setOption(platformResourceOption,true);
-    },
-    drawMeetingTerminalGraph:function(data){
-        var option = graphOption.meetingTerminalCountOption;
-        var meetingTerminalName = $(".title",$(".active",".meeting_count")).text();
-        var meeting_count=panelData.meeting_count.head_titles;
-        var currntTab={};
-        if(meetingTerminalName==meeting_count[0]){//并发会议统计
-            currntTab=controller.terminalTemp.bfMeeting;
-        }
-        if(meetingTerminalName==meeting_count[1]){//并发会议在线终端统计
-            currntTab=controller.terminalTemp.bfOnlineMeeting;
-        }
-        if(meetingTerminalName==meeting_count[2]){//终端在线统计
-            currntTab=controller.terminalTemp.zdOnline;
-        }
-        if(currntTab.startIndex != null) {
-            var startIndex = data.time.lastIndexOf(currntTab.startValue);
-            var endIndex = data.time.lastIndexOf(currntTab.endValue);
-            if(startIndex==-1){
-                option.startIndex = data.time.length-1-option.num+1;
-            }else {
-                option.startIndex = startIndex;
-            }
-            if(endIndex == -1) {
-                option.endIndex = data.time.length - 1;
-            }else {
-                option.endIndex = endIndex;
-            }
-        }else {
-            option.startIndex = data.time.length-1-option.num+1;
-            option.endIndex = data.time.length-1;
-        }
-        option.start = option.startIndex/(data.time.length-1)*100;
-        option.end = option.endIndex/(data.time.length-1)*100;
-
-
-        // console.log("drawgraph-----endIndex",option.endIndex,"startIndex",option.startIndex)
-
-        option.xData = data.time;
-        option.yData = data.values;
-        //begin:Edge浏览器----解决“终端在线统计”刷新一段时间红色线条和其他线条互换颜色
-        $("#meeting_count-graph").empty()
-        $("#meeting_count-graph").removeAttr("style");
-        $("#meeting_count-graph").removeAttr("_echarts_instance_");
-        //end:Edge浏览器----解决“终端在线统计”刷新一段时间红色线条和其他线条互换颜色
-
-        this.meetingTerminalCountChart = echarts.init(document.getElementById("meeting_count-graph"),"");
-        echartOption.getDotLineOption(option);
-        
-        var meetingTerminalCountOption = echartOption.lineOption
-
-
-        //begin:Edge浏览器----解决“并发会议统计、并发会议在线终端统计”刷新一段时间，蓝色线条变成红色线条
-        meetingTerminalCountOption.color = option.yData.length==3?option.color:option.color.slice(0,2)
-        //end:Edge浏览器----解决“并发会议统计、并发会议在线终端统计”刷新一段时间，蓝色线条变成红色线条
-
-        meetingTerminalCountOption.yAxis[0].max = echartOption.lineMaxValue;
-        meetingTerminalCountOption.yAxis[0].interval = echartOption.lineMaxValue/echartOption.lineMarkLineNum
-        meetingTerminalCountOption.series[0].markLine.data[0].yAxis = 0;
-        
-        for(var i = 0;i<echartOption.lineMarkLineNum-1;i++){
-        	meetingTerminalCountOption.series[0].markLine.data[i].yAxis = meetingTerminalCountOption.yAxis[0].interval*(i+1);
-        }
-        
-        this.meetingTerminalCountChart.clear();
-        this.meetingTerminalCountChart.setOption(meetingTerminalCountOption,true);
-    },
-    drawBookMeetingGraph:function (data) {
-        var option = graphOption.bookMeetingOption;
-        option.xData = data.time;
-        option.yData = data.values;
-        this.bookMeetingChart = echarts.init(document.getElementById("book_meeting_count-graph"),"")
-        echartOption.getBarOption(option);
-        
-        var bookMeetingCountOption = echartOption.barOption;
-        bookMeetingCountOption.yAxis[0].max = echartOption.barMaxValue;
-        bookMeetingCountOption.yAxis[0].interval = echartOption.barMaxValue/echartOption.barMarkLineNum;
-        bookMeetingCountOption.series[0].markLine.data[0].yAxis = 0;
-        
-        for(var i = 0;i<echartOption.barMarkLineNum-1;i++){
-        	bookMeetingCountOption.series[0].markLine.data[i].yAxis = bookMeetingCountOption.yAxis[0].interval*(i+1);
-        }
-        
-        var barOption = echartOption.barOption;
-        barOption.grid.height = 200;
-        this.bookMeetingChart.setOption(barOption);
-    }
+//绘图用
+function percentCount(used, total){
+    let percent = total == 0 ? 0 : used/total;
+    percent = Math.round(percent * 100);
+    if(percent === 0 && used > 0) return 1;
+    if(percent === 100 && used < total) return 99;
+    return percent;
 }
-var IE = {
-    IEVersion:function() {
-        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器
-        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器
-        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
-        if(isIE) {
-            var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
-            reIE.test(userAgent);
-            var fIEVersion = parseFloat(RegExp["$1"]);
-            if(fIEVersion == 7) {
-                return 7;
-            } else if(fIEVersion == 8) {
-                return 8;
-            } else if(fIEVersion == 9) {
-                return 9;
-            } else if(fIEVersion == 10) {
-                return 10;
-            } else {
-                return 6;//IE版本<=7
-            }
-        } else if(isEdge) {
-            return 'edge';//edge
-        } else if(isIE11) {
-            return 11; //IE11
-        }else{
-            return -1;//不是ie浏览器
-        }
-    },
-    isIELover8:function(){
-        var ieVersion = this.IEVersion();
-        if(ieVersion==-1){
-            return false;
-        }else{
-            if(ieVersion<=8){
-                return true;
-            }else{
-                return false;
-            }
-        }
-    }
+
+export {
+    echartOption,
+    percentCount
 }

@@ -5,9 +5,6 @@ const Home = {
     render({ user, menu }){
         TemplateSystemModules.render('.module-entry-wrapper', { user, menu })
         TemplateMain.render('main', { user, menu })
-
-
-        
     }   
 }
 

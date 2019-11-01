@@ -2,9 +2,12 @@ import Store from '@/store';
 import { Mask } from '@/components/loading';
 import TemplateDialog from './dialog.art';
 import { fetchSavePersonalList } from './server';
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import '@/lib/artDialog/4.1.7/skins/simple.css';
-import '@/styles/reset-artDialog.scss';
+
+import '@/lib/easyui/1.8.5/themes/icon.css';
+import '@/lib/easyui/1.8.5/themes/default/easyui.css';
+import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
+import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
+import '@/styles/reset-easyui.scss';
 
 import './dialog.scss';
 

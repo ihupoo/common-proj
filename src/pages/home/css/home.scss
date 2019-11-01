@@ -95,7 +95,8 @@ body{
 }
 .module-entry-wrapper{
     /*margin: 46px auto 0px auto;*/
-    padding-top:46px;
+    // padding-top:46px;
+    text-align: center;
 }
 .modules{
     margin: 0px auto;
@@ -105,7 +106,7 @@ body{
     width: 163px;
     height:90px;
     text-align: center;
-    float: left;
+    // float: left;
 }
 .module:hover{
     background-color: #1e94da;
@@ -1137,6 +1138,9 @@ main{
     position: absolute;
     top: 0;
     left: 0;
+}
+.mo-icons-bg.comm_video_img:hover .mo-icons-bg.comm_video_img_btn{
+    display: block;
 }
 .comm_video_date,.comm_video_time{
     font-size: 12px;

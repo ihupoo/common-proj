@@ -1,10 +1,12 @@
 import Store from '@/store';
-import { fetchLoop } from '../utils';
+import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import '@/lib/artDialog/4.1.7/skins/simple.css';
-import '@/styles/reset-artDialog.scss';
 
+import '@/lib/easyui/1.8.5/themes/icon.css';
+import '@/lib/easyui/1.8.5/themes/default/easyui.css';
+import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
+import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
+import '@/styles/reset-easyui.scss';
 const fetchState = {
     transMeeting : new fetchLoop(),
     portMeeting : new fetchLoop(),
@@ -80,6 +82,7 @@ function eventBindTitle(dom){
             let url = mores.url[tabName]
             $containerDom.find('.header-more a.more').attr('href', url)
         }
+        output.stopfetch()
         fetchState[tabName].start(({ moid, dom }) => FETCHMEETING[tabName](moid, dom))
         
     })
@@ -204,7 +207,7 @@ function fetchP2PMeetng(moid, dom){//获取点对点会议信息
     });
 }
 
-export default {
+const output = {
     render(dom, { user }, { head_more }){
         
         $(dom).empty().append($(TemplateIndex({})).localize())
@@ -234,3 +237,5 @@ export default {
         fetchState['p2pMeeting'].stop()
     }
 }
+
+export default output

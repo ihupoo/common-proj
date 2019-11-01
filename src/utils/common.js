@@ -3,27 +3,6 @@ import { Validation } from './utils';
 import { MoAlert } from '@/components/popup';
 
 const Common = {
-	initPortrait: function (portrait, portraitDomain) {
-		if (!portrait) {
-			portrait = Store.getState('BASE_URL') + '/static/images/avator.png?v=1';
-		} else if (portraitDomain) {
-			portrait = '//' + portraitDomain + '/' + portrait;
-		}
-		let $userPortrait = $('.user-info .user-portrait');
-		$userPortrait.on('load', function () {
-			$(this).removeClass('hidden');
-		});
-		$userPortrait.attr('src', portrait);
-	},
-	setDefaultImg: function (parent) {
-		parent = parent || "";
-		$(parent + " img[data-onerror]").each(function (i) {
-			$(this).on("error", function () {
-				$(this).attr("src", $(this).attr("data-onerror"));
-				$(this).off('error')
-			})
-		})
-    },
     //账号正确与否
     checkAccount(value) {
 		if (Validation.isAllNumber(value)) {//账号的检验 新增该规则（不可以纯数字）

@@ -1,6 +1,6 @@
 import TemplateIndex from './index.art';
 import echarts from 'echarts'
-import { echartOption } from '@/pages/home/js/draw';
+import { echartOption } from '@/pages/home/tpl/draw';
 
 const echartsOpt = {
     data:[

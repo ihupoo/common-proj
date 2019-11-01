@@ -1,11 +1,13 @@
 import Store from '@/store';
 import { Times } from '@/utils/utils';
-import { fetchLoop } from '../utils';
+import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import '@/lib/artDialog/4.1.7/skins/simple.css';
-import '@/styles/reset-artDialog.scss';
 
+import '@/lib/easyui/1.8.5/themes/icon.css';
+import '@/lib/easyui/1.8.5/themes/default/easyui.css';
+import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
+import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
+import '@/styles/reset-easyui.scss';
 let pages = {
     currentPage: 1,
     total: 0
@@ -130,20 +132,20 @@ function renderGrid({total, meetings} , dom){
 }
 
 function fetchLoad({ moid, user } , dom){//获取告警信息
-    const { BASE_URL } = Store.getState()
+    const { BASE_URL, domainType } = Store.getState()
 
-    const url = user.domainType == "coreDomain" 
+    const url = domainType == "coreDomain" 
         ? BASE_URL + "/nms/getHistoryMeetingList"
         : BASE_URL + "/meeting/listMeetingByCondition";
 
-    const _moid = user.domainType == "coreDomain" ? moid : user.moid
+    const _moid = domainType == "coreDomain" ? moid : user.moid
     const _searchType = user.isUserDomainAdmin ? '1' : '0'
 
     let endTime = new Date();
     let startTime = new Date(endTime.getTime());
     startTime.setDate(startTime.getDate() - 1);
-    startTime = user.domainType == "coreDomain" ? Times.getCurrentTime(startTime).replace(/-/g, '/') : Times.getCurrentTime(startTime)
-    endTime = user.domainType == "coreDomain" ? Times.getCurrentTime(endTime).replace(/-/g, '/') : Times.getCurrentTime(endTime)
+    startTime = domainType == "coreDomain" ? Times.getCurrentTime(startTime).replace(/-/g, '/') : Times.getCurrentTime(startTime)
+    endTime = domainType == "coreDomain" ? Times.getCurrentTime(endTime).replace(/-/g, '/') : Times.getCurrentTime(endTime)
 
     let params = {
         moid : _moid,

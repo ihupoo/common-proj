@@ -6,10 +6,12 @@
                 <div class="content_panel">
                     {{if Object.prototype.toString.call(module) === "[object Array]"}}
                         {{each module x}}
-                            {{include './wrapper.art' x}}
+                            // {{include './wrapper.art' x}}
+                            <% include('./wrapper.art', { data : x }) %>
                         {{/each}}
                     {{else}}
-                        {{include './wrapper.art' module}}
+                        // {{include './wrapper.art' module}}
+                            <% include('./wrapper.art', { data : module }) %>
                     {{/if}}
                 </div>
             </div>

@@ -1,10 +1,14 @@
 import Store from '@/store';
 import { Times } from '@/utils/utils';
-import { fetchLoop } from '../utils';
+import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import '@/lib/artDialog/4.1.7/skins/simple.css';
-import '@/styles/reset-artDialog.scss';
+
+import '@/lib/easyui/1.8.5/themes/icon.css';
+import '@/lib/easyui/1.8.5/themes/default/easyui.css';
+import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
+import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
+
+import '@/styles/reset-easyui.scss';
 
 let pages = {
     currentPage: 1,
@@ -14,6 +18,8 @@ let pages = {
 const fetchState = new fetchLoop()
 
 function datagridInit({ moid, user }){
+    const { domainType } = Store.getState()
+
     $('#call_meeting_info_grid').datagrid({
         idField : "id",
         pagination:true,
@@ -36,7 +42,7 @@ function datagridInit({ moid, user }){
                     rowTemp.rooms = rooms.length == 0 ? "无会议室信息" : rooms.toLocaleString();
                     let meetingDetailUrl = '';
 
-                    if(user.domainType !== 'coreDomain'){
+                    if(domainType !== 'coreDomain'){
                         meetingDetailUrl = 'href="/meeting/mcc/manager/'+ rowTemp.id +'"';
                     }
                     let leftStr = '<div class="grid-item-wrapper">' +
@@ -127,13 +133,13 @@ function renderGrid({total, meetings} , dom){
 }
 
 function fetchLoad({ moid, user } , dom){//获取告警信息
-    const { BASE_URL } = Store.getState()
+    const { BASE_URL, domainType } = Store.getState()
 
-    const url = user.domainType == "coreDomain" 
+    const url = domainType == "coreDomain" 
         ? BASE_URL + "/nms/getCallMeetingList"
         : BASE_URL + "/meeting/listMeetingByCondition";
 
-    const _moid = user.domainType == "coreDomain" ? moid : user.moid
+    const _moid = domainType == "coreDomain" ? moid : user.moid
     const _searchType = user.isUserDomainAdmin ? '1' : '0'
     let params = {
         moid : _moid,

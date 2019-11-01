@@ -1,23 +1,23 @@
-<div class="item-resource-info-content-wrapper {{if data.length/3>2}}{{else}} {{if data.length/3>1}}twoRow {{else}} oneRow {{if data.length%3==1}} oneColumn {{else if data.length%3==2}} twoColumn {{/if}}{{/if}}{{/if}}{{/if}}">
-    {{each data as item_resource i}}
-    {{if i%3 == 0 }}<div class="row ">{{/if}}
-        <div class="item-resource-info-content {{if i%3!=0}}magrin-left-112{{/if}}">
-            <div id="{{item_resource.id}}" class="pie"></div>
-            <div id="{{item_resource.id}}_gray" class="pie gray-pie"></div>
-            <div class="item-resource-info-detail">
-                <ul>
-                    <li class="item-li item-name">{{item_resource.name}}</li>
-                    <li class="item-li used-num">
-                        <span class="item-title used">已使用</span>
-                        <span class="item-value used {{if item_resource.used/item_resource.total>=0.85}}moreThan85{{else}} lessThan85{{/if}}">{{item_resource.used}}</span>
-                    </li>
-                    <li class="item-li total-num">
-                        <span class="item-title">总数</span>
-                        <span class="item-value">{{item_resource.total}}</span>
-                    </li>
-                </ul>
+<div class="item-resource-info-content-wrapper {{if data.length/3>2}}{{else}} {{if data.length/3>1}}twoRow {{else}} oneRow {{if data.length%3==1}} oneColumn {{else if data.length%3==2}} twoColumn {{/if}}{{/if}}{{/if}}">
+    {{each data item_resource i}}
+        {{if i%3 == 0 }}<div class="row ">{{/if}}
+            <div class="item-resource-info-content {{if i%3!=0}}magrin-left-112{{/if}}">
+                <div id="{{item_resource.id}}" class="pie"></div>
+                <div id="{{item_resource.id}}_gray" class="pie gray-pie"></div>
+                <div class="item-resource-info-detail">
+                    <ul>
+                        <li class="item-li item-name">{{item_resource.name}}</li>
+                        <li class="item-li used-num">
+                            <span class="item-title used">已使用</span>
+                            <span class="item-value used {{if item_resource.used/item_resource.total>=0.85}}moreThan85{{else}} lessThan85{{/if}}">{{item_resource.used}}</span>
+                        </li>
+                        <li class="item-li total-num">
+                            <span class="item-title">总数</span>
+                            <span class="item-value">{{item_resource.total}}</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    {{if i%3 == 2 || i == data.length-1 }}</div>{{/if}}
+        {{if i%3 == 2 || i == data.length-1 }}</div>{{/if}}
     {{/each}}
 </div>

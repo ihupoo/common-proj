@@ -1,6 +1,7 @@
-<div id="{{contentId}}_wrapper" style="height:{{height}}px">
-    {{include './header.art' header}}
-    <div class="content-wrapper" id="{{contentId}}">
+
+<div id="{{data.contentId}}_wrapper" style="height:{{data.height}}px">
+    {{include './header.art' data}}
+    <div class="content-wrapper" id="{{data.contentId}}">
     </div>
     <div class="no-data-wrapper hidden">
         <div class="no-data">

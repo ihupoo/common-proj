@@ -1,8 +1,8 @@
 import Store from '@/store';
 import { Times } from '@/utils/utils';
-import { getMinMaxValue, getAverageValue, fetchLoop } from '../utils';
+import { getMinMaxValue, getAverageValue, fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
-import { echartOption } from '@/pages/home/js/draw';
+import { echartOption } from '@/pages/home/tpl/draw';
 
 
 let fetchState = new fetchLoop();

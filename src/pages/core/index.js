@@ -92,8 +92,9 @@ $(function () {
             CoreUpdataAccount.init();
             CoreSet.init();
             ModifyPortrait.initUpload();
-            Common.setDefaultImg('.user-info');
-            Common.initPortrait(user.portrait40, user.portraitDomain);
+            
+            TemplateHeader.setPortrait(user.portrait40, user.portraitDomain);
+
             if (user.portrait256 && user.portraitDomain) {
                 let domain = '//' + portraitDomain + '/';
                 $('.img_32').attr('src', domain + user.portrait40);

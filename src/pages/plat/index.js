@@ -27,7 +27,7 @@ import './css/plat.scss';
 
 import '@/lib/portal/mo-portal';
 import ModifyPortrait from '@/utils/modifyPortrait';
-import { Common, setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
+import { setBaseUrl, InputPreventAutocomplete, AjaxComplete } from '@/utils/common';
 import { Password } from '@/utils/password';
 import { PlatSetFrame, PlatUpdataAccount, ExtNum, PlatSet } from './js/plat';
 
@@ -125,8 +125,8 @@ $(function () {
             ExtNum.init();
             PlatSet.init();
             ModifyPortrait.initUpload();
-            Common.setDefaultImg('.user-info');
-            Common.initPortrait(user.portrait40, user.portraitDomain);
+
+            TemplateHeader.setPortrait(user.portrait40, user.portraitDomain);
             if (user.portrait256 && user.portraitDomain) {
                 let domain = '//' + portraitDomain + '/';
                 $('.img_32').attr('src', domain + user.portrait40);

@@ -5,6 +5,7 @@ import { MoAlert } from '@/components/popup'
 import { Size, Common } from '@/utils/common'
 import '@/lib/portal/mo-portal';
 import Store from '@/store/index';
+import TemplateHeader from '@/components/tpl/header';
 
 let { username, securityPolicy, editName } = Store.getState('user');
 
@@ -335,7 +336,7 @@ const PlatSet = {
 		});
 	},
 	loadPage: function (data) {
-		Common.initPortrait(data.portraitUrl40, window.portraitDomain);
+		TemplateHeader.setPortrait(data.portraitUrl40, window.portraitDomain);
 	},
 	passwordSave: function () {
 		let url = Store.getState('BASE_URL') + "/system/user/updatepassword";
