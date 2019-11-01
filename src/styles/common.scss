@@ -274,8 +274,8 @@
 /*footer start*/
 #footer {
     width: 100%;
-    position: fixed;
-    bottom: 0px;
+    // position: fixed;
+    // bottom: 0px;
     height: 70px;
     background-color: #373d41;
     margin-top: 20px;
@@ -2125,4 +2125,8 @@
 .nav-sublist-notify .base-scrollbar_view {
     width: 313px;
     height: 214px;
+}
+
+.content_panel.none-border{
+	border:none;
 }

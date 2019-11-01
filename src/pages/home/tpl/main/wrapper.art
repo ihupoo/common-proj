@@ -1,5 +1,5 @@
-
-<div id="{{data.contentId}}_wrapper" style="height:{{data.height}}px">
+{{if data}}
+<div id="{{data.contentId}}_wrapper" style="height:{{data.height}}px;position:relative">
     {{include './header.art' data}}
     <div class="content-wrapper" id="{{data.contentId}}">
     </div>
@@ -10,3 +10,4 @@
         </div>
     </div>
 </div>
+{{/if}}

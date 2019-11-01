@@ -412,6 +412,7 @@ function lastStatusResourceTemp(opt, data){
   */
 function fetchServer({ tab, moid, dom }){
     const { BASE_URL } = Store.getState()
+    let url = ''
     if(tab === 'cpu'){
         url = BASE_URL + "/nms/getCpuPhysical";
     }else{

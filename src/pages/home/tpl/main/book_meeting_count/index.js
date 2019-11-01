@@ -1,4 +1,5 @@
 import Store from '@/store';
+import echarts from 'echarts';
 import { Times } from '@/utils/utils';
 import { getMinMaxValue, getAverageValue, fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';

@@ -84,7 +84,7 @@ export class fetchLoop{
         this.poll = false;
         clearTimeout(this.timeoutId)
         this.timeoutId = null
-        this.ajaxId.abort()
+        this.ajaxId && this.ajaxId.abort()
     }
     loop(fn){
         if(this.poll){

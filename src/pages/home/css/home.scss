@@ -214,16 +214,7 @@ body{
         float: left;
         width: 564px;
     }
-     .col-md-4.meeting_info{
-        clear: left;
-    }
-    .col-md-4.meeting_info.clear{
-    	/* clear: none; */
-    }
-    .col-md-4.meeting_category_info.clear{
-    	/* float:left;
-    	clear: none;  */
-    }
+  
 
 }
 @media (min-width: 1862px){
@@ -236,11 +227,8 @@ body{
     .col-md-4{
         width: 564px;
     }
-    .col-md-4.meeting_info.clear{
-    	/* clear: left; */
-    }
-    .col-md-4.meeting_category_info.clear{
-    	clear:left;
+    .col-md-4:nth-of-type(3){
+        height: 567px;
     }
    
 }
@@ -274,11 +262,11 @@ main{
     padding: 0;
     margin:10px 9px 10px 9px;
     width: 564px;
-    height: 570px;
+    // height: 570px;
 }
 .content_panel{
     width: 562px;
-    height: 568px;
+    // height: 568px;
     border:1px solid #e2e4e6;
     color: #4e4e4e;
 }
@@ -291,33 +279,33 @@ main{
     margin-bottom:20px;
     height: 163px;
 }
-.col-md-4.book_meeting_count{
-    height: 430px;
-}
-.content_panel.book_meeting_count{
-    height: 428px;
-}
-.col-md-4.meeting_info{
-    height: 430px;
-}
-.content_panel.meeting_info{
-    height: 428px;
-}
-.col-md-4.meeting_category_info,.col-md-4.live_room,.col-md-4.living{
-    height: 430px;
-}
-.content_panel.meeting_category_info,.content_panel.live_room,.content_panel.living{
-    height: 428px;
-}
-.col-md-4.call_meeting_info,.col-md-4.confirm_meeting_info,.col-md-4.book_meeting_info,.col-md-4.past_meeting_info{
-    height: 430px;
-}
-.content_panel.call_meeting_info,.content_panel.confirm_meeting_info,.content_panel.book_meeting_info,.content_panel.past_meeting_info{
-    height: 428px;
-}
-#call_meeting_info,#confirm_meeting_info,#book_meeting_info,#past_meeting_info{
-    height: 394px;
-}
+// .col-md-4.book_meeting_count{
+//     height: 430px;
+// }
+// .content_panel.book_meeting_count{
+//     height: 428px;
+// }
+// .col-md-4.meeting_info{
+//     height: 430px;
+// }
+// .content_panel.meeting_info{
+//     height: 428px;
+// }
+// .col-md-4.meeting_category_info,.col-md-4.live_room,.col-md-4.living{
+//     height: 430px;
+// }
+// .content_panel.meeting_category_info,.content_panel.live_room,.content_panel.living{
+//     height: 428px;
+// }
+// .col-md-4.call_meeting_info,.col-md-4.confirm_meeting_info,.col-md-4.book_meeting_info,.col-md-4.past_meeting_info{
+//     height: 430px;
+// }
+// .content_panel.call_meeting_info,.content_panel.confirm_meeting_info,.content_panel.book_meeting_info,.content_panel.past_meeting_info{
+//     height: 428px;
+// }
+// #call_meeting_info,#confirm_meeting_info,#book_meeting_info,#past_meeting_info{
+//     height: 394px;
+// }
 .book_meeting_data_container{
 	padding-top:14px;
 	padding-left:20px;
@@ -1007,7 +995,7 @@ main{
 }
 
 #meeting_info{
-    height:394px;
+    // height:394px;
 }
 /*#meeting_info  .datagrid-btable tr, #call_meeting_info .datagrid-btable tr,
 #confirm_meeting_info .datagrid-btable tr, #book_meeting_info .datagrid-btable tr, #past_meeting_info .datagrid-btable tr{
@@ -1251,12 +1239,13 @@ main{
     margin-top: -34px;
     z-index: -100;
     height: 100%;
+    top: 34px;
 }
 #subscribe_alarm .no-data-wrapper{
     // height: 385px;
 }
-#platform_resource .no-data-wrapper{
-	// height:128px;
+.platform_resource .no-data-wrapper{
+	 height:158px;
 	// margin-top:-128px;
 }
 #meeting_info .no-data-wrapper,#meeting_category_info .no-data-wrapper,
@@ -1314,8 +1303,8 @@ main{
 }
 #footer{
 	width: 100%;
-    position: fixed;
-    bottom: 0px;
+    // position: fixed;
+    // bottom: 0px;
 	height: 83px;
     background-color: #373d41;
     margin-top: 20px;

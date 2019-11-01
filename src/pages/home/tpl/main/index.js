@@ -14,32 +14,38 @@ import TemplatePlatformResource from './platform_resource';
 import TemplateResourceLoad from './resource_load';
 import TemplateSubscribeAlarm from './subscribe_alarm';
 
+
 //一般用户界面的主体模板数据
 const USER_MODULE = ({ createMeetingUrl }) => ({
     call_meeting_info: {
         contentId:"call_meeting_info",
         head_titles:["正在召开的会议"],
         head_more:[{more:"创建会议",url: createMeetingUrl },{more:"更多",url:"/meeting/mcc"}],
+        height: 430
     },
     book_meeting_info: {
         contentId:"book_meeting_info",
         head_titles:["预约的会议"],
         head_more:[{more:"更多",url:"/meeting/meeting/meetingList"}],
+        height: 430
     },
     past_meeting_info: {
         contentId:"past_meeting_info",
         head_titles:["历史会议"],
         head_more:[{more:"更多",url:"/meeting/meeting/historyMeeting"}],
+        height: 430
     },
     live_room: {
         contentId:"live_room",
         head_titles: ["直播室"],
-        head_more:[]
+        head_more:[],
+        height: 430
     },
     living: {
         contentId:"living",
         head_titles:["即将直播"],
-        head_more:[]
+        head_more:[],
+        height: 430
     }
 })
 //管理员模板
@@ -103,6 +109,7 @@ const ADMIN_MODULE = ({
             }
             return moreList
         })(),
+        height: 565,
     },
     meeting_count: {
         contentId:"meeting_count",
@@ -117,11 +124,13 @@ const ADMIN_MODULE = ({
             }
             return moreList
         })(),
+        height: 565,
     },
     book_meeting_count: {
         contentId:"book_meeting_count",
         head_titles:["预约会议并发统计"],
-        head_more:[]
+        head_more:[],
+        height: 430
     },
     meeting_info: {
         contentId:"meeting_info",
@@ -171,6 +180,7 @@ const ADMIN_MODULE = ({
             return moreList
 
         })(),
+        height: 430
     },
     meeting_category_info: {
         contentId:"meeting_category_info",
@@ -189,6 +199,7 @@ const ADMIN_MODULE = ({
             }
             return moreList
         })(),
+        height: 430
     },
     live_room: {
         contentId:"live_room",
@@ -215,6 +226,7 @@ const ADMIN_MODULE = ({
 
             return moreList
         })(),
+        height: 430
     },
     living: {
         contentId:"living",
@@ -239,7 +251,8 @@ const ADMIN_MODULE = ({
                 }
             }
             return moreList
-        })()
+        })(),
+        height: 430
     }
 })
 
