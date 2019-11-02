@@ -35,11 +35,11 @@ function datagridInit(){
 
 function renderGrid(data, dom){
     if(data.length != 0){
-        $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $(dom).find('.no-data-wrapper').addClass("hidden");
         $("#warm-grid-container").removeClass("none-visible");
         $("#warm-grid").datagrid('loadData', data);
     }else{
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden");
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         $("#warm-grid-container").addClass("none-visible");
     }
 }
@@ -70,9 +70,8 @@ function fetchLoad(moid, dom){//获取告警信息
 
 export default {
     render(dom, { user }){
-        
         $(dom).empty().append($(TemplateIndex({})).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无订阅告警信息');
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         datagridInit()
         
         const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);

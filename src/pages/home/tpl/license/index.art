@@ -1,0 +1,9 @@
+<div class="tipImage license-warn-image"></div>
+<div class="license-warn-info">
+    {{if days > 0}}
+        当前检测到授权许可与设备不匹配！<br>运行{{31-days}}天后授权将失效，请尽快恢复设备！
+    {{else}}
+        授权未导入或已失效！<br>会议功能无法使用，请重新导入授权！
+    {{/if}}
+    <div id="license-warn-checkbox"></div>
+</div>

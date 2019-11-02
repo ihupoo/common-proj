@@ -1,7 +1,8 @@
 import axios from 'axios'
+import Store from '@/store'
 
 const service = axios.create({
-    baseURL: '/mock',
+    baseURL: '/',
     timeout: 115000
 })
 
@@ -20,7 +21,15 @@ service.interceptors.response.use(
     response => {
         const res = response.data;
         if (response.status !== 200) {
-           //
+            //
+            if (response.errorCode && (
+                response.errorCode == "100012"
+                || response.errorCode == "100011"
+                || response.errorCode == "100010"
+                || response.errorCode == "100013"
+            )) {
+                location.href = Store.getState('BASE_URL') + "/login";
+            }
             return Promise.reject('error')
         } else {
             return res

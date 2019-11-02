@@ -1,105 +1,73 @@
 /**login start**/
-.login-logo{
-	position: absolute;
-    display: inline-block;
-    left: 35px;
-    top: 29px;
+.login-logo {
+   position: absolute;
+   display: inline-block;
+   left: 35px;
+   top: 29px;
 }
 
-#login_header .sys_logo{
-     position: absolute;
-     top: 161px;
-     left:50%;
+#login_header .sys_logo {
+   position: absolute;
+   top: 161px;
+   left: 50%;
 }
 
-.sys_logo .logo_text{
-     margin-left: 136px;
-     font-size: 24px;
-     text-align: left;
-     vertical-align: top;
-     height:24px;
-     line-height: 24px;
-     color:#cccccc;
-     font-family:"微软雅黑";
-     display:block;
-     
-} 
-.sys_logo .logo_englishtext{
-     margin-left: 136px;
-     margin-top: 10px;
-     font-size: 14px;
-     text-align: left;
-     vertical-align: top;
-     line-height: 14px;
-     color:#333333;
-     font-family:"Arial"     
-}
-
-.login-title-logo{
-	display: inline-block;
-    margin-right: 13px;
-    margin-left: -36px;
-    float:left;
-}
-.logo_title{
-	float:left;
-}
-.logo_englishtext{
-	float:left;
-}
-#login_header {
-    width: 100%;
-    height: 377px;
-    background-color: #0C0C0C;
-}
-#login_header .login_header_bg{
-  width: 100%;
-  height: 100%;
-  background:url("~images/login_header_bg.png") center bottom;
-}
-.company_info_down{
-	margin-top:10px;
-	font-size: 12px;
-	color: #606060;
-	font-family:'微软雅黑';
-}
-
-.company_info span.phoneNumber,.company_info span.email,.company_info .no_meeting,.company_info span.meeting  a {
-	vertical-align:top;
-}
-.enterprise_introduce_content{
-   width: 800px;
+.sys_logo .logo_text {
+   margin-left: 136px;
+   font-size: 24px;
+   text-align: left;
+   vertical-align: top;
+   height: 24px;
+   line-height: 24px;
+   color: #cccccc;
+   font-family: "微软雅黑";
    display: block;
-   margin-left:auto;
-   margin-right:auto;
-   margin-bottom:20px;
-   color: #616060;
+
 }
-.enterprise_introduce_content h2{
-   font-size: 16px;
+
+.sys_logo .logo_englishtext {
+   margin-left: 136px;
+   margin-top: 10px;
+   font-size: 14px;
+   text-align: left;
+   vertical-align: top;
+   line-height: 14px;
+   color: #333333;
+   font-family: "Arial"
 }
-.enterprise_introduce_content .connect_info{
-   margin-top: 30px;
+
+.login-title-logo {
+   display: inline-block;
+   margin-right: 13px;
+   margin-left: -36px;
+   float: left;
 }
-.enterprise_introduce_content .company_info{
-   /* margin-top:10px; */
-   margin-bottom: 0px;
+
+.logo_title {
+   float: left;
 }
-.enterprise_introduce_content .company_info a{
-   cursor: default;
+
+.logo_englishtext {
+   float: left;
 }
-.enterprise_introduce_content .enterprise_descript{
-   margin: 18px 0 18px;
+
+#login_header {
+   width: 100%;
+   height: 377px;
+   background-color: #0C0C0C;
 }
-.enterprise_introduce_content .enterprise_tel,.enterprise_introduce_content .enterprise_mail,.enterprise_introduce_content .enterprise_net{
-    display: block;
-    float: left;
-    padding-left: 28px;
-    position: relative;
-    text-align:left;
+
+#login_header .login_header_bg {
+   width: 100%;
+   height: 100%;
+   background: url("~images/login_header_bg.png") center bottom;
 }
-.enterprise_introduce_content .enterprise_mail,.enterprise_introduce_content .enterprise_net{
-    margin-left: 40px;
+
+.company_info span.phoneNumber,
+.company_info span.email,
+.company_info .no_meeting,
+.company_info span.meeting a {
+   vertical-align: top;
 }
 
 /**login end**/

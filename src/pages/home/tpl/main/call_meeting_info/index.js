@@ -77,7 +77,7 @@ function datagridInit({ moid, user }){
                         meetingTime = minute == 0 ? meetingTime : meetingTime + minute + '分钟';
                     }
 
-                    if(startTimeDateStr == currentDateStr){//同一天不显示日期
+                    if(startTimeDateStr == new Date().toDateString()){//同一天不显示日期
                         let hour = startTimeDate.getHours() < 10 ? '0' + startTimeDate.getHours() : startTimeDate.getHours();
                         let miniute = startTimeDate.getMinutes() < 10 ? '0'+startTimeDate.getMinutes() : startTimeDate.getMinutes()
                         rowTemp.time = hour + ":" + miniute + "开始 " + meetingTime;

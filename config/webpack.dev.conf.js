@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require("path");
 const base = require('./webpack.base.conf');
+const Dotenv = require('dotenv-webpack');
+const { logger } = require('./utils')
 
 module.exports = merge.smart(
     {
@@ -15,14 +17,16 @@ module.exports = merge.smart(
             ]
         },
         plugins: [
-            new webpack.HotModuleReplacementPlugin() //热更新，还需在index.js里配置
+            new webpack.HotModuleReplacementPlugin(), //热更新，还需在index.js里配置
+            new Dotenv({
+                path: path.resolve(__dirname,'../.env.dev')
+            })
         ],
 
         devtool: '#cheap-module-eval-source-map', //构建速度快，采用eval执行
 
         devServer: {
             index: 'login.html',
-            openPage: 'portal',
             contentBase: path.resolve(__dirname, '../dist'), //服务路径，存在于缓存中
             host: 'localhost', // 默认是localhost
             port: 8088, // 端口
@@ -32,15 +36,25 @@ module.exports = merge.smart(
             overlay: true,
             proxy: {
                 '/portal': {
-                    target: 'http://172.16.185.233',
+                    target: 'http://localhost:8080/portal',
                     secure: false,
                     changeOrigin: true,
                     pathRewrite: {
-                        '^/portal': '/portal'
+                        '^/portal': ''
                     },
                     bypass: function(req, res, proxyOptions) {
                         if (req.headers.accept.indexOf('html') !== -1) {
-                            return '/login.html';
+                            
+                            let originalUrl = req.originalUrl;
+                            let page = originalUrl.replace(/\/(portal)/g, '')
+
+                            return page === '' ? '/login.html' : `${page}.html`;
+                        }
+                        if(/.(jpe?g|png|gif|css|scss|js)/g.test(req.originalUrl)){
+                            let originalUrl = req.originalUrl;
+                            let page = originalUrl.replace(/\/(portal)/g, '')
+
+                            return  `${page}`;
                         }
                     }
                 },

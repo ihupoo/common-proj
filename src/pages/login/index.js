@@ -63,7 +63,7 @@ $(function () {
                     ...resConfig.data
                 }
             })
-            localStorage.setItem('system_config', resConfig.data)
+            localStorage.setItem('system_config', JSON.stringify(resConfig.data))
 
             const { sysBrand, lang, versionYear } = Store.getState()
             pageRender({ sysBrand, lang, versionYear })
@@ -72,9 +72,8 @@ $(function () {
             pageRender()
         }
 
-
         if (resInfo && resInfo.success && resInfo.data) {
-            const { outAlter, showVerifyCode, nonceValue } = resInfo.data
+            const { outAlter, showVerifyCode, nonceValue = '' } = resInfo.data
 
             if (showVerifyCode && showVerifyCode == '1') {
                 $(".verifyCode_input_holder").removeClass("hidden");

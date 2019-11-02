@@ -12,6 +12,32 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
+    height: auto !important;
+    background: none !important;
+}
+
+.company_info {
+    color: #4e4e4e !important;
+}
+
+.company_info .email {
+    color: #4e4e4e !important;
+}
+
+.meeting a {
+    color: #4e4e4e !important;
+}
+
+.meeting a:hover {
+    color: #007ac0 !important;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.company_info .email:hover {
+    color: #007ac0 !important;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .company_info_up {
@@ -23,10 +49,58 @@ body {
     align-items: center;
 }
 
+.enterprise_introduce_content .company_info {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.enterprise_introduce_content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    color: #616060;
+}
+
+.enterprise_introduce_content h2 {
+    font-size: 16px;
+}
+
+.enterprise_introduce_content .connect_info {
+    margin-top: 30px;
+}
+
+.enterprise_introduce_content .company_info a {
+    cursor: default;
+}
+
+.enterprise_introduce_content .enterprise_descript {
+    margin: 18px 0 18px;
+}
+
+.enterprise_introduce_content .enterprise_tel,
+.enterprise_introduce_content .enterprise_mail,
+.enterprise_introduce_content .enterprise_net {
+    display: block;
+    float: left;
+    padding-left: 28px;
+    position: relative;
+    text-align: left;
+}
+
+.enterprise_introduce_content .enterprise_mail,
+.enterprise_introduce_content .enterprise_net {
+    margin-left: 40px;
+}
+
 .company_info_down {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 0px;
+    font-size: 12px;
+    color: #606060;
+    font-family: '微软雅黑';
 }
 
 .sys_logo .icon {
@@ -344,15 +418,6 @@ body {
     margin-left: 5px;
 }
 
-.enterprise_introduce_content {
-    /* width: 600px; */
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-    /*    color: #616060;
-   */
-}
 
 .enterprise_introduce_content h2 {
     font-size: 16px;
@@ -441,16 +506,6 @@ body {
     display: inline-block;
 }
 
-.meeting a {
-    color: #4e4e4e;
-}
-
-.meeting a:hover {
-    color: #007ac0;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 .left24 {
     margin-left: 24px;
 }
@@ -471,14 +526,4 @@ input:-webkit-autofill {
 
 .login_input_wrapper .pwdEye.active {
     background-position: -20px 0;
-}
-
-.company_info .email {
-    color: #4e4e4e;
-}
-
-.company_info .email:hover {
-    color: #007ac0;
-    text-decoration: underline;
-    cursor: pointer;
 }

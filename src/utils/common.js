@@ -1,4 +1,5 @@
 import Store from '@/store';
+import axios from '@/api/axios';
 import { Validation } from './utils';
 import { MoAlert } from '@/components/popup';
 
@@ -47,10 +48,13 @@ export { Size, Common }
 
 //页面进入设置URL
 export function setBaseUrl(){
-    const baseUrl = window.location.pathname.split('/')[1];
-    if(baseUrl !== 'portal' && baseUrl !== 'portalCore'){
-        // throw new Error('路径错误')   //todo，跳转404
+    let baseUrl = window.location.pathname.split('/')[1];
+    
+    if(process.env.NODE_ENV === 'development'){
+        baseUrl = process.env.URL_DEV
     }
+
+    axios.defaults.baseURL = `/${baseUrl}`
     Store.dispatch({
         type:'save',
         payload:{

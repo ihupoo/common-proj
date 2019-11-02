@@ -31,3 +31,10 @@
         {{/each}}
     </div>
 </div>
+<div class="no-data-wrapper hidden">
+    <div class="no-data">
+        <span class="mo-icons-bg warm-icon"></span>
+        <span class="warm-text">暂无订阅告警信息</span>
+    </div>
+</div>
+

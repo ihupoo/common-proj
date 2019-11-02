@@ -1,6 +1,21 @@
+
+const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+/* node 打印log */
+function logger() {
+    const options = {
+        flags: 'a',
+        encoding: 'utf8'
+    }
+
+    let stdout = fs.createWriteStream(path.join(__dirname, '../log/stdout.log'), options)
+    let stderr = fs.createWriteStream(path.join(__dirname, '../log/stderr.log'), options)
+
+    return new console.Console(stdout, stderr)
+}
 
 const HTML_META = {
     charset: { charset: 'utf-8' },
@@ -62,5 +77,6 @@ function entry_alias_htmlPlugin() {
 
 
 module.exports = {
-    ...entry_alias_htmlPlugin()
+    ...entry_alias_htmlPlugin(),
+    logger: logger()
 }

@@ -34,7 +34,7 @@ import 'ezmark'
 
 import Store from '@/store/index';
 import { setBaseUrl, AjaxComplete } from '@/utils/common';
-// import { fetchSystemConfig, fetchUserInfo } from '@/api/service';
+import { fetchUserMenu, fetchUserInfo } from '@/api/service';
 // import { fetchHomeMenu } from './service';
 import { MoConfirm } from '@/components/popup';
 
@@ -43,6 +43,7 @@ import TemplateHeader from '@/components/tpl/header';
 import TemplateFooter from '@/components/tpl/footer.art';
 import TemplateMain from './tpl/main';
 import TemplateSystemModules from './tpl/systemModules';
+import { fetchHomeInfo } from './service';
 
 
 
@@ -65,79 +66,135 @@ function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', BASE_URL, 
 setBaseUrl()
 
 $(function () {
-    const config = localStorage.getItem('system_config') || {}
+    const config = JSON.parse(localStorage.getItem('system_config') || {})
     Store.dispatch({
         type: 'save',
         payload: {
             ...config
         }
     })
-    const { sysBrand, lang, versionYear, BASE_URL, user, menu } = Store.getState()
 
-    pageRender({ sysBrand, lang, versionYear, BASE_URL, user, menu })
-
-    TemplateHeader.setPortrait(user.portrait40, user.portraitDomain);
-
-    if (user.passwordExpire) {
-        let pwdExpire = parseInt(user.passwordExpire)
-        if (pwdExpire > -1) {
-            MoConfirm('您的密码有效期剩余' + pwdExpire + '天，是否进行密码修改？', function (bool) {
-                if (bool) {
-                    location.href = 'set#password';
+    ;(async () => {
+        let [resUser, resUserMenu, resMenu] = await Promise.all([
+            fetchUserInfo(),
+            fetchUserMenu(),
+            fetchHomeInfo()
+        ])
+        if (resUser && resUser.success && resUser.data) {
+            Store.dispatch({
+                type: 'save',
+                payload: {
+                    user: resUser.data
                 }
-            }, '修改密码');
+            })
+        } else {
+            //todo 没获取到，跳转login?
+
         }
-    }
 
-    if (window.innerHeight - $("main").outerHeight() - $(".header-wrapper").outerHeight(true) > 103) {
-        $("main").height(window.innerHeight - 103 - $(".header-wrapper").outerHeight(true))
-    }
+        if (resUserMenu && resUserMenu.success && resUserMenu.data) {
+            Store.dispatch({
+                type: 'save',
+                payload: {
+                    user: {
+                        ...Store.getState('user'),
+                        ...resUserMenu.data
+                    }
+                }
+            })
 
-    $(window).on("resize", function () {
+        } else {
+            //todo 没获取到的 初始缺省值
+        }
+
+
+        if (resMenu && resMenu.success && resMenu.data) {
+            Store.dispatch({
+                type: 'save',
+                payload: {
+                    menu : resMenu.data
+                }
+            })
+
+        } else {
+            //todo url没获取到的 初始缺省值
+        }
+
+
+
+        
+        const { sysBrand, lang, versionYear, BASE_URL, user, menu } = Store.getState()
+
+        pageRender({ sysBrand, lang, versionYear, BASE_URL, user, menu })
+
+        TemplateHeader.setPortrait(user.portrait40, user.portraitDomain);
+
+        if (user.passwordExpire) {
+            let pwdExpire = parseInt(user.passwordExpire)
+            if (pwdExpire > -1) {
+                MoConfirm('您的密码有效期剩余' + pwdExpire + '天，是否进行密码修改？', function (bool) {
+                    if (bool) {
+                        location.href = 'set#password';
+                    }
+                }, '修改密码');
+            }
+        }
+
         if (window.innerHeight - $("main").outerHeight() - $(".header-wrapper").outerHeight(true) > 103) {
             $("main").height(window.innerHeight - 103 - $(".header-wrapper").outerHeight(true))
         }
-    });
 
-   
+        $(window).on("resize", function () {
+            if (window.innerHeight - $("main").outerHeight() - $(".header-wrapper").outerHeight(true) > 103) {
+                $("main").height(window.innerHeight - 103 - $(".header-wrapper").outerHeight(true))
+            }
+        });
 
-    // // if (isSimpleMcu) {
-    // //     var jmsConfigLink = $('#jmsConfig');
-    // //     if (!!jmsConfigGuideUrl) { //如果jmsConfigGuideUrl为空，false，null或undefined
-    // //         jmsConfigLink.attr('href', jmsConfigGuideUrl);
-    // //         jmsConfigLink.parent().show();
-    // //     }
-    // // }
-
-    // // if ((isServiceDomainAdmin || meetingAdmin || (isSimpleMcu && isUserDomainAdmin)) && '1' !== licenseInvalidWarn) {
-    // //     $.getJSON(Mo.Config.appUrl + '/checkLicenseIsInvalid', function (msg) {
-    // //         if (msg.success) {
-    // //             var data = msg.data;
-    // //             if (typeof data === 'number' && data >= 0) {
-    // //                 Portal.Dialog({
-    // //                     id: 'licenseWarn',
-    // //                     content: template('license-warn-dialog', { days: data }),
-    // //                     okBtn: false,
-    // //                     cancelText: '关闭',
-    // //                     cancelFn: function () {
-    // //                         if (licenseWarnCheckbox.getValue()) {
-    // //                             $.post(Mo.Config.appUrl + '/saveLicenseWarnStatus', function () { }, 'json');
-    // //                         }
-    // //                     },
-    // //                 });
-    // //                 var licenseWarnCheckbox = Portal.Checkbox('#license-warn-checkbox', {
-    // //                     name: 'licenseWarnCheckbox',
-    // //                     data: {
-    // //                         id: "licenseWarnCheckbox",
-    // //                         name: "今日不再提醒",
-    // //                         value: "0"
-    // //                     }
-    // //                 });
-    // //             }
-    // //         }
-    // //     });
-    // }
     
+
+        if (user.jmsType === '1') {
+            var jmsConfigLink = $('#jmsConfig');
+            if (user.jmsConfigGuideUrl) { //如果jmsConfigGuideUrl为空，false，null或undefined
+                jmsConfigLink.attr('href', user.jmsConfigGuideUrl);
+                jmsConfigLink.parent().show();
+            }
+        }
+
+        // if ((isServiceDomainAdmin || meetingAdmin || (isSimpleMcu && isUserDomainAdmin)) && '1' !== licenseInvalidWarn) {
+        //     $.getJSON(BASE_URL + '/checkLicenseIsInvalid', function (msg) {
+        //         if (msg.success) {
+        //             var data = msg.data;
+        //             if (typeof data === 'number' && data >= 0) {
+        //                 Portal.Dialog({
+        //                     id: 'licenseWarn',
+        //                     content: template('license-warn-dialog', { days: data }),
+        //                     okBtn: false,
+        //                     cancelText: '关闭',
+        //                     cancelFn: function () {
+        //                         if (licenseWarnCheckbox.getValue()) {
+        //                             $.post(BASE_URL + '/saveLicenseWarnStatus', function () { }, 'json');
+        //                         }
+        //                     },
+        //                 });
+        //                 var licenseWarnCheckbox = Portal.Checkbox('#license-warn-checkbox', {
+        //                     name: 'licenseWarnCheckbox',
+        //                     data: {
+        //                         id: "licenseWarnCheckbox",
+        //                         name: "今日不再提醒",
+        //                         value: "0"
+        //                     }
+        //                 });
+        //             }
+        //         }
+        //     });
+        // }
+        
+
+
+
+    })()
+
+
     
     AjaxComplete()
 })

@@ -6,12 +6,12 @@ import '@/styles/reset-artDialog.scss';
 
 export default {
     show(){
-        const { sysBrand , versionYear } = Store.getState()
-        const content = TemplateIndex({ sysBrand, versionYear})
+        const { sysBrand , versionYear, version } = Store.getState()
+        const content = $(TemplateIndex({ sysBrand, versionYear, version})).localize().prop("outerHTML")
         $.dialog({
             padding: 0,
             id: "aboutWindow",
-            content,
+            content ,
             lock: true,
             opacity: 0.50,	// 透明度
             cancel:false, // 隐藏关闭按钮

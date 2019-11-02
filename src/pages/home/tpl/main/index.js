@@ -1,5 +1,4 @@
 import Store from '@/store';
-import './runtime';
 import TemplateIndex from './index.art';
 import TemplateBookMeetingCount from './book_meeting_count';
 import TemplateBookMeetingInfo from './book_meeting_info';

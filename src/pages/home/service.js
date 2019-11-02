@@ -1,3 +1,3 @@
 import axios from '@/api/axios';
 
-export const fetchHomeMenu = () => axios.get('/home/menu').catch((err) => {});;
+export const fetchHomeInfo = () => axios.get('/userHome').catch((err) => {});

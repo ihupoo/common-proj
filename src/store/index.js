@@ -10,70 +10,21 @@ function get(source, path, defaultValue = undefined) {
     return result
 }
 
+const example = {
+    'BASE_URL': '/',
+    "realmName":"kedacom",
+    "systemMode":0,
+    "domainType":1,
+    "lang":"zn-CN",
+    "sysBrand":"telecom",
+    "versionYear":"2019",
+    "version":"6.0.0.4.0"
+}
+
 
 class Store {
     state = {
-        BASE_URL: '/',
-        strengthRegular: { "3": "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[._])[0-9a-zA-Z._]{8,16}$", "2": "(?!^([0-9]+|[a-zA-Z]+|[._]+)$)^[0-9a-zA-Z._?]{8,16}$", "1": "^[A-Za-z0-9]{8,16}$" },
-        sysBrand: 'kedacom',
-        versionYear: '2019',
-        user: {
-            passwordExpire: '',
-            cloudModeInfo: '',
-            vrsShow: '',
-            cbsShow: '',
-            domsShow: '',
-            enableNexvision: '',
-            tpsIP: '',
-            kisIP: '',
-            vrsIP: '',
-            show_sh: '0',
-            portraintDomain: '',
-            isUserDomainAdmin: '',
-            isServiceDomainAdmin: '',
-            isUsualUser: '',
-            jmsConfigGuideUrl: '',
-            jmsType: '',
-            licenseInvalidWarn: '',
-            onlyCurrentIp: '',
-            umoid: '',
-            systemSecurity: '1',
-            securityPolicy: {passwordStrength: '1'},
-            nonce: '',
-            brithday: '',
-            username: '8cd66490-3463-46fe-9b86-5fc4ae390ee2',//和name取一
-            //
-            name: 'jihuiqin',
-            userDomainMoid: '2sh5wxryttt19qf6gs5kvzlc',
-            userDomainAdmin: '',
-            moid: '2sh5wxryttt19qf6gs5kvzlc',
-            account: 'haha',
-            mobile: '15236095272',
-            email: '2551044074@qq.com',
-            sex: '1',
-            seat: '办公地址',
-            extNum: '',
-            e164: '77777777',
-            depts: {},
-            fax: '',
-            meetingAdmin: '',
-            serviceDomainMoid: 'mooooooo-oooo-oooo-oooo-defaultserdo',
-            enableMeeting: '',
-            enableNM: '',
-            enableWeibo: '',
-            enableBMC: '',
-            enableVRS: '',
-            enableLive: '',
-            enableKIS: '',
-            enablePublicCloudAccess: '',
-            cloudModelDisplay: '',
-            virMachineroomMoid: '',
-            cloudModelName: '',
-            portrait40: '',
-            portrait64: '',
-            portrait128: '',
-            portrait256: ''
-        }
+        
     }
 
     reducers = {
@@ -82,6 +33,9 @@ class Store {
                 ...this.state,
                 ...payload
             }
+        },
+        delete(payload){
+            
         }
     }
 

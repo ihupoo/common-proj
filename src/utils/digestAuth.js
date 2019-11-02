@@ -82,7 +82,7 @@ const DigestAuth = {
 		let err = param.error;
 		param.error = function (XMLHttpRequest, textStatus, errorThrown) {
 			let wwwAuthenticate = XMLHttpRequest.getResponseHeader("WWW-Authenticate");
-			if (!!wwwAuthenticate && wwwAuthenticate.indexOf('stale="true"') != -1) {
+			if (wwwAuthenticate) { //&& wwwAuthenticate.indexOf('stale="true"') != -1
 				DigestAuth.sendAgain(XMLHttpRequest, param, err);
 			} else {
 				err(XMLHttpRequest, textStatus, errorThrown);
