@@ -3,6 +3,7 @@ import echarts from 'echarts';
 import { Times } from '@/utils/utils';
 import { getMinMaxValue, getAverageValue, fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 import { echartOption } from '@/pages/home/tpl/draw';
 
 
@@ -114,15 +115,26 @@ function fetchLoad(moid, dom){//ajax从后端获取预约会议
 
 export default {
     render(dom, { user }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        this.renderHeader(`${dom}-header`)
+        this.renderContent(dom, moid)
+        
+    },
+    renderHeader(dom ) {
+        const data = {
+            head_titles:["预约会议并发统计"],
+            head_more:[],
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+    },  
+    renderContent(dom, moid) {
         $(dom).empty().append($(TemplateIndex({})).localize());
         //初始显示无数据
         echartRender(getNoDataEchartsOpt());
         
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-
-        
         fetchState.cache({ moid, dom }).start(({ moid, dom }) => fetchLoad(moid, dom))
-        
     },
     startfetch(){
         fetchState.start()

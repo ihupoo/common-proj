@@ -1,9 +1,0 @@
-{{each data as cloudModelInfo i}}
-<span class="li">
-    <span class="check-hook-content">
-        <span id="{{cloudModelInfo.virMachineroomMoid}}" class="mo-icons-bg check-hook active"></span>
-    </span>
-    <a value="{{cloudModelInfo.virMachineroomMoid}}" class="li-a{{if publicAccess||cloudModelInfo.cloudModelType===1}}"
-        onclick="cloudClick(this)" {{else}} disabled"{{/if}}>{{cloudModelInfo.cloudModelName}}</a>
-</span>
-{{/each}}

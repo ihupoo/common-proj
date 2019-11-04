@@ -2,6 +2,7 @@ import Store from '@/store/index';
 import TemplateIndex from './index.art';
 import AboutDialog from '../about';
 import Main from '@/pages/home/tpl/main';
+import MovisionNavNotify from './email';
 
 import avatorDefaultPng from '@/assets/images/avator.png';
 
@@ -109,9 +110,13 @@ function eventBind(user) {
 
 export default {
     render(dom, { user, cloudModelList }){
-        const { BASE_URL , sysBrand } = Store.getState()
+        const { BASE_URL , sysBrand, domainType } = Store.getState()
         $(dom).empty().append($(TemplateIndex({ BASE_URL, sysBrand, user, cloudModelList, avatorDefaultPng })).localize())
         eventBind(user);
+
+        if(domainType === 1){
+            MovisionNavNotify.init();
+        }
     },
     setPortrait(portrait, portraitDomain) {
         const { BASE_URL } = Store.getState()

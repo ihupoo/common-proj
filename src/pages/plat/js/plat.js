@@ -3,9 +3,11 @@ import { Password } from '@/utils/password'
 import { Validation, Throttle } from '@/utils/utils'
 import { MoAlert } from '@/components/popup'
 import { Size, Common } from '@/utils/common'
-import '@/lib/portal/mo-portal';
 import Store from '@/store/index';
 import TemplateHeader from '@/components/tpl/header';
+
+import '@/lib/artDialog'
+import '@/lib/portal'
 
 let { username, securityPolicy, editName } = Store.getState('user');
 

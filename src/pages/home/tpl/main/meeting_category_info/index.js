@@ -1,12 +1,10 @@
 import Store from '@/store';
 import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 
-import '@/lib/easyui/1.8.5/themes/icon.css';
-import '@/lib/easyui/1.8.5/themes/default/easyui.css';
-import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
-import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
-import '@/styles/reset-easyui.scss';
+import '@/lib/easyui'
+
 const fetchState = {
     transMeeting : new fetchLoop(),
     portMeeting : new fetchLoop(),
@@ -208,23 +206,46 @@ function fetchP2PMeetng(moid, dom){//获取点对点会议信息
 }
 
 const output = {
-    render(dom, { user }, { head_more }){
+    render(dom, { user }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        this.renderHeader(`${dom}-header`, user, moid)
+        this.renderContent(dom, moid)
         
+    }, 
+    renderHeader(dom, { enableNM }, moid ) {
+        const data = {
+            head_titles:["传统会议","端口会议","点对点会议"],
+            head_more: (() => {
+                let moreList = [
+                    { more:"更多",url:{
+                        transMeeting: `/nms/home/?path=realtime_meeting&type=tran&domainMoid=${moid}`,
+                        portMeeting: `/nms/home/?path=realtime_meeting&type=port&domainMoid=${moid}`,
+                        p2pMeeting: `/nms/home/?path=realtime_meeting&type=p2p&domainMoid=${moid}`,
+                    }}
+                ]
+                //没有网管权限不显示更多
+                if (!enableNM) {
+                    moreList = moreList.filter(x => x !== '更多')
+                }
+                return moreList
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+        
+        mores = data.head_more.find(x => x.more === '更多')
+        eventBindTitle(dom)
+    },  
+    renderContent(dom, moid) {
         $(dom).empty().append($(TemplateIndex({})).localize())
         $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无传统会议信息');
 
-        mores = head_more.find(x => x.more === '更多')
-
-        eventBindTitle(dom)
-
         datagridInit()
-        
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-
+       
         fetchState['transMeeting'].cache({ moid, dom }).start(({ moid, dom }) => fetchTransMeeting(moid, dom))
         fetchState['portMeeting'].cache({ moid, dom })
         fetchState['p2pMeeting'].cache({ moid, dom })
-        
     },
     startfetch(){
         fetchState['transMeeting'].start()

@@ -1,10 +1,10 @@
-const Portal = {
-    AccountInput: function (id, config, data) {
-        //return initInstant(bmc_account_input_src, id, config, data, 'accountInput');
-    },
-    Combox: function (id, config, data) {
-        //return initInstant(mo_combox_src, id, config, data, 'combox');
-    }
-}
 
-export { Portal };
+import './portal1/mo-portal.css'
+
+import './portal2/mo-portal.css'
+
+
+import './portal1/mo-portal'
+
+import './portal2/mo-portal'
+

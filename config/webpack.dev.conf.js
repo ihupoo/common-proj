@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require("path");
 const base = require('./webpack.base.conf');
-const Dotenv = require('dotenv-webpack');
+// const Dotenv = require('dotenv-webpack');
 const { logger } = require('./utils')
 
 module.exports = merge.smart(
@@ -18,9 +18,9 @@ module.exports = merge.smart(
         },
         plugins: [
             new webpack.HotModuleReplacementPlugin(), //热更新，还需在index.js里配置
-            new Dotenv({
-                path: path.resolve(__dirname,'../.env.dev')
-            })
+            // new Dotenv({
+            //     path: path.resolve(__dirname,'../.env.dev')
+            // })
         ],
 
         devtool: '#cheap-module-eval-source-map', //构建速度快，采用eval执行

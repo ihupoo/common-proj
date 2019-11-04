@@ -1,25 +1,17 @@
-<div class="resource-wrapper {{if resourceData.length==0}}none-border{{/if}}"  >
-    <div class="resource-container" style="width:{{containerWidth}}px">
-        {{each resourceData data i}}
-            <div class="resource-content">
-                <div class="item-resource-wrapper {{if i==0 }}active{{/if}}">
-                    <div class="value-wrapper">
-                        <span class="value {{if data.percent>=85}}moreThan85 {{else}}lessThan85 {{/if}}">{{data.percent}}</span>
-                        <span class="unit">%</span>
-                    </div>
-                   <div class="foot-title" title="{{data.name}}">
-                        <span id="{{data.moid}}" class="hidden resourceMoid">{{data.moid}}</span>
-                        <span class="hidden ip">{{data.ip}}</span>
-                        <span class="hidden machineRoomName">{{data.machineRoomName}}</span>
-                        <span class="hidden type">{{data.type}}</span>
-                        <span class="hidden frameName">{{data.frameName}}</span>
-                        <span class="foot-title-name">{{data.name}}</span>
-                    </div>
-                </div>
-            </div>
-            {{if resourceData.length!=i+1}}
-                <div class="cut-off-line"></div>
-            {{/if}}
-        {{/each}}
-    </div>
-</div>
+{{extend '../header.art'}}
+
+{{block 'more'}}
+    {{each head_more mores i}}
+        <li class="header-title">
+            <span>
+                {{if mores.more === '显示自定义服务器'}}
+                    <a href="javascript:;"  class="mo-icons-bg isPersonalSetting no-checked"></a>
+                    <a href="javascript:;" >显示自定义服务器</a>
+                    <a href="javascript:;" class="mo-icons-bg personalSetting "></a>
+                {{else}}
+                    <a href="{{ typeof mores.url === "string" ? mores.url : '#'}}" target="_blank" class='more'>{{mores.more}}</a>
+                {{/if}}
+            </span>
+        </li>
+    {{/each}}  
+{{/block}}

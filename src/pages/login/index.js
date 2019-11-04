@@ -1,7 +1,4 @@
 import $ from 'jquery-migrate';
-import 'ezmark'
-
-import '@/lib/ezmark/ezmark.scss'
 
 import '@/styles/reset.scss'
 import '@/styles/common.scss'
@@ -9,6 +6,8 @@ import '@/styles/commonCSS.scss'
 
 import './css/login.scss';
 import './css/theme.scss';
+
+import '@/lib/ezmark'
 
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';

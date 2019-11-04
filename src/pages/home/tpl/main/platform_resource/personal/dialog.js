@@ -3,11 +3,11 @@ import { Mask } from '@/components/loading';
 import TemplateDialog from './dialog.art';
 import { fetchSavePersonalList } from './server';
 
-import '@/lib/easyui/1.8.5/themes/icon.css';
-import '@/lib/easyui/1.8.5/themes/default/easyui.css';
-import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
-import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
-import '@/styles/reset-easyui.scss';
+import '@/lib/easyui'
+
+import '@/lib/artDialog'
+
+import '@/lib/mCustomScrollbar'
 
 import './dialog.scss';
 

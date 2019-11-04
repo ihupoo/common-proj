@@ -1,12 +1,10 @@
 import Store from '@/store';
 import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 
-import '@/lib/easyui/1.8.5/themes/icon.css';
-import '@/lib/easyui/1.8.5/themes/default/easyui.css';
-import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
-import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
-import '@/styles/reset-easyui.scss';
+import '@/lib/easyui'
+
 const fetchState = new fetchLoop()
 
 function datagridInit(){
@@ -69,15 +67,35 @@ function fetchLoad(moid, dom){//获取告警信息
 }
 
 export default {
-    render(dom, { user }){
+    render(dom, { user }){ 
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        this.renderHeader(`${dom}-header`, user, moid)
+        this.renderContent(dom, moid)
+    },
+    renderHeader(dom, { enableNM }, moid ) {
+        const data = {
+            head_titles: ["订阅告警"],
+            head_more: (() => {
+                let moreList = [
+                    { more:"更多", url:`/nms/home/?path=unrepairedwarning&domainMoid=${moid}` }
+                ]
+                //没有网管权限不显示更多
+                if (!enableNM) {
+                    moreList = moreList.filter(x => x !== '更多')
+                }
+                return moreList
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+    },  
+    renderContent(dom, moid) {
         $(dom).empty().append($(TemplateIndex({})).localize())
         $(dom).find('.no-data-wrapper').removeClass("hidden");
         datagridInit()
         
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-
         fetchState.cache({ moid, dom }).start(({ moid, dom }) => fetchLoad(moid, dom))
-        
     },
     startfetch(){
         fetchState.start()

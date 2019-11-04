@@ -1,8 +1,6 @@
 import Store from '@/store/index';
 import TemplateIndex from './index.art';
-import '@/lib/artDialog/4.1.7/jquery.artDialog.min';
-import '@/lib/artDialog/4.1.7/skins/simple.css';
-import '@/styles/reset-artDialog.scss';
+import '@/lib/artDialog'
 
 export default {
     show(){

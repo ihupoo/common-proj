@@ -4,8 +4,10 @@ import { Validation, Throttle } from '@/utils/utils'
 import { MoAlert } from '@/components/popup'
 import { Common, Size } from '@/utils/common'
 import Store from '@/store/index';
-import '@/lib/portal/mo-portal';
 import TemplateHeader from '@/components/tpl/header';
+
+import '@/lib/artDialog'
+import '@/lib/portal'
 
 let { username } = Store.getState('user');
 

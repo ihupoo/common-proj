@@ -2,6 +2,9 @@ import Store from '@/store';
 import { Throttle } from './utils';
 import { MoAlert, MooAlert , MoTips, MoConfirm } from '@/components/popup';
 
+import '@/lib/artDialog'
+import '@/lib/portal'
+
 const RebootTip = {
     intervalId: null,
     progressbar: null,

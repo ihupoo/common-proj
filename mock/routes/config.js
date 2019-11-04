@@ -5,12 +5,13 @@ let Mock = require('mockjs');
 router.get('/', async (ctx) => {
     ctx.body = Mock.mock({
         data: {
-            systemMode: '0',
-            domainType: '1',
-            lang: 'zn-CN',
-            sysBrand: 'kedacom',
-            versionYear: '2019',
-            realmName: ''
+            "realmName":"kedacom",
+            "systemMode":0,
+            "domainType":1,
+            "lang":"zn-CN",
+            "sysBrand":"telecom",
+            "versionYear":"2019",
+            "version":"6.0.0.4.0"
         },
         description: "",
         errorCode: "",

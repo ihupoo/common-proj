@@ -2,13 +2,9 @@ import Store from '@/store';
 import { Times } from '@/utils/utils';
 import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 
-import '@/lib/easyui/1.8.5/themes/icon.css';
-import '@/lib/easyui/1.8.5/themes/default/easyui.css';
-import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
-import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
-
-import '@/styles/reset-easyui.scss';
+import '@/lib/easyui'
 
 let pages = {
     currentPage: 1,
@@ -42,7 +38,7 @@ function datagridInit({ moid, user }){
                     rowTemp.rooms = rooms.length == 0 ? "无会议室信息" : rooms.toLocaleString();
                     let meetingDetailUrl = '';
 
-                    if(domainType !== 'coreDomain'){
+                    if(domainType === 1){
                         meetingDetailUrl = 'href="/meeting/mcc/manager/'+ rowTemp.id +'"';
                     }
                     let leftStr = '<div class="grid-item-wrapper">' +
@@ -135,12 +131,12 @@ function renderGrid({total, meetings} , dom){
 function fetchLoad({ moid, user } , dom){//获取告警信息
     const { BASE_URL, domainType } = Store.getState()
 
-    const url = domainType == "coreDomain" 
+    const url = domainType === 0 
         ? BASE_URL + "/nms/getCallMeetingList"
         : BASE_URL + "/meeting/listMeetingByCondition";
 
-    const _moid = domainType == "coreDomain" ? moid : user.moid
-    const _searchType = user.isUserDomainAdmin ? '1' : '0'
+    const _moid = domainType === 0 ? moid : user.moid
+    const _searchType = user.userDomainAdmin ? '1' : '0'
     let params = {
         moid : _moid,
         searchType : _searchType,
@@ -171,17 +167,31 @@ function fetchLoad({ moid, user } , dom){//获取告警信息
 
 
 export default {
-    render(dom, { user }){
+    render(dom, { user, menu }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        if(user.usualUser){
+            this.renderHeader(`${dom}-header`, menu)
+        }
+
+        this.renderContent(dom, user, moid)
         
+    },
+    renderHeader(dom, { createMeetingUrl } ) {
+        const data = {
+            head_titles:["正在召开的会议"],
+            head_more:[{more:"创建会议",url: createMeetingUrl },{more:"更多",url:"/meeting/mcc"}],
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+    },  
+    renderContent(dom, user ,moid) {
         $(dom).children('#call_meeting_container').remove().end().append($(TemplateIndex({})).localize())
         $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('今日无会议安排，点击“创建会议”开始创会吧。');
         
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-
         datagridInit({ moid, user })
 
         fetchState.cache({ moid, user, dom }).start(({ moid, user , dom }) => fetchLoad({ moid, user }, dom))
-        
     },
     startfetch(){
         fetchState.start()

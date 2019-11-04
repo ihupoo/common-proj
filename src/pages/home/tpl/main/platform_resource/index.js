@@ -2,8 +2,9 @@ import Store from '@/store';
 import { Times } from '@/utils/utils';
 import { echartBtnVisiable, fetchLoop } from '../../utils';
 import TemplateHeader from './header.art';
+import TemplateTop from './top.art';
 import TemplateChart from './chart.art';
-import TemplateFooter from './footer.art';
+import TemplateBottom from './bottom.art';
 import TemplateWheelBtn from './wheelBtn.art';
 import echarts from 'echarts'
 import { echartOption } from '@/pages/home/tpl/draw';
@@ -177,7 +178,7 @@ function renderServer(tab, dom){
             let containerWidth = resourceData.length * 107;
 
             $(dom).find('.resource-wrapper').remove().end()
-                .prepend($(TemplateHeader({ resourceData, containerWidth })).localize())
+                .prepend($(TemplateTop({ resourceData, containerWidth })).localize())
 
             /**end:intTemplate*/
 
@@ -219,7 +220,7 @@ function renderServerInfo(tab, dom){
         frameName: $activeDom.find('.frameName').text()
     }
     $(dom).find(".platform-resource-detail").remove();
-    $(dom).append($(TemplateFooter(resourceDetail)).localize())
+    $(dom).append($(TemplateBottom(resourceDetail)).localize())
 
     /**end*/
 
@@ -537,12 +538,36 @@ function fetchServerInfo({ tab, moid, dom }){
 
 
 const output = {
-    async render(dom, { user }){
-        $(dom).empty()
-            .append($(TemplateHeader({ resourceData: [] })).localize())
-            .append($(TemplateChart({})).localize())
-            .append($(TemplateFooter({})).localize())
+    render(dom, { user }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        this.renderHeader(`${dom}-header`, user)
+        this.renderContent(dom, moid)
+    },
+    renderHeader(dom, { enableNM } ) {
+        const data = {
+            head_titles:["平台CPU资源","平台内存资源"],
+            head_more:(() => {
+                let moreList =[
+                    { more:"显示自定义服务器" },
+                    { more:"更多", url:"/nms/home/" }
+                ]
+                //没有网管权限不显示更多
+                if (!enableNM) {
+                    moreList = moreList.filter(x => x !== '更多')
+                }
+                return moreList
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
         eventBindTitle(dom)
+    },  
+    async renderContent(dom, moid) {
+        $(dom).empty()
+            .append($(TemplateTop({ resourceData: [] })).localize())
+            .append($(TemplateChart({})).localize())
+            .append($(TemplateBottom({})).localize())
         //初始显示无数据
         renderNoDataServer(dom)
         echartRender(getNoDataEchartsOpt());
@@ -554,12 +579,10 @@ const output = {
         readyData['cpu'].personalMoidList = moidList;
         readyData['memory'].currentMoidListIndex = 0;
         readyData['memory'].personalMoidList = moidList;
-
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-        
+ 
         fetchState.server.cpu.cache({ moid, dom }).start(({ moid, dom }) => fetchServer({ tab: 'cpu', moid, dom }))
         fetchState.server.memory.cache({ moid, dom }).start(({ moid, dom }) => fetchServer({ tab: 'memory', moid, dom }))
-      
+  
     },
     startfetch(){
         fetchState.server.cpu.start()

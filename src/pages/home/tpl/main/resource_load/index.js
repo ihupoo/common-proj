@@ -1,6 +1,7 @@
 import Store from '@/store';
 import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 import TemplateEightConference from './eightConference';
 import TemplateMediaResource from './mediaResource';
 import { percentCount } from '@/pages/home/tpl/draw';
@@ -123,8 +124,8 @@ function eventBind(dom){
 function fetchLoad(user, resourceData, dom) {
     const { BASE_URL } = Store.getState()
     const { 
-        isServiceDomainAdmin,
-        isUserDomainAdmin,
+        serviceDomainAdmin,
+        userDomainAdmin,
         serviceDomainMoid,
         userDomainMoid,
         moid,
@@ -134,8 +135,8 @@ function fetchLoad(user, resourceData, dom) {
     let data = $.extend(true, [], resourceData);
 
     return $.get(url, {
-            'type': isServiceDomainAdmin ? 'service' : 'user',
-            'moid': isServiceDomainAdmin ? serviceDomainMoid : ( isUserDomainAdmin ? userDomainMoid : moid)
+            'type': serviceDomainAdmin ? 'service' : 'user',
+            'moid': serviceDomainAdmin ? serviceDomainMoid : ( userDomainAdmin ? userDomainMoid : moid)
         }, function(t){
             if(t.success){
                 const { data: { resource: resResource } } = t;
@@ -222,11 +223,11 @@ function fetchLoad(user, resourceData, dom) {
                             portMeetingPercent = percentCount(portMeetingUsed, portMeetingTotal);
                         }
                         //有端口会议 总百分比根据端口已使用数加本域的其他占用数计算 
-                        totalPercent = percentCount(portMeetingUsed + (isServiceDomainAdmin ? portMeetingOther : portMeetingOtherUserDomain), portMeetingTotal);
+                        totalPercent = percentCount(portMeetingUsed + (serviceDomainAdmin ? portMeetingOther : portMeetingOtherUserDomain), portMeetingTotal);
                     } else { //端口会议数据如果缺失则不显示
                         mediaData[1].show = false;
                         //没有端口会议 总百分比根据传统已使用数加本域的其他占用数计算 
-                        totalPercent = percentCount(traMeetingUsed + (isServiceDomainAdmin ? traMeetingOther : traMeetingOtherUserDomain), traMeetingTotal);
+                        totalPercent = percentCount(traMeetingUsed + (serviceDomainAdmin ? traMeetingOther : traMeetingOtherUserDomain), traMeetingTotal);
                     }
                    data[3].percent = totalPercent;
                    data[3].showInfo = true;
@@ -254,6 +255,29 @@ function fetchLoad(user, resourceData, dom) {
 
 export default {
     render(dom, { user }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        this.renderHeader(`${dom}-header`, user , moid)
+        this.renderContent(dom, user)
+    },
+    renderHeader(dom, { enableNM } , moid) {
+        const data = {
+            head_titles:["资源负载"],
+            head_more: (() => {
+                let moreList = [
+                    { more:"更多", url:`/nms/home/?path=platformdevice&domainMoid=${moid}` }
+                ]
+                //没有网管权限不显示更多
+                if (!enableNM) {
+                    moreList = moreList.filter(x => x !== '更多')
+                }
+                return moreList
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+    },  
+    renderContent(dom, user) {
         //没有网管权限不显示媒体资源
         const resourceData = RESOURCE_DATA.filter(x => user.enableNM || (x.name !== '媒体资源'))
         $(dom).empty().append($(TemplateIndex({ resourceData })).localize())

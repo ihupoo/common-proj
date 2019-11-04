@@ -2,12 +2,10 @@ import Store from '@/store';
 import { Times } from '@/utils/utils';
 import { fetchLoop } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 
-import '@/lib/easyui/1.8.5/themes/icon.css';
-import '@/lib/easyui/1.8.5/themes/default/easyui.css';
-import '@/lib/easyui/1.8.5/jquery.easyui.min.js';
-import '@/lib/easyui/1.8.5/locale/easyui-lang-zh_CN.js';
-import '@/styles/reset-easyui.scss';
+import '@/lib/easyui'
+
 let pages = {
     currentPage: 1,
     total: 0
@@ -39,7 +37,7 @@ function datagridInit({ moid, user }){
                     rowTemp.rooms = rooms.length == 0 ? "无会议室信息" : rooms.toLocaleString();
                     let meetingDetailUrl = '';
 
-                    if (user.isUsualUser) {
+                    if (user.usualUser) {
                         meetingDetailUrl = 'href="/meeting/meeting/detail/' + row.id + '?history"';
                     }
                     var videoStr = '"></a><a ' + meetingDetailUrl + ' class="meeting-name ';
@@ -134,18 +132,18 @@ function renderGrid({total, meetings} , dom){
 function fetchLoad({ moid, user } , dom){//获取告警信息
     const { BASE_URL, domainType } = Store.getState()
 
-    const url = domainType == "coreDomain" 
+    const url = domainType === 0
         ? BASE_URL + "/nms/getHistoryMeetingList"
         : BASE_URL + "/meeting/listMeetingByCondition";
 
-    const _moid = domainType == "coreDomain" ? moid : user.moid
-    const _searchType = user.isUserDomainAdmin ? '1' : '0'
+    const _moid = domainType === 0 ? moid : user.moid
+    const _searchType = user.userDomainAdmin ? '1' : '0'
 
     let endTime = new Date();
     let startTime = new Date(endTime.getTime());
     startTime.setDate(startTime.getDate() - 1);
-    startTime = domainType == "coreDomain" ? Times.getCurrentTime(startTime).replace(/-/g, '/') : Times.getCurrentTime(startTime)
-    endTime = domainType == "coreDomain" ? Times.getCurrentTime(endTime).replace(/-/g, '/') : Times.getCurrentTime(endTime)
+    startTime = domainType === 0 ? Times.getCurrentTime(startTime).replace(/-/g, '/') : Times.getCurrentTime(startTime)
+    endTime = domainType === 0 ? Times.getCurrentTime(endTime).replace(/-/g, '/') : Times.getCurrentTime(endTime)
 
     let params = {
         moid : _moid,
@@ -178,16 +176,31 @@ function fetchLoad({ moid, user } , dom){//获取告警信息
 
 export default {
     render(dom, { user }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        if(user.usualUser){
+            this.renderHeader(`${dom}-header`)
+        }
+
+        this.renderContent(dom, user, moid)
         
+    },
+    renderHeader(dom ) {
+        const data = {
+            head_titles:["历史会议"],
+            head_more:[{more:"更多",url:"/meeting/meeting/historyMeeting"}],
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+    },  
+    renderContent(dom, user ,moid) {
         $(dom).children('#past_meeting_container').remove().end().append($(TemplateIndex({})).localize())
         $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无历史会议记录');
         
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-
+      
         datagridInit({ moid, user })
 
         fetchState.cache({ moid, user, dom }).start(({ moid, user , dom }) => fetchLoad({ moid, user }, dom))
-        
     },
     startfetch(){
         fetchState.start()

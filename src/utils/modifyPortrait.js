@@ -3,6 +3,9 @@ import qq from '@/lib/uploader/fileuploader'
 import { MoAlert } from '@/components/popup';
 import { Throttle } from './utils';
 
+import '@/lib/imgareaselect';
+
+
 //图片剪切
 const SelectImage = {
 	getSelectLength: function () {

@@ -12,7 +12,7 @@
         <span class="server-item">
         <label>所属机房:</label><span class="server-detail">{{machineRoomName ? machineRoomName :'无'}}</span>
         </span>
-        <span class="server-item">''
+        <span class="server-item">
         <label>设备类型:</label><span class="server-detail">{{type ? type:'无'}}</span>
         </span>
         <span class="">

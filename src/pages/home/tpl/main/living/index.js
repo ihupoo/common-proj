@@ -2,6 +2,7 @@ import Store from '@/store';
 import { Trans } from '@/utils/utils';
 import { fetchLoop, fetchSsoToken } from '../../utils';
 import TemplateIndex from './index.art';
+import TemplateHeader from './header.art';
 
 const fetchState = new fetchLoop()
 
@@ -44,7 +45,7 @@ function fetchLoad({ moid , vrsIp, domainType }, dom){//获取告警信息
     };
 
     //核心域下 从网管处拿数据
-    if(domainType === 'coreDomain'){
+    if(domainType === 0){
         return $.get(BASE_URL + "/nms/getAppointedLivingList",{
             'moid':moid,
             num:6
@@ -75,25 +76,56 @@ function fetchLoad({ moid , vrsIp, domainType }, dom){//获取告警信息
         });
     }
    
-
 }
 
 export default {
-    render(dom, { user }){
-        const { vrsIp } = user;
-        $(dom).empty().append($(TemplateIndex({ liveinfo: [] })).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无即将直播的信息');
-  
-
-        eventBindTitle()
-    
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
+    render(dom, { user, menu }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
 
         const { domainType } = Store.getState()
+
+        this.renderHeader(`${dom}-header`, user, menu, domainType)
+        this.renderContent(dom, moid, menu, domainType)
+    },
+    renderHeader(dom, { usualUser, serviceDomainAdmin, jmsType, userDomainAdmin }, { vrsIP, livingUrl, }, domainType ) {
+
+        const data = {
+            head_titles:["即将直播"],
+            head_more: (() => {
+                if(usualUser) return []
+                let moreList = [
+                    { more: "全部", url: "allLiveRooms?type=appointment" },
+                    { more: "更多", url: `//${vrsIP}${livingUrl}` }
+                ]
+                //服务域管理员
+                if (serviceDomainAdmin && jmsType !== 1) {
+                    //服务域管理员不显示直播室更多
+                    moreList = moreList.filter(x => x.more !== '更多')
+                }
+                //用户域管理员
+                if (userDomainAdmin) {
+                    //用户域管理员不显示直播室全部
+                    moreList = moreList.filter(x => x.more !== '全部')
+                    
+                    if (domainType === 0) {
+                        moreList = moreList.filter(x => x.more !== '更多')
+                    }
+                }
+                return moreList
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+        !usualUser && eventBindTitle()
+    },  
+    renderContent(dom, moid,  { vrsIp }, domainType) {
+        $(dom).empty().append($(TemplateIndex({ liveinfo: [] })).localize())
+        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无即将直播的信息');
 
         fetchState.cache({ moid, vrsIp, domainType, dom }).start(({ moid, vrsIp, domainType , dom }) => fetchLoad({ moid, vrsIp, domainType }, dom))
         
     },
+
     startfetch(){
         fetchState.start()
     },

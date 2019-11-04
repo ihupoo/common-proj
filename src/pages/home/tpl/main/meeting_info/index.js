@@ -2,6 +2,7 @@ import Store from '@/store';
 import TemplateBookMeetingInfo from '../book_meeting_info';
 import TemplateCallMeetingInfo from '../call_meeting_info';
 import TemplatePastMeetingInfo from '../past_meeting_info';
+import TemplateHeader from './header.art';
 
 
 let TEMPLATE = {
@@ -50,7 +51,69 @@ function eventBindTitle(){
 
 
 export default {
-    render(dom, { user }, { head_titles = [], head_more = [] }){
+    render(dom, { user, menu }){
+
+        this.renderHeader(`${dom}-header`, user, menu)
+        this.renderContent(dom)
+    },
+    renderHeader(dom, { enableNM, serviceDomainAdmin, jmsType, userDomainAdmin, enableMeeting  }, { createMeetingUrl } ) {
+        const domainType = Store.getState('domainType')
+        const data = {
+            head_titles: (() => {
+                let titleList = ["正在召开的会议","预约的会议","历史会议"];
+                //服务域管理员
+                if(serviceDomainAdmin && jmsType !== 1){//服务域管理员
+                    titleList = titleList.filter(x => x === '预约的会议')
+                }
+                //用户域管理员
+                if (userDomainAdmin && !enableMeeting) {
+                    titleList = titleList.filter(x => x !== '预约的会议')
+                }
+    
+            
+                return titleList
+            })(),
+            head_more: (() => {
+                let moreList = [
+                    { more: '创建会议', url: createMeetingUrl },
+                    { more: '更多', url: {
+                        call_meeting_info : {
+                            url: domainType === 0 
+                                ? '/nms/home/?path=realtime_meeting'
+                                : '/meeting/mcc',
+                            canShow: true
+                        },
+                        book_meeting_info : {
+                            url: '/nms/home/?path=appointment_meeting',
+                            canShow: enableNM
+                        },
+                        past_meeting_info : {
+                            url: '/nms/home/?path=history_meeting',
+                            canShow: enableNM
+                        },
+                    } }
+                ]
+                //核心域不显示创建会议
+                if(domainType === 0){
+                    moreList = moreList.filter(x => x.more !== '创建会议')
+                    //无网管权限没有更多
+                    if(!enableNM){
+                        moreList = moreList.filter(x => x.more !== '更多')
+                    }
+                }
+    
+                return moreList
+    
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+
+        eventBindTitle()
+
+    },  
+    renderContent(dom) {
+
         $(dom).empty()
         let $containerDom = $(".meeting_info");
 
@@ -71,9 +134,10 @@ export default {
                 TEMPLATE[tab].hide()
             }
         })
-        eventBindTitle()
-        
     },
+
+
+
     startfetch(){
         titles.forEach((tab, index) => {
             TEMPLATE[tab].startfetch()

@@ -50,9 +50,11 @@ export { Size, Common }
 export function setBaseUrl(){
     let baseUrl = window.location.pathname.split('/')[1];
     
-    if(process.env.NODE_ENV === 'development'){
-        baseUrl = process.env.URL_DEV
-    }
+    // if(process.env.NODE_ENV === 'development'){
+    //     baseUrl = process.env.URL_DEV
+    // }
+
+    baseUrl = 'mock'
 
     axios.defaults.baseURL = `/${baseUrl}`
     Store.dispatch({

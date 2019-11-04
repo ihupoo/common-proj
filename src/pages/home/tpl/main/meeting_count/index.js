@@ -2,7 +2,9 @@ import Store from '@/store';
 import { Times } from '@/utils/utils';
 import { getMinMaxValue, getAverageValue, echartBtnVisiable, fetchLoop } from '../../utils';
 import TemplateChart from './chart.art';
-import TemplateFooter from './footer.art';
+import TemplateBottom from './bottom.art';
+import TemplateHeader from './header.art';
+
 import { echartOption } from '@/pages/home/tpl/draw';
 import echarts from 'echarts';
 
@@ -344,7 +346,7 @@ function renderData(dom){
     let data = getNoDataEchartsOpt()
     let detailOfMeetingTerminal = decriptionsOfMeeting[tabName];
 
-    if (readyData[tabName].value != null) {//存在缓存数据
+    if (readyData[tabName] && readyData[tabName].value != null) {//存在缓存数据
         data = readyData[tabName].value
         //begin:<记录下标>记录当前时间轴的开始下标和结束下标
         let endIndex = terminalTemp[tabName].endIndex == null ? data['time'].length - 1 : terminalTemp[tabName].endIndex;
@@ -371,7 +373,7 @@ function renderData(dom){
     echartRender(data)
 
     $(".meeting-count-data-description").remove();
-    $(dom).append($(TemplateFooter(detailOfMeetingTerminal)).localize())
+    $(dom).append($(TemplateBottom(detailOfMeetingTerminal)).localize())
 }
 
 
@@ -417,7 +419,7 @@ function eventBindChart(dom){
             }
 
             $(".meeting-count-data-description").remove();
-            $(dom).append($(TemplateFooter(detailOfMeetingTerminal)).localize())
+            $(dom).append($(TemplateBottom(detailOfMeetingTerminal)).localize())
             
         
             echartsOpt.lineMaxValue = setEchartsLineMaxValue(maxValue);
@@ -470,7 +472,7 @@ function eventBindChart(dom){
             }
             
             $(".meeting-count-data-description").remove();
-            $(dom).append($(TemplateFooter(detailOfMeetingTerminal)).localize())
+            $(dom).append($(TemplateBottom(detailOfMeetingTerminal)).localize())
 
             echartsOpt.lineMaxValue = setEchartsLineMaxValue(maxValue);
 
@@ -518,7 +520,7 @@ function eventBindChart(dom){
             }
             
             $(".meeting-count-data-description").remove();
-            $(dom).append($(TemplateFooter(detailOfMeetingTerminal)).localize())
+            $(dom).append($(TemplateBottom(detailOfMeetingTerminal)).localize())
 
             echartsOpt.lineMaxValue = setEchartsLineMaxValue(maxValue);
 
@@ -567,7 +569,7 @@ function eventBindChart(dom){
             }
             
             $(".meeting-count-data-description").remove();
-            $(dom).append($(TemplateFooter(detailOfMeetingTerminal)).localize())
+            $(dom).append($(TemplateBottom(detailOfMeetingTerminal)).localize())
 
             echartsOpt.lineMaxValue = setEchartsLineMaxValue(maxValue);
 
@@ -584,7 +586,7 @@ function eventBindChart(dom){
 
 
 function eventBindTitle(dom, moid){
-    let $containerDom = $(".platform_resource");
+    let $containerDom = $(".meeting_count");
     let url = {
         concurrentCount: "/nms/home/?path=history_meeting&type=multi&domainMoid=" + moid,
         concurrentTerminalCount: "/nms/home/?path=terminalstatics&type=meeting&domainMoid=" + moid,
@@ -787,17 +789,37 @@ function fetchTerminalCount({ moid, dom }){
 
 
 const output = {
-    async render(dom, { user }){
+    render(dom, { user }){
+        const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
+
+        this.renderHeader(`${dom}-header`, user, moid)
+        this.renderContent(dom, moid)
+    },
+    renderHeader(dom, { enableNM } , moid) {
+        const data = {
+            head_titles:["并发会议统计","并发会议在线终端统计","在线终端统计"],
+            head_more:(() => {
+                let moreList = [
+                    { more:"更多", url:`/nms/home/?path=history_meeting&type=multi&domainMoid=${moid}`}
+                ]
+                //没有网管权限不显示更多
+                if (!enableNM) {
+                    moreList = moreList.filter(x => x !== '更多')
+                }
+                return moreList
+            })(),
+        }
+
+        $(dom).empty().append($(TemplateHeader(data)).localize())
+        eventBindTitle(dom, moid)
+    },  
+    renderContent(dom, moid) {
         $(dom).empty()
             .append($(TemplateChart({})).localize())
-            .append($(TemplateFooter(decriptionsOfMeeting['concurrentCount'])).localize())
+            .append($(TemplateBottom(decriptionsOfMeeting['concurrentCount'])).localize())
         //初始显示无数据
         echartRender(getNoDataEchartsOpt());
         eventBindChart(dom)
-
-        const moid = user.isServiceDomainAdmin ? user.serviceDomainMoid : ( user.isUserDomainAdmin ? user.userDomainMoid : user.moid);
-        
-        eventBindTitle(dom, moid)
 
         fetchState['concurrentCount'].cache({ moid, dom }).start(({ moid, dom }) => fetchConcurrentCount({ moid, dom }))
         fetchState['concurrentTerminalCount'].cache({ moid, dom }).start(({ moid, dom }) => fetchConcurrentTerminalCount({ moid, dom }))
