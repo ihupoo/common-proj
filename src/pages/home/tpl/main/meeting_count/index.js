@@ -585,25 +585,24 @@ function eventBindChart(dom){
 }
 
 
-function eventBindTitle(dom, moid){
-    let $containerDom = $(".meeting_count");
+function eventBindTitle(dom, contentDom, moid){
     let url = {
         concurrentCount: "/nms/home/?path=history_meeting&type=multi&domainMoid=" + moid,
         concurrentTerminalCount: "/nms/home/?path=terminalstatics&type=meeting&domainMoid=" + moid,
         terminalCount: "/nms/home/?path=terminalstatics&type=online&domainMoid=" + moid
     }
-    $containerDom.find('.tab .header-title').on('click',function(){
+    $(dom).find('.tab .header-title').on('click',function(){
         if($(this).hasClass('active')) return;
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
 
         let { tabName } = getTabName()
-        $containerDom.find('.leftMove').removeClass("hidden");
-        $containerDom.find('.rightMove').addClass("hidden");
+        $(dom).find('.leftMove').removeClass("hidden");
+        $(dom).find('.rightMove').addClass("hidden");
 
-        renderData(dom)
+        renderData(contentDom)
 
-        $containerDom.find(".header-more a").attr("href",url[tabName]);
+        $(dom).find(".header-more a").attr("href",url[tabName]);
     })
 }
 
@@ -792,10 +791,10 @@ const output = {
     render(dom, { user }){
         const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
 
-        this.renderHeader(`${dom}-header`, user, moid)
+        this.renderHeader(`${dom}-header`, dom, user, moid)
         this.renderContent(dom, moid)
     },
-    renderHeader(dom, { enableNM } , moid) {
+    renderHeader(dom, contentDom, { enableNM } , moid) {
         const data = {
             head_titles:["并发会议统计","并发会议在线终端统计","在线终端统计"],
             head_more:(() => {
@@ -811,7 +810,7 @@ const output = {
         }
 
         $(dom).empty().append($(TemplateHeader(data)).localize())
-        eventBindTitle(dom, moid)
+        eventBindTitle(dom, contentDom, moid)
     },  
     renderContent(dom, moid) {
         $(dom).empty()

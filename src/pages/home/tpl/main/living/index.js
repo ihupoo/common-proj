@@ -9,22 +9,21 @@ const fetchState = new fetchLoop()
 
 function renderData(data, dom){
     if(data.liveinfo.length != 0){
-        $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $(dom).find('.no-data-wrapper').addClass("hidden");
         $(".vrs-living-container").removeClass("none-visible");
         //render
         $(dom).empty().append($(TemplateIndex(data)).localize())
 
     }else{
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden");
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         $(".vrs-living-container").addClass("none-visible");
     }
 }
 
 
-function eventBindTitle(){
-    let $containerDom = $(".living");
+function eventBindTitle(dom){
 
-    $containerDom.find(".more").on("click",function(e){
+    $(dom).find(".more").on("click",function(e){
         e.preventDefault();
         let me = $(this);
         if(me.attr("href").indexOf("?") == -1){
@@ -116,11 +115,11 @@ export default {
         }
 
         $(dom).empty().append($(TemplateHeader(data)).localize())
-        !usualUser && eventBindTitle()
+        !usualUser && eventBindTitle(dom)
     },  
     renderContent(dom, moid,  { vrsIp }, domainType) {
         $(dom).empty().append($(TemplateIndex({ liveinfo: [] })).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无即将直播的信息');
+        $(dom).find('.no-data-wrapper').removeClass("hidden")
 
         fetchState.cache({ moid, vrsIp, domainType, dom }).start(({ moid, vrsIp, domainType , dom }) => fetchLoad({ moid, vrsIp, domainType }, dom))
         

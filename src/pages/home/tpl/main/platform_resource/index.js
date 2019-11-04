@@ -157,7 +157,7 @@ function renderNoDataServer(dom, personal = ''){
 
     //勾选了显示自定义服务器，但是实际没设置自定义服务器
     let warningText = personal === 'personal' ? '尚未自定义所需显示的服务器，请先设置。' : '暂无服务器信息'
-    $(dom).siblings('.no-data-wrapper').removeClass('hidden').find('.warm-text').text(warningText);
+    $(dom).find('.no-data-wrapper').removeClass('hidden').find('.warm-text').text(warningText);
 }
 
 
@@ -188,7 +188,7 @@ function renderServer(tab, dom){
             $(dom).find(".item-resource-wrapper").removeClass("active")
             $("#" + currentResourceMoid[tab]).parent().parent().addClass("active")
 
-            $(dom).siblings('.no-data-wrapper').addClass("hidden");
+            $(dom).find('.no-data-wrapper').addClass("hidden");
 
             if (personal) {//设置的是【显示自定义服务器】，当数量超过五个的时候需要轮显
                 if (readyData[tab].personalMoidList.length > 1) {
@@ -352,21 +352,20 @@ function eventBindChart(dom){
     })
 }
 
-function eventBindTitle(dom){
-    let $containerDom = $(".platform_resource");
-    $containerDom.find(".isPersonalSetting").on("click",function () {//是否自定义设置服务器
+function eventBindTitle(dom, contentDom){
+    $(dom).find(".isPersonalSetting").on("click",function () {//是否自定义设置服务器
         $(this).toggleClass("no-checked");
         fetchPersonalSettingClick().then(res => {
             output.stopfetch()
 
             let { tabName } = getTabName()
-            renderServer(tabName, dom)
-            renderServerInfo(tabName, dom)
+            renderServer(tabName, contentDom)
+            renderServerInfo(tabName, contentDom)
 
             output.startfetch()
         })
     })
-    $containerDom.find(".personalSetting").on("click",function(){//设置自定义服务器---弹出自定义设置服务器对话框
+    $(dom).find(".personalSetting").on("click",function(){//设置自定义服务器---弹出自定义设置服务器对话框
         let { tabName } = getTabName()
         output.stopfetch()
         
@@ -381,19 +380,19 @@ function eventBindTitle(dom){
             output.startfetch()
         })
     })
-    $containerDom.find('.tab .header-title').on('click',function(){
+    $(dom).find('.tab .header-title').on('click',function(){
         if($(this).hasClass('active')) return;
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
 
         let { tabName } = getTabName()
-        $containerDom.find('.leftMove').removeClass("hidden");
-        $containerDom.find('.rightMove').addClass("hidden");
-        $containerDom.find(".item-resource-wrapper").removeClass("active");
+        $(dom).find('.leftMove').removeClass("hidden");
+        $(dom).find('.rightMove').addClass("hidden");
+        $(dom).find(".item-resource-wrapper").removeClass("active");
         readyData[tabName].currentMoidListIndex = 0;
 
-        renderServer(tabName, dom)
-        renderServerInfo(tabName, dom)
+        renderServer(tabName, contentDom)
+        renderServerInfo(tabName, contentDom)
     })
 }
 
@@ -541,10 +540,10 @@ const output = {
     render(dom, { user }){
         const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
 
-        this.renderHeader(`${dom}-header`, user)
+        this.renderHeader(`${dom}-header`, dom, user)
         this.renderContent(dom, moid)
     },
-    renderHeader(dom, { enableNM } ) {
+    renderHeader(dom, contentDom, { enableNM } ) {
         const data = {
             head_titles:["平台CPU资源","平台内存资源"],
             head_more:(() => {
@@ -561,7 +560,7 @@ const output = {
         }
 
         $(dom).empty().append($(TemplateHeader(data)).localize())
-        eventBindTitle(dom)
+        eventBindTitle(dom, contentDom)
     },  
     async renderContent(dom, moid) {
         $(dom).empty()

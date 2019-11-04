@@ -29,8 +29,6 @@ const FETCHMEETING =  {
     p2pMeeting : fetchP2PMeetng,
 }
 
-let mores = [];
-
 function datagridInit(){
     $("#meeting_category-grid").datagrid({
         idField : "id",
@@ -50,11 +48,11 @@ function datagridInit(){
 
 function renderGrid(data, dom){
     if(data.length != 0){
-        $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $(dom).find('.no-data-wrapper').addClass("hidden");
         $("#meeting_category-container").removeClass("none-visible");
         $("#meeting_category-grid").datagrid('loadData', data);
     }else{
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden");
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         $("#meeting_category-container").addClass("none-visible");
     }
 }
@@ -65,23 +63,22 @@ function getTabName(){
     return { tabName : TITLE[activeName] }
 }
 
-function eventBindTitle(dom){
-    let $containerDom = $(".meeting_category_info");
-    $containerDom.find('.tab .header-title').on('click',function(){
+function eventBindTitle(dom, contentDom, mores){
+    $(dom).find('.tab .header-title').on('click',function(){
         if($(this).hasClass('active')) return;
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
 
         let { tabName } = getTabName()
-        $(dom).siblings('.no-data-wrapper').find('.warm-text').text(WARNING[tabName]);
-        renderGrid([], dom)
+        $(contentDom).find('.no-data-wrapper').find('.warm-text').text(WARNING[tabName]);
+        renderGrid([], contentDom)
 
         if(mores){
             let url = mores.url[tabName]
-            $containerDom.find('.header-more a.more').attr('href', url)
+            $(dom).find('.header-more a.more').attr('href', url)
         }
         output.stopfetch()
-        fetchState[tabName].start(({ moid, dom }) => FETCHMEETING[tabName](moid, dom))
+        fetchState[tabName].start(({ moid, dom: contentDom }) => FETCHMEETING[tabName](moid, contentDom))
         
     })
 }
@@ -209,11 +206,11 @@ const output = {
     render(dom, { user }){
         const moid = user.serviceDomainAdmin ? user.serviceDomainMoid : ( user.userDomainAdmin ? user.userDomainMoid : user.moid);
 
-        this.renderHeader(`${dom}-header`, user, moid)
+        this.renderHeader(`${dom}-header`, dom, user, moid)
         this.renderContent(dom, moid)
         
     }, 
-    renderHeader(dom, { enableNM }, moid ) {
+    renderHeader(dom, contentDom, { enableNM }, moid ) {
         const data = {
             head_titles:["传统会议","端口会议","点对点会议"],
             head_more: (() => {
@@ -234,12 +231,12 @@ const output = {
 
         $(dom).empty().append($(TemplateHeader(data)).localize())
         
-        mores = data.head_more.find(x => x.more === '更多')
-        eventBindTitle(dom)
+        let mores = data.head_more.find(x => x.more === '更多')
+        eventBindTitle(dom, contentDom, mores)
     },  
     renderContent(dom, moid) {
         $(dom).empty().append($(TemplateIndex({})).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无传统会议信息');
+        $(dom).find('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无传统会议信息');
 
         datagridInit()
        

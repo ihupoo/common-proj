@@ -1,2 +1,8 @@
 
 <div id='meeting_category-container'><div id="meeting_category-grid"></div></div>
+<div class="no-data-wrapper hidden">
+    <div class="no-data">
+        <span class="mo-icons-bg warm-icon"></span>
+        <span class="warm-text">暂无传统会议信息</span>
+    </div>
+</div>

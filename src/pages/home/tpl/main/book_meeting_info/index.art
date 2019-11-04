@@ -1,1 +1,7 @@
 <div id="book_meeting_container"><div id="book_meeting_info_grid"></div></div>
+<div class="no-data-wrapper hidden">
+    <div class="no-data">
+        <span class="mo-icons-bg warm-icon"></span>
+        <span class="warm-text">暂无预约的会议</span>
+    </div>
+</div>

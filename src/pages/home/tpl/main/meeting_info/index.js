@@ -2,6 +2,7 @@ import Store from '@/store';
 import TemplateBookMeetingInfo from '../book_meeting_info';
 import TemplateCallMeetingInfo from '../call_meeting_info';
 import TemplatePastMeetingInfo from '../past_meeting_info';
+import TemplateIndex from './index.art';
 import TemplateHeader from './header.art';
 
 
@@ -12,22 +13,18 @@ let TEMPLATE = {
 }
 
 let TITLE = {
-    '正在召开的会议': 'book_meeting_info',
-    '预约的会议': 'call_meeting_info',
+    '正在召开的会议': 'call_meeting_info',
+    '预约的会议': 'book_meeting_info',
     '历史会议': 'past_meeting_info',
 }
-
-
-let titles = [], mores = []
 
 function getTabName(){
     let activeName = $(".meeting_info .active .title").text();
     return { tabName : TITLE[activeName] }
 }
 
-function eventBindTitle(){
-    let $containerDom = $(".meeting_info");
-    $containerDom.find('.tab .header-title').on('click',function(){
+function eventBindTitle(dom, contentDom, titles, mores){
+    $(dom).find('.tab .header-title').on('click',function(){
         if($(this).hasClass('active')) return;
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
@@ -36,14 +33,14 @@ function eventBindTitle(){
         
         titles.forEach(tab =>{
             if(tab === tabName){
-                TEMPLATE[tab].show()
+                $(contentDom).find(`.${tab}-container`).show()
             }else{
-                TEMPLATE[tab].hide()
+                $(contentDom).find(`.${tab}-container`).hide()
             }
         })
         if(mores){
             let { url , canShow } = mores.url[tabName]
-            let $a = $containerDom.find('.header-more a.more').attr('href', url)
+            let $a = $(dom).find('.header-more a.more').attr('href', url)
             canShow ? $a.show() : $a.hide()
         }
     })
@@ -53,10 +50,10 @@ function eventBindTitle(){
 export default {
     render(dom, { user, menu }){
 
-        this.renderHeader(`${dom}-header`, user, menu)
-        this.renderContent(dom)
+        const [titles, mores]= this.renderHeader(`${dom}-header`, dom, user, menu)
+        this.renderContent(dom, `${dom}-header` , { user, menu } , titles, mores)
     },
-    renderHeader(dom, { enableNM, serviceDomainAdmin, jmsType, userDomainAdmin, enableMeeting  }, { createMeetingUrl } ) {
+    renderHeader(dom, contentDom , { enableNM, serviceDomainAdmin, jmsType, userDomainAdmin, enableMeeting  }, { createMeetingUrl } ) {
         const domainType = Store.getState('domainType')
         const data = {
             head_titles: (() => {
@@ -109,29 +106,29 @@ export default {
 
         $(dom).empty().append($(TemplateHeader(data)).localize())
 
-        eventBindTitle()
+        let titles = data.head_titles.map(x => TITLE[x])
+        let mores = data.head_more.find(x => x.more === '更多')
+
+        eventBindTitle(dom,contentDom ,titles, mores)
+
+        return [titles, mores]
 
     },  
-    renderContent(dom) {
-
-        $(dom).empty()
-        let $containerDom = $(".meeting_info");
-
-        titles = head_titles.map(x => TITLE[x])
-        mores = head_more.find(x => x.more === '更多')
+    renderContent(dom, headerDom, { user, menu }, titles, mores) {
+        $(dom).empty().append($(TemplateIndex({})).localize())
 
         titles.forEach((tab, index) => {
-            TEMPLATE[tab].render(dom, { user })
+            TEMPLATE[tab].render(`.${tab}-container`, { user, menu })
             if(index === 0){
                 //第一个显示
-                TEMPLATE[tab].show()
+                $(dom).find(`.${tab}-container`).show()
                 if(mores){
                     let { url , canShow } = mores.url[tab]
-                    let $a = $containerDom.find('.header-more a.more').attr('href', url)
+                    let $a = $(headerDom).find('.header-more a.more').attr('href', url)
                     canShow ? $a.show() : $a.hide()
                 }
             }else{
-                TEMPLATE[tab].hide()
+                $(dom).find(`.${tab}-container`).hide()
             }
         })
     },

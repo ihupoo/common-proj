@@ -39,3 +39,9 @@
         {{/if}}
     {{/each}}
 </div>
+<div class="no-data-wrapper hidden">
+    <div class="no-data">
+        <span class="mo-icons-bg warm-icon"></span>
+        <span class="warm-text">暂无直播</span>
+    </div>
+</div>

@@ -12,13 +12,13 @@ const fetchState = new fetchLoop()
 
 function renderData(data, vrsIp, dom){
     if(data.roomstate.length != 0){
-        $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $(dom).find('.no-data-wrapper').addClass("hidden");
         $(".vrs-live-container").removeClass("none-visible");
         //render
         $(dom).empty().append($(TemplateIndex({ ...data, videoDefaultPng, vrsIp })).localize())
 
     }else{
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden");
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         $(".vrs-live-container").addClass("none-visible");
     }
 }
@@ -63,10 +63,9 @@ function eventBind(dom, vrsIp){
 }
 
 
-function eventBindTitle(){
-    let $containerDom = $(".live_room");
+function eventBindTitle(dom){
 
-    $containerDom.find(".more").on("click",function(e){
+    $(dom).find(".more").on("click",function(e){
         e.preventDefault();
         let me = $(this);
         if(me.attr("href").indexOf("?") == -1){
@@ -165,11 +164,11 @@ export default {
         }
 
         $(dom).empty().append($(TemplateHeader(data)).localize())
-        !usualUser && eventBindTitle()
+        !usualUser && eventBindTitle(dom)
     },  
     renderContent(dom, moid,  { vrsIp }, domainType) {
         $(dom).empty().append($(TemplateIndex({ roomstate: [], videoDefaultPng, vrsIp })).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无直播');
+        $(dom).find('.no-data-wrapper').removeClass("hidden")
         eventBind(dom, vrsIp)
     
         fetchState.cache({ moid, vrsIp, domainType, dom }).start(({ moid, vrsIp, domainType , dom }) => fetchLoad({ moid, vrsIp, domainType }, dom))

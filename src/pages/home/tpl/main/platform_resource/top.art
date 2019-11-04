@@ -23,3 +23,10 @@
         {{/each}}
     </div>
 </div>
+<div class="no-data-wrapper hidden">
+    <div class="no-data">
+        <span class="mo-icons-bg warm-icon"></span>
+        <span class="warm-text">尚未自定义所需显示的服务器，请先设置。</span>
+    </div>
+</div>
+

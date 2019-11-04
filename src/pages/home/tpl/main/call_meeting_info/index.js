@@ -118,10 +118,10 @@ function datagridInit({ moid, user }){
 
 function renderGrid({total, meetings} , dom){
     if(total === 0 || !meetings || meetings.length === 0){
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('今日无会议安排，点击“创建会议”开始创会吧。');
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         $("#call_meeting_container").addClass('none-visible')
     }else{
-        $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $(dom).find('.no-data-wrapper').addClass("hidden");
         $("#call_meeting_container").removeClass("none-visible");
         $('#call_meeting_info_grid').datagrid('loadData', meetings);
        
@@ -187,7 +187,7 @@ export default {
     },  
     renderContent(dom, user ,moid) {
         $(dom).children('#call_meeting_container').remove().end().append($(TemplateIndex({})).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('今日无会议安排，点击“创建会议”开始创会吧。');
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         
         datagridInit({ moid, user })
 
@@ -198,11 +198,5 @@ export default {
     },
     stopfetch(){
         fetchState.stop()
-    },
-    show(){
-        $('#call_meeting_container').show()
-    },
-    hide(){
-        $('#call_meeting_container').hide()
     },
 }

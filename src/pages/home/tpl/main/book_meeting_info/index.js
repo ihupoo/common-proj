@@ -124,10 +124,10 @@ function datagridInit({ moid, user }){
 
 function renderGrid({total, meetings} , dom){
     if(total === 0 || !meetings || meetings.length === 0){
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无预约的会议');
+        $(dom).find('.no-data-wrapper').removeClass("hidden");
         $("#book_meeting_container").addClass('none-visible')
     }else{
-        $(dom).siblings('.no-data-wrapper').addClass("hidden");
+        $(dom).find('.no-data-wrapper').addClass("hidden");
         $("#book_meeting_container").removeClass("none-visible");
         $('#book_meeting_info_grid').datagrid('loadData', meetings);
        
@@ -197,7 +197,7 @@ export default {
     },  
     renderContent(dom, user ,moid) {
         $(dom).children('#book_meeting_container').remove().end().append($(TemplateIndex({})).localize())
-        $(dom).siblings('.no-data-wrapper').removeClass("hidden").find('.warm-text').text('暂无预约的会议');
+        $(dom).find('.no-data-wrapper').removeClass("hidden")
         
         datagridInit({ moid, user })
 
@@ -208,11 +208,5 @@ export default {
     },
     stopfetch(){
         fetchState.stop()
-    },
-    show(){
-        $('#book_meeting_container').show()
-    },
-    hide(){
-        $('#book_meeting_container').hide()
     },
 }
