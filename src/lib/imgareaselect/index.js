@@ -1,3 +1,4 @@
+
 import './imgareaselect-default.css'
 
-import './jquery.imgareaselect.pack';
+import './jquery.imgareaselect';

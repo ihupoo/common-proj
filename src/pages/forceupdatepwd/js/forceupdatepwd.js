@@ -3,10 +3,9 @@ import { MoAlert } from '@/components/popup'
 import { DigestAuth } from '@/utils/digestAuth'
 import Store from '@/store/index';
 
-let { securityPolicy, username, systemSecurity } = Store.getState('user');
-
 const ForcePwd = {
     init: function () {
+        let { securityPolicy, systemSecurity } = Store.getState('user');
         $("#detail-btn-save").click(function () {
             if ($(this).hasClass("disabled")) {
                 return;
@@ -50,7 +49,11 @@ const ForcePwd = {
                 data['key'] = params['knonce'] + '_' + params['ciphertext'] + '_' + params['hmac'];
             }
 
-            data.username = username;
+            // const BASE_URL = Store.getState('BASE_URL') 
+            // let reg = new RegExp(`\\/${BASE_URL}\\/(\\S+?)\/`)
+            // let username = location.href.match(reg)?.[1];
+
+            data.username = Store.getState('user.account');
 
             $.post(url, data, function (t) {
                 if (t.success) {

@@ -165,7 +165,7 @@ const SelectPersonalServers = {
 					selectedIds : sortedSelectedIds.join(","),
 			};
 			$.dialog.data("result", result);
-			$.dialog.close();
+			$.dialog({id: 'selectServerDialog'}).close();
 		});
 		
 		
@@ -174,7 +174,7 @@ const SelectPersonalServers = {
 				action : "cancel"
 			};
 			$.dialog.data("result", result);
-			$.dialog.close();
+			$.dialog({id: 'selectServerDialog'}).close();
 		});
 		
 		
@@ -183,7 +183,7 @@ const SelectPersonalServers = {
 				action : "close"
 			};
 			$.dialog.data("result", result);
-			$.dialog.close();
+			$.dialog({id: 'selectServerDialog'}).close();
 		});
 	},
 	initSearchEvent:function(){

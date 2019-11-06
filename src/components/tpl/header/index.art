@@ -73,7 +73,7 @@
                     <span class="li">
                         <a id="about" href="javascript:;">关于</a>
                     </span>
-                    {{if user.show_sh == '1'}}
+                    {{if user.show_sh === 1}}
                         <span class="li">
                             <a id="reboot" href="javascript:;">重启</a>
                         </span>

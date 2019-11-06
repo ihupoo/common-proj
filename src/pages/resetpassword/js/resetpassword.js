@@ -3,7 +3,6 @@ import { MoAlert } from '@/components/popup'
 import { DigestAuth } from '@/utils/digestAuth'
 import Store from '@/store/index';
 
-let { securityPolicy, nonce } = Store.getState('user');
 
 function beforeSave() {
     let data = {
@@ -46,6 +45,7 @@ function beforeSave() {
 
 const ResetPwd = {
     init: function () {
+        let { securityPolicy, nonce } = Store.getState('user');
         $(".confirm").on("click", function () {
             if ($(".confirm").hasClass("disabled")) {
                 return false;

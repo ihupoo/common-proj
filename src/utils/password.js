@@ -2,10 +2,8 @@ import Store from '@/store';
 import { DigestAuth } from './digestAuth';
 import { hex_md5 } from '@/lib/md5/md5';
 
-let { systemSecurity } = Store.getState('user');
-
 function getPasswordStrength(pwd) {
-	const strengthRegular = Store.getState('strengthRegular');
+	const { strengthRegular } = Store.getState('user');
 	if (!pwd && '0' != pwd) return "fault";
 	if (strengthRegular) {
 		let checkArr = ['3', '2', '1'];// 校验顺序 强 中 弱
@@ -19,7 +17,6 @@ function getPasswordStrength(pwd) {
 	} else {
 		console.error("密码强认证规则获取失败");
 	}
-	return "fault";
 }
 
 const Password = {
@@ -144,7 +141,8 @@ const Password = {
 	},
 	newPassBlur: function ($this) {
 		let that = this;
-		const BASE_URL = Store.getState('BASE_URL')
+		const { user: { systemSecurity }, BASE_URL } = Store.getState();
+
 		if ($this.next().hasClass("showHidePassword")) {
 			if (!$this.next().hasClass("click")) {
 				if (that.newPasswordEye.hasClass("show-password")) {
@@ -173,6 +171,9 @@ const Password = {
 							}
 						}
 					}
+					let realmName = Store.getState('realmName') || ''
+					// realmName = realmName.substring(0, 16);
+
 					//判断密码是否使用过
 					if (Password.checkUsed) {
 						let oldPassword = $.trim($(Password.oldPasswordId).val());
@@ -192,8 +193,8 @@ const Password = {
 								});
 							}
 
-						} else if (!!nonce) {
-							cdata = DigestAuth.makePassword(nonce, newPassword);
+						} else if (realmName) {
+							cdata = DigestAuth.makePassword(realmName, newPassword);
 							cdata.email = $.trim($('#email').val());
 							cdata.sequenceNum = $.trim($('#sequenceNum').val());
 							$.post(BASE_URL + '/forgetpassword/checkNewPassword', cdata, function (msg) {
@@ -438,15 +439,18 @@ const Password = {
 	checkPassword: function (newPass) {//检测旧（当前）密码是否正确
 		let that = this;
 		let oldPassword = $(this.oldPasswordId).val();
+		const { moid } = Store.getState('user');
 		if (oldPassword != "" && oldPassword != undefined) {
 
-			let url = Store.getState('BASE_URL') + "/modifypassword/checkOldPassword";
+			const { user: { systemSecurity }, BASE_URL } = Store.getState();
+
+			let url = BASE_URL + "/modifypassword/checkOldPassword";
 			let data = {};
 			if ('1' == systemSecurity) {
 				data = DigestAuth.makePassword(oldPassword, oldPassword);
 			} else {
 				data = DigestAuth.makePassword(hex_md5(oldPassword), oldPassword);
-			}
+            }
 			data.username = DigestAuth.username;
 			$.post(url, data, function (msg) {
 				if (msg.success) {

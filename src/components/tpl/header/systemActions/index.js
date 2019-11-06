@@ -1,6 +1,8 @@
 import Store from '@/store';
-import { Throttle } from './utils';
+import { Throttle } from '@/utils/utils';
 import { MoAlert, MooAlert , MoTips, MoConfirm } from '@/components/popup';
+import PasswordDialog from './password-dialog';
+import PserverDialog from './pserver-dialog';
 
 import '@/lib/artDialog'
 import '@/lib/portal'
@@ -243,59 +245,15 @@ function getShutdownStatus() {
     });
 }
 
-//todo
-function checkADPassword(callback) {
-    $.dialog.open(Store.getState('BASE_URL') + "/checkADPassword", {
-        id: "checkADPassword",
-        lock: true,
-        opacity: 0.50,  // 透明度
-        title: "密码验证",
-        padding: 0,
-        width: 400,
-        height: 260,
-        close: function () {
-            let action = $.dialog.data("action");
-            if (action == "ok") {
-                callback();
-            }
-        },
-        cancel: false, // 隐藏关闭按钮
-        drag: false // 不允许拖拽
-    }, false);
-};
-
-//todo
-function selectPserverIP(callback1, callback2) {
-    $.dialog.open(Store.getState('BASE_URL') + "/selectPserverIP", {
-        id: "selectPserverIP",
-        lock: true,
-        opacity: 0.50,  // 透明度
-        title: "选择主机ip",
-        padding: 0,
-        width: 400,
-        height: 260,
-        close: function () {
-            let action = $.dialog.data("action");
-            let needOperateIPCount = $.dialog.data("needOperateIPCount");
-            if(action == "ok"){
-                needOperateIPCount != 1 && callback2();
-                needOperateIPCount == 1 && callback1();
-            }
-        },
-        cancel: false, // 隐藏关闭按钮
-        drag: false // 不允许拖拽
-    }, false);
-};
-
-
 export default {
-    init(){
+    init(user){
         // 重启
         $("#reboot").on('click', function () {
-            checkADPassword(function () {
-                const onlyCurrentIp = Store.getState('user.onlyCurrentIp')
-                if (!!onlyCurrentIp) {
-                    MoConfirm(`您将要重启设备${onlyCurrentIp},重启过程中请勿切断电源！`, function (result) {
+            PasswordDialog.show(function () {
+                const { currentIps } = user
+                if(!currentIps || currentIps.length === 0) return;
+                if (currentIps.length === 1) {
+                    MoConfirm(`您将要重启设备${currentIps[0]},重启过程中请勿切断电源！`, function (result) {
                         if (!result) {
                             return;
                         }
@@ -304,17 +262,18 @@ export default {
                     );
                 } else {
                     $.dialog.data("operate", "reboot");
-                    selectPserverIP(rebootEvent, rebootClusterEvent);
+                    PserverDialog.show(rebootEvent, rebootClusterEvent, currentIps);
                 }
             });
         });
 
         // 关机
         $("#shutdown").on('click', function () {
-            checkADPassword(function () {
-                const onlyCurrentIp = Store.getState('user.onlyCurrentIp')
-                if (!!onlyCurrentIp) {
-                    MoConfirm(`您将要关闭设备${onlyCurrentIp},关闭过程中请勿切断电源！`, function (result) {
+            PasswordDialog.show(function () {
+                const { currentIps } = user
+                if(!currentIps || currentIps.length === 0) return;
+                if (currentIps.length === 1) {
+                    MoConfirm(`您将要关闭设备${currentIps[0]},关闭过程中请勿切断电源！`, function (result) {
                         if (!result) {
                             return;
                         }
@@ -323,7 +282,7 @@ export default {
                     );
                 } else {
                     $.dialog.data("operate", "shutdown");
-                    selectPserverIP(shutdownEvent, shutdownClusterEvent);
+                    PserverDialog.show(shutdownEvent, shutdownClusterEvent, currentIps);
                 }
             });
         });

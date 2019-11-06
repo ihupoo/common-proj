@@ -1,8 +1,9 @@
 import Store from '@/store/index';
 import TemplateIndex from './index.art';
-import AboutDialog from '../about';
+import AboutDialog from './about';
 import Main from '@/pages/home/tpl/main';
 import MovisionNavNotify from './email';
+import SystemAction from './systemActions';
 
 import avatorDefaultPng from '@/assets/images/avator.png';
 
@@ -105,6 +106,9 @@ function eventBind(user) {
         location.href = BASE_URL + "/loginout";
     });
 
+    if(user.show_sh === 1){
+        SystemAction.init(user)
+    }
 }
 
 

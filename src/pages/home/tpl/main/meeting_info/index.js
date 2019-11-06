@@ -34,6 +34,7 @@ function eventBindTitle(dom, contentDom, titles, mores){
         titles.forEach(tab =>{
             if(tab === tabName){
                 $(contentDom).find(`.${tab}-container`).show()
+                TEMPLATE[tab].refresh()
             }else{
                 $(contentDom).find(`.${tab}-container`).hide()
             }
@@ -48,10 +49,14 @@ function eventBindTitle(dom, contentDom, titles, mores){
 
 
 export default {
+    cache:{
+        titles: [],
+    },
     render(dom, { user, menu }){
 
         const [titles, mores]= this.renderHeader(`${dom}-header`, dom, user, menu)
         this.renderContent(dom, `${dom}-header` , { user, menu } , titles, mores)
+        this.cache.titles = titles
     },
     renderHeader(dom, contentDom , { enableNM, serviceDomainAdmin, jmsType, userDomainAdmin, enableMeeting  }, { createMeetingUrl } ) {
         const domainType = Store.getState('domainType')
@@ -132,16 +137,13 @@ export default {
             }
         })
     },
-
-
-
     startfetch(){
-        titles.forEach((tab, index) => {
+        this.cache.titles.forEach((tab, index) => {
             TEMPLATE[tab].startfetch()
         })
     },
     stopfetch(){
-        titles.forEach((tab, index) => {
+        this.cache.titles.forEach((tab, index) => {
             TEMPLATE[tab].stopfetch()
         })
     }

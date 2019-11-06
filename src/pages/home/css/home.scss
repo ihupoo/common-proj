@@ -454,13 +454,20 @@ main{
 #resource_load_wrapper{
     width: 562px;
     height: 161px;
-    border: 1px solid #e2e4e6;
     margin-bottom: 20px;
 }
 #subscribe_alarm_wrapper{
     width: 562px;
+    // height: 385px;
+}
+.none-border #resource_load_wrapper{
     border: 1px solid #e2e4e6;
-    height: 385px;
+}
+.none-border #subscribe_alarm_wrapper{
+    border: 1px solid #e2e4e6;
+}
+.none-border #book_meeting_count_wrapper{
+    border: 1px solid #e2e4e6;
 }
 .resource_load #book_meeting_count{
     width: 562px;

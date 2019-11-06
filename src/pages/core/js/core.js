@@ -9,8 +9,6 @@ import TemplateHeader from '@/components/tpl/header';
 import '@/lib/artDialog'
 import '@/lib/portal'
 
-let { username } = Store.getState('user');
-
 const CoreSetFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
 	default_detail_paddingLeft: 0, // 默认详细表单左边偏移量
@@ -18,14 +16,14 @@ const CoreSetFrame = {
 	main_padding_left: 128,
 	main_min_height: 650,
 	main_padding_bottom: 83,
-	main_top_height: 98,
+	main_top_height: 57,
 	fixLineHeight: 2,
 
 	initCoreSetPage: function () {
 		let wH = $(window).height();
 		let innerHeight = wH - this.main_top_height - this.main_padding_bottom;
 		let viewHeight = innerHeight - (this.fixLineHeight * 2) - 80;
-		$(".set-content").css("min-height", viewHeight);
+		$(".wrapcontent").css("min-height", viewHeight);
 		if ('password' == $(".tabs .active").attr("data-tab")) {
 			$("#detail-btn-save").addClass('disabled');
 		} else {
@@ -49,7 +47,9 @@ const CoreUpdataAccount = {
 			$('#account').hide()
 			$("#account-readonly").show();
 		}
-		this.accountInput = Portal.AccountInput("#account", {
+
+		const { account: username } = Store.getState('user');
+		this.accountInput = Portal1.AccountInput("#account", {
 			label: '账号',
 			labelWidth: 120,
 			value: username,
@@ -150,7 +150,9 @@ const CoreSet = {
 	//保存更改后的个人信息
 	profileSave: function () {
 
-		let url = Store.getState('BASE_URL') + "/system/user/updateuser";
+		const { user: { account: username }, BASE_URL } = Store.getState();
+
+		let url = BASE_URL + "/system/user/updateuser";
 		if (Throttle.isLock(url)) {
 			return false;
 		}
@@ -406,6 +408,8 @@ const CoreSet = {
 		});
 	},
 	activeTab: function (tab) { //tab = .password
+		const { user: { username } } = Store.getState();
+
 		if (tab == '.profile') {
 			this.profileHref = true;
 		}

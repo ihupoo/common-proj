@@ -11,6 +11,12 @@ let pages = {
     total: 0
 }
 
+let cache = {
+    total: 0,
+    meetings: [],
+    dom:''
+}
+
 const fetchState = new fetchLoop()
 
 function datagridInit({ moid, user }){
@@ -132,6 +138,7 @@ function renderGrid({total, meetings} , dom){
         $('#book_meeting_info_grid').datagrid('loadData', meetings);
        
     }
+    cache = {total, meetings, dom}
 }
 
 function fetchLoad({ moid, user } , dom){//获取告警信息
@@ -209,4 +216,7 @@ export default {
     stopfetch(){
         fetchState.stop()
     },
+    refresh(){
+        renderGrid(cache, cache.dom)
+    }
 }

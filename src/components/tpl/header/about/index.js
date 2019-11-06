@@ -1,4 +1,4 @@
-import Store from '@/store/index';
+import Store from '@/store';
 import TemplateIndex from './index.art';
 import '@/lib/artDialog'
 

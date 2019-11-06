@@ -49,11 +49,11 @@ const ADMIN_MODULE = {
     },
     platform_resource: {
         contentId:"platform_resource",
-        height: 565,
+        height: 568,
     },
     meeting_count: {
         contentId:"meeting_count",
-        height: 565,
+        height: 568,
     },
     book_meeting_count: {
         contentId:"book_meeting_count",
@@ -78,14 +78,13 @@ const ADMIN_MODULE = {
 }
 
 
-function parseAdminModule(list, adminModule){
-    return list.map(x => {
-        if(Array.isArray(x)){
-            return x.map(y => adminModule[y])
-        }else{
-            return adminModule[x]
-        }
-    })
+function parseAdminModule(x, adminModule, heightSet){
+    if(Array.isArray(x)){
+        return x.map(y => parseAdminModule(y, adminModule, heightSet))
+    }else{
+        heightSet[x] && (adminModule[x].height = heightSet[x])
+        return adminModule[x]
+    }
 }
 
 function parse({ 
@@ -138,10 +137,13 @@ function parse({
             'living',
         ]
 
+        let heightSet = {}
+
         //用户域管理员
         if (userDomainAdmin) {
             if (jmsType !== 1) {
                 list[0][1] = 'book_meeting_count'
+                heightSet['book_meeting_count'] = 386
                 list = list.filter(x => x !== 'platform_resource' && x !== 'book_meeting_count')
             }
             if(domainType === 1){
@@ -151,7 +153,7 @@ function parse({
             }
         }
         
-        let moduleList = parseAdminModule(list, adminModule);
+        let moduleList = parseAdminModule(list, adminModule, heightSet);
 
         return {
             list: list.flat(),

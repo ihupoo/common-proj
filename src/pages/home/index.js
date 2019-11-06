@@ -5,7 +5,6 @@ import '@/styles/reset.scss';
 import '@/styles/common.scss';
 import '@/styles/commonCSS.scss';
 
-
 import './css/boot.scss';
 import './css/home.scss';
 import './css/theme.scss';

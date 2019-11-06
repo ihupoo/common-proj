@@ -17,11 +17,11 @@ import { ResetPwd } from './js/resetpassword';
 
 import Store from '@/store/index';
 import { i18next, documentTitle } from '@/i18n';
-import { fetchResetPwd } from './service';
+import { fetchUserMenu, fetchUserInfo } from '@/api/service';
 import TemplateHeader from '@/components/tpl/header';
 import TemplateFooter from '@/components/tpl/footer.art';
 
-function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE_URL } = {}) {
+function pageRender({ sysBrand, lang, versionYear, user, BASE_URL } = {}) {
     $('body').addClass(`theme-${sysBrand}`);
     i18next.changeLanguage(lang)
     TemplateHeader.render('#header-logo', { sysBrand, user, BASE_URL })
@@ -30,49 +30,77 @@ function pageRender({ sysBrand, lang = 'zn-CN', versionYear = '2019', user, BASE
 }
 
 setBaseUrl()
-const { sysBrand, lang, versionYear, user, BASE_URL } = Store.getState();
+InputPreventAutocomplete()
+AjaxComplete()
+
 let options = {
     strongAuthentication: true,
     checkUsed: true
 }
+const config = JSON.parse(localStorage.getItem('system_config') || '{}')
 
-$(function () {
-    (async () => {
-        let [reset] = await Promise.all([
-            fetchResetPwd()
-        ])
-        if (reset && reset.success && reset.data) {
-            Store.dispatch({
-                type: 'save',
-                payload: {
-                    ...reset.data
-                }
-            })
-            pageRender({ sysBrand, lang, versionYear, user, BASE_URL })
-        } else {
-            pageRender()
+if ($.isEmptyObject(config)) {
+    //缓存被清，重新登录
+    // location.href = Store.getState('BASE_URL') + '/login'
+} else {
+    Store.dispatch({
+        type: 'save',
+        payload: {
+            ...config
         }
+    })
+}
 
-        if (reset && reset.success && reset.data) {
-            //处理页面中数据
-            let data = reset.data;
-            DigestAuth.realm = data.realmName;
-            DigestAuth.username = data.email;
-            let passwordStrength = data.securityPolicy.passwordStrength;
-            if (passwordStrength == 2) {
-                $('#errMsg').val('密码等级应为中或者强');
-            } else if (passwordStrength == 3) {
-                $('#errMsg').val('密码等级应为强');
+(async () => {
+    let [resUser, resUserMenu] = await Promise.all([
+        fetchUserInfo(),
+        fetchUserMenu()
+    ])
+    if (resUser && resUser.success && resUser.data) {
+        Store.dispatch({
+            type: 'save',
+            payload: {
+                user: resUser.data
             }
-            $('#email').val(user.email);
-            $('#sequenceNum').val(user.sequenceNum);
-            //调用
-            Size.experirdpageInit();
-            Password.init(options);
-            ResetPwd.init();
-        }
-    })()
+        })
+    } else {
+        //todo 没获取到，跳转login
+        // location.href = Store.getState('BASE_URL') + '/login'
+    }
 
-    InputPreventAutocomplete()
-    AjaxComplete()
-})
+    if (resUserMenu && resUserMenu.success && resUserMenu.data) {
+        Store.dispatch({
+            type: 'save',
+            payload: {
+                user: {
+                    ...Store.getState('user'),
+                    ...resUserMenu.data
+                }
+            }
+        })
+
+    } else {
+        //todo 没获取到的 初始缺省值
+    }
+
+    const { sysBrand, lang = 'zn-CN', versionYear = '2019', BASE_URL, user = {}, menu = {}, realmName } = Store.getState();
+    pageRender({ sysBrand, lang, versionYear, user, BASE_URL });
+
+    //处理页面中数据
+    DigestAuth.realm = realmName;
+    DigestAuth.username = user.email;
+    let passwordStrength = user.securityPolicy.passwordStrength;
+    if (passwordStrength == 2) {
+        $('#errMsg').val('密码等级应为中或者强');
+    } else if (passwordStrength == 3) {
+        $('#errMsg').val('密码等级应为强');
+    }
+    $('#email').val(user.email);
+    $('#sequenceNum').val(user.sequenceNum);
+    //调用
+    Size.experirdpageInit();
+    Password.init(options);
+    ResetPwd.init();
+
+})()
+

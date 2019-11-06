@@ -595,3 +595,13 @@ a.s-btn-active .s-btn-downarrow, a.s-btn-plain-active .s-btn-downarrow {
 .datagrid table td:nth-child(2){
     padding-right: 8px;
 }
+
+.panel-body, .panel-header{
+    border: none;
+}
+.datagrid-row-over, .datagrid-header td.datagrid-header-over{
+    background: none;
+}
+.panel-body{
+    padding: 20px;
+}

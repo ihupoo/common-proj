@@ -12,11 +12,7 @@
         </div>
         <div id="turnOffFooter">
             <a class="mo-btn-gray confirm mo-btn-x mo-btn-x-left" data-action="ok" href="javascript:">确定</a>
-            <a class="mo-btn-gray cancel mo-btn-x mo-btn-x-left" data-action="cancel" href="javascript:"
-                style="margin-left:6px;">取消</a>
+            <a class="mo-btn-gray cancel mo-btn-x mo-btn-x-left" data-action="cancel" href="javascript:" style="margin-left:6px;">取消</a>
         </div>
     </div>
 </div>
-
-
-<!-- css:style/pserver-dialog.scss  js部分：pserverIpSelect-dialog.jsp -->

@@ -5004,7 +5004,7 @@
       // import 'script-loader!ezmark/js/jquery.ezmark.min.js';
 
 
-      window.Portal = {
+      window.Portal1 = {
         AccountInput: function AccountInput(id, config, data) {
           return initInstant(bmc_account_input_src, id, config, data, 'accountInput');
         },

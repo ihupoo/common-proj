@@ -21,7 +21,7 @@ const MovisionNavNotify = {
     initEvent:function initEvent() {
         var that = this;
         // 点击头部的消息图标
-        $('.seetings #nav-notify-item').on("click",function(){
+        $('#nav-notify-item').on("click",function(e){
             $(".nav-sublist-list", "#nav-sublist-notify").hide();
             $(".notify-loading", "#nav-sublist-notify").find("span").text("加载中，请稍候...");
             $(".notify-loading", "#nav-sublist-notify").show();
@@ -29,6 +29,7 @@ const MovisionNavNotify = {
             that.loadLatest();
             that.updateMeetingNotifyStateRead(); //把所有消息置为已读
             that.isDialogShow = true;
+            e.stopPropagation()
         })
         // 点击清空按钮
         $("#nav-sublist-notify .title a.clear").on("click",function () {

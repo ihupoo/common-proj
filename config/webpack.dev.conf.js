@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require("path");
 const base = require('./webpack.base.conf');
-// const Dotenv = require('dotenv-webpack');
+const Dotenv = require('dotenv-webpack');
 const { logger } = require('./utils')
 
 module.exports = merge.smart(
@@ -18,9 +18,9 @@ module.exports = merge.smart(
         },
         plugins: [
             new webpack.HotModuleReplacementPlugin(), //热更新，还需在index.js里配置
-            // new Dotenv({
-            //     path: path.resolve(__dirname,'../.env.dev')
-            // })
+            new Dotenv({
+                path: path.resolve(__dirname,'../.env.dev')
+            })
         ],
 
         devtool: '#cheap-module-eval-source-map', //构建速度快，采用eval执行
@@ -34,39 +34,43 @@ module.exports = merge.smart(
             hot: true, // 开启热更新,只监听js文件，所以css假如被抽取后，就监听不到了
             clientLogLevel: 'none', //阻止打印那种搞乱七八糟的控制台信息
             overlay: true,
-            proxy: {
-                '/portal': {
-                    target: 'http://localhost:8080/portal',
-                    secure: false,
-                    changeOrigin: true,
-                    pathRewrite: {
-                        '^/portal': ''
-                    },
-                    bypass: function(req, res, proxyOptions) {
-                        if (req.headers.accept.indexOf('html') !== -1) {
-                            
-                            let originalUrl = req.originalUrl;
-                            let page = originalUrl.replace(/\/(portal)/g, '')
-
-                            return page === '' ? '/login.html' : `${page}.html`;
-                        }
-                        if(/.(jpe?g|png|gif|css|scss|js)/g.test(req.originalUrl)){
-                            let originalUrl = req.originalUrl;
-                            let page = originalUrl.replace(/\/(portal)/g, '')
-
-                            return  `${page}`;
-                        }
-                    }
+            proxy: [{
+                context: ["/portal", "/portalCore"],
+                // target: 'http://10.67.17.245:8090',
+                target: 'http://localhost:8080',
+                secure: false,
+                // changeOrigin: true,
+                pathRewrite: {
+                    '^/portal$': '/portal',
+                    '^/portalCore$': '/portalCore'
                 },
-                '/mock': {
-                    target: 'http://localhost:8099',
-                    secure: false,
-                    changeOrigin: true,
-                    pathRewrite: {
-                        '^/mock': '/mock'
+                bypass: function(req, res, proxyOptions) {
+                    if (req.headers.accept.indexOf('html') !== -1) {
+                        
+                        let originalUrl = req.originalUrl;
+                        let page = originalUrl.replace(/\/(portal|portalCore)\//g, '/')
+
+                        return page === '' ? '/login.html' : `${page}.html`;
                     }
-                },
-            }
+                    if(/.(jpe?g|png|gif|css|scss|js)/g.test(req.originalUrl)){
+                        let originalUrl = req.originalUrl;
+                        let page = originalUrl.replace(/\/(portal|portalCore)\//g, '/')
+
+                        return  `${page}`;
+                    }
+                }
+            }, 
+            {
+                context:['/mock'],
+                target: 'http://localhost:8099',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/mock': '/mock'
+                }
+            },
+            ]
+           
         },
         mode: 'development'
     },

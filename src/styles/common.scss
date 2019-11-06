@@ -1940,33 +1940,33 @@
 /*.setting-wrapper{*/
 /*    position: relative;*/
 /*}*/
-.setting-wrapper .seetings a.disabled {
+.setting-wrapper .settings a.disabled {
     cursor: default;
 }
 
-.setting-wrapper .seetings .mo-icons-bg.disabled.email {
+.setting-wrapper .settings .mo-icons-bg.disabled.email {
     background-position: -102px -87px;
 }
 
-.setting-wrapper .seetings .mo-icons-bg.disabled.setting {
+.setting-wrapper .settings .mo-icons-bg.disabled.setting {
     background-position: -102px -121px;
     margin-left: 10px;
 }
 
-.setting-wrapper .seetings .mo-icons-bg.disabled.logout {
+.setting-wrapper .settings .mo-icons-bg.disabled.logout {
     background-position: -102px -155px;
     margin-left: 10px;
 }
 
-.setting-wrapper .seetings .mo-icons-bg.disabled.email:hover {
+.setting-wrapper .settings .mo-icons-bg.disabled.email:hover {
     background-position: -102px -87px;
 }
 
-.setting-wrapper .seetings .mo-icons-bg.disabled.setting:hover {
+.setting-wrapper .settings .mo-icons-bg.disabled.setting:hover {
     background-position: -102px -121px;
 }
 
-.setting-wrapper .seetings .mo-icons-bg.logout.disabled:hover {
+.setting-wrapper .settings .mo-icons-bg.logout.disabled:hover {
     background-position: -102px -155px;
 }
 
@@ -2011,6 +2011,7 @@
 
 .pulldown.nav-sublist-notify .menu-line-wrap .text {
     font-weight: 600;
+    float: left;
 }
 
 .pulldown .menu-line-wrap a.clear {

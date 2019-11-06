@@ -2,7 +2,6 @@ import '@/styles/reset.scss';
 
 import '@/styles/common.scss';
 import '@/styles/commonCSS.scss';
-import '@/styles/password.scss';
 import '@/styles/master.scss';
 import '@/styles/reset-error.scss';
 

@@ -9,8 +9,6 @@ import TemplateHeader from '@/components/tpl/header';
 import '@/lib/artDialog'
 import '@/lib/portal'
 
-let { username, securityPolicy, editName } = Store.getState('user');
-
 const PlatSetFrame = {
 	default_detail_paddingTop: 0, // 默认详细表单顶部偏移量
 	default_detail_paddingLeft: 0, // 默认详细表单左边偏移量
@@ -18,7 +16,7 @@ const PlatSetFrame = {
 	main_padding_left: 128,
 	main_min_height: 650,
 	main_padding_bottom: 83,
-	main_top_height: 98,
+	main_top_height: 57,
 	fixLineHeight: 2,
 
 	loadPlatSet: function () {
@@ -49,7 +47,8 @@ const PlatUpdataAccount = {
 			$('#account').hide()
 			$("#account-readonly").show();
 		}
-		this.accountInput = Portal.AccountInput("#account", {
+		const { account: username } = Store.getState('user');
+		this.accountInput = Portal1.AccountInput("#account", {
 			label: '账号',
 			labelWidth: 120,
 			value: username,
@@ -148,6 +147,7 @@ const PlatSet = {
 		}
 	},
 	getProfileData: function () {
+		const { account: username } = Store.getState('user');
 		let newAccount = $('#account .base-input').val();
 		let account = "";//超管传
 		if (DigestAuth.username == 'mooooooo-oooo-oooo-oooo-defaultadmin') {//超管
@@ -178,6 +178,7 @@ const PlatSet = {
 			return false;
 		}
 		//校验用户姓名
+		let { editName } = Store.getState('user');
 		if (editName) {
 			if (data.name == "") {
 				MoAlert('请输入姓名', function () {
@@ -340,7 +341,9 @@ const PlatSet = {
 	loadPage: function (data) {
 		TemplateHeader.setPortrait(data.portraitUrl40, window.portraitDomain);
 	},
+
 	passwordSave: function () {
+		let { securityPolicy } = Store.getState('user');
 		let url = Store.getState('BASE_URL') + "/system/user/updatepassword";
 		let securityPolicyObj = { "弱": 1, "中": 2, "强": 3 };
 		let newPasswordStrength = securityPolicyObj[$(".newPasswordTip .tip-info").text()];

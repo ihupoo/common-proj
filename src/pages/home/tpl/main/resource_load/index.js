@@ -143,18 +143,19 @@ function fetchLoad(user, resourceData, dom) {
                 //处理虚拟会议室资源
                 let vmr = resResource.vmr;
                 /**根据env_type的数值显示数据**/
-                let env_type = (vmr.env_type=='1' || vmr.env_type=='2') ? 'largeSmallVmr' : 'eightVmr';
-               
-                let percent = RESOURCE_MODULE[env_type].reduce((all, cur) => {
-                    return {
-                        total: all.total + vmr[`total_${cur.id}`],
-                        used : all.totalUsed + vmr[`used_${cur.id}`],
-                    }
-                })
-
+                let env_type = (vmr.env_type =='1' || vmr.env_type=='2') ? 'largeSmallVmr' : 'eightVmr';
                 eightData = RESOURCE_MODULE[env_type];
+                let totalUsed = 0;
+                let total = 0;
+                for(let i=0;i<eightData.length;i++){
+                    let temp = eightData[i];
+                    temp.used = vmr["used_"+temp.id];
+                    temp.total = vmr["total_"+temp.id];
+                    totalUsed = totalUsed + temp.used;
+                    total = total + temp.total;
+                }
 
-                data[0].percent = percentCount(percent.used, percent.total);
+                data[0].percent = percentCount(totalUsed, total);
                 data[0].showInfo = true;
 
                 //处理会议并发介入终端数

@@ -242,7 +242,7 @@ function eventBindServer(dom){
         $(".item-resource-wrapper",$(this).parent().parent()).removeClass("active");
         $(this).addClass("active")
         
-        let { tabName, otherName } = getTabName()
+        let { tabName } = getTabName()
 
         //不记忆上次操作的值
         resourceTemp[tabName]={
@@ -253,7 +253,7 @@ function eventBindServer(dom){
         }
         //启动自动刷新
         //与后端交互，查询平台资源信息，并绘制线图
-        currentResourceMoid[tab] = $(".resourceMoid",$(this)).text()
+        currentResourceMoid[tabName] = $(".resourceMoid",$(this)).text()
 
         fetchState.server.cpu.poll = true;
         fetchState.server.memory.poll = true;
@@ -521,9 +521,9 @@ function fetchServerInfo({ tab, moid, dom }){
                 data.values[i] = data.values[i] || 0
                 data.time[i] = data.time[i].split(" ")[1];
             }
-            readyData[tab].value[serverMoid] = data;
+            readyData[tab].value[currentResourceMoid[tab]] = data;
         }else{
-            readyData[tab].value[serverMoid] = getNoDataEchartsOpt();
+            readyData[tab].value[currentResourceMoid[tab]] = getNoDataEchartsOpt();
         }
         if(canRender){
             renderServerInfo(tab, dom);
