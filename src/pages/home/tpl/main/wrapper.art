@@ -1,6 +1,0 @@
-{{if data}}
-    <div id="{{data.contentId}}_wrapper" style="height:{{data.height}}px;position:relative">
-        <div class='header-div' id='{{data.contentId}}-header'></div>
-        <div class="content-wrapper" id="{{data.contentId}}"></div>
-    </div>
-{{/if}}
